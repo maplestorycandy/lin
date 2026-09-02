@@ -9,7 +9,17 @@ namespace IdleLineage.App;
 
 public partial class ArpgEngineScreen
 {
-    private readonly Dictionary<string, (Combatant Actor, ArpgActor View, bool IsMoving)> _remotePlayerViews = new();
+    private class RemotePlayerState
+    {
+        public Combatant Actor { get; set; } = null!;
+        public ArpgActor View { get; set; } = null!;
+        public bool IsMoving { get; set; }
+        public float WalkProgress { get; set; }
+        public double MoveHoldTimer { get; set; }
+        public Vector2 TargetPos { get; set; }
+    }
+
+    private readonly Dictionary<string, RemotePlayerState> _remotePlayerViews = new();
     private readonly Dictionary<string, (Vector2 TargetPos, int Facing8, bool Stepping)> _clientMobTargets = new();
     private double _netSyncTimer = 0.0;
     private double _netMobSyncTimer = 0.0;
@@ -68,9 +78,9 @@ public partial class ArpgEngineScreen
             _engine.Engine.DisableMobAi = false;
         }
 
-        foreach (var tuple in _remotePlayerViews.Values)
+        foreach (var state in _remotePlayerViews.Values)
         {
-            try { tuple.View.Free(); } catch { }
+            try { state.View.Free(); } catch { }
         }
         _remotePlayerViews.Clear();
         _clientMobTargets.Clear();
@@ -94,17 +104,50 @@ public partial class ArpgEngineScreen
 
             float dt = (float)delta;
 
-            // 1. Update Remote Player Views
-            foreach (var tuple in _remotePlayerViews.Values)
+            // 1. Update Remote Player Views & Walking Animation Progress
+            foreach (var state in _remotePlayerViews.Values)
             {
                 try
                 {
-                    UpdateView(tuple.View, tuple.Actor, (ToVec(tuple.Actor.Pos), 0f, tuple.IsMoving), dt, false);
+                    if (state.MoveHoldTimer > 0)
+                    {
+                        state.MoveHoldTimer -= delta;
+                        if (state.MoveHoldTimer <= 0)
+                        {
+                            state.IsMoving = false;
+                        }
+                    }
+
+                    // Smooth interpolate remote player movement
+                    Vector2 currentPos = ToVec(state.Actor.Pos);
+                    float dist = currentPos.DistanceTo(state.TargetPos);
+                    if (dist > 200f)
+                    {
+                        state.Actor.Pos = new WorldPoint(state.TargetPos.X, state.TargetPos.Y);
+                    }
+                    else if (dist > 0.5f)
+                    {
+                        float speed = Mathf.Max(150f, dist * 8.0f);
+                        Vector2 next = currentPos.MoveToward(state.TargetPos, speed * dt);
+                        state.Actor.Pos = new WorldPoint(next.X, next.Y);
+                        state.IsMoving = true;
+                    }
+
+                    if (state.IsMoving)
+                    {
+                        state.WalkProgress = (state.WalkProgress + dt * 4.2f) % 1.0f;
+                    }
+                    else
+                    {
+                        state.WalkProgress = 0f;
+                    }
+
+                    UpdateView(state.View, state.Actor, (ToVec(state.Actor.Pos), state.WalkProgress, state.IsMoving), dt, false);
                 }
                 catch { }
             }
 
-            // 2. Client-side Smooth Mob Movement Interpolation (No Jitter!)
+            // 2. Client-side Smooth Mob Movement Interpolation
             if (!NetworkManager.Instance.IsHost && _clientMobTargets.Count > 0)
             {
                 foreach (var (mobId, info) in _clientMobTargets)
@@ -117,12 +160,10 @@ public partial class ArpgEngineScreen
 
                         if (dist > 180f)
                         {
-                            // Teleport if too far
                             mob.Pos = new WorldPoint(info.TargetPos.X, info.TargetPos.Y);
                         }
                         else if (dist > 0.5f)
                         {
-                            // Smooth move towards target
                             float speed = Mathf.Max(120f, dist * 6.0f);
                             Vector2 next = current.MoveToward(info.TargetPos, speed * dt);
                             mob.Pos = new WorldPoint(next.X, next.Y);
@@ -184,7 +225,7 @@ public partial class ArpgEngineScreen
             if (NetworkManager.Instance.IsHost)
             {
                 _netMobSyncTimer += delta;
-                if (_netMobSyncTimer >= 0.05) // 20Hz
+                if (_netMobSyncTimer >= 0.05)
                 {
                     _netMobSyncTimer = 0.0;
                     BroadcastHostMobs();
@@ -248,7 +289,6 @@ public partial class ArpgEngineScreen
         {
             if (target == _engine.Player)
             {
-                // Local player took damage -> sync to other players
                 NetworkManager.Instance.SendPlayerHpSync(new PlayerHpSyncPacket
                 {
                     Hp = _engine.Player.Hp,
@@ -260,7 +300,6 @@ public partial class ArpgEngineScreen
             {
                 if (NetworkManager.Instance.IsHost)
                 {
-                    // Host broadcasts HP sync to all clients
                     NetworkManager.Instance.SendMobHpSync(new MobHpSyncPacket
                     {
                         MobId = target.Key,
@@ -271,7 +310,6 @@ public partial class ArpgEngineScreen
                 }
                 else if (source == _engine.Player)
                 {
-                    // Client tells Host it hit the mob
                     NetworkManager.Instance.SendMobHit(new MobHitPacket
                     {
                         MobId = target.Key,
@@ -368,18 +406,25 @@ public partial class ArpgEngineScreen
         {
             ArpgActor view = CreateView(actor);
             view.SetNameWithoutLevel(actor.Disp, actor.Level);
-            view.SetNameColor(Color.FromHtml("#66d9ef")); // Teammate Cyan
+            view.SetNameColor(Color.FromHtml("#66d9ef"));
             view.Hp = actor.Hp;
             view.MaxHp = actor.MaxHp;
             view.Pos = ToVec(actor.Pos);
             view.FaceDirection(handshake.Facing8);
 
-            // Apply weapon visual immediately
             var (desired, fallback) = CharacterWeaponAnimation.Resolve(actor, GameDataProvider.Shared);
             view.SetWeaponPrefix(desired, fallback);
             view.Sync(1.0, 0f);
 
-            _remotePlayerViews[handshake.PlayerId] = (actor, view, false);
+            _remotePlayerViews[handshake.PlayerId] = new RemotePlayerState
+            {
+                Actor = actor,
+                View = view,
+                IsMoving = false,
+                WalkProgress = 0f,
+                MoveHoldTimer = 0.0,
+                TargetPos = new Vector2((float)handshake.X, (float)handshake.Y)
+            };
         }
         catch (Exception ex)
         {
@@ -396,70 +441,69 @@ public partial class ArpgEngineScreen
 
     private void HandleRemotePlayerEquipped(EquipPacket equip)
     {
-        if (_remotePlayerViews.TryGetValue(equip.PlayerId, out var tuple))
+        if (_remotePlayerViews.TryGetValue(equip.PlayerId, out var state))
         {
-            tuple.Actor.MainWeaponId = equip.MainWeaponId;
-            var (desired, fallback) = CharacterWeaponAnimation.Resolve(tuple.Actor, GameDataProvider.Shared);
-            tuple.View.SetWeaponPrefix(desired, fallback);
-            tuple.View.Sync(1.0, 0f);
+            state.Actor.MainWeaponId = equip.MainWeaponId;
+            var (desired, fallback) = CharacterWeaponAnimation.Resolve(state.Actor, GameDataProvider.Shared);
+            state.View.SetWeaponPrefix(desired, fallback);
+            state.View.Sync(1.0, 0f);
         }
     }
 
     private void HandlePlayerHpSynced(PlayerHpSyncPacket hpSync)
     {
-        if (_remotePlayerViews.TryGetValue(hpSync.PlayerId, out var tuple))
+        if (_remotePlayerViews.TryGetValue(hpSync.PlayerId, out var state))
         {
-            tuple.Actor.Hp = hpSync.Hp;
-            tuple.Actor.MaxHp = hpSync.MaxHp;
-            tuple.View.Hp = hpSync.Hp;
-            tuple.View.MaxHp = hpSync.MaxHp;
-            tuple.View.Sync(1.0, 0.016f);
+            state.Actor.Hp = hpSync.Hp;
+            state.Actor.MaxHp = hpSync.MaxHp;
+            state.View.Hp = hpSync.Hp;
+            state.View.MaxHp = hpSync.MaxHp;
+            state.View.Sync(1.0, 0.016f);
 
             if (hpSync.DamageTaken > 0)
             {
-                Float(ToVec(tuple.Actor.Pos), $"{(int)hpSync.DamageTaken}", Color.FromHtml("#ef4444"), big: false);
+                Float(ToVec(state.Actor.Pos), $"{(int)hpSync.DamageTaken}", Color.FromHtml("#ef4444"), big: false);
             }
         }
     }
 
     private void HandleRemotePlayerMoved(MovePacket move)
     {
-        if (_remotePlayerViews.TryGetValue(move.PlayerId, out var tuple))
+        if (_remotePlayerViews.TryGetValue(move.PlayerId, out var state))
         {
-            tuple.Actor.Pos = new WorldPoint(move.X, move.Y);
-            tuple.Actor.Facing8 = move.Facing8;
-            tuple.Actor.Hp = move.Hp;
-            tuple.Actor.MaxHp = move.MaxHp;
-            tuple.View.Hp = move.Hp;
-            tuple.View.MaxHp = move.MaxHp;
-            tuple.View.Pos = ToVec(tuple.Actor.Pos);
-            tuple.View.FaceDirection(move.Facing8);
-            tuple.View.DriveLoop(move.Stepping);
-            _remotePlayerViews[move.PlayerId] = (tuple.Actor, tuple.View, move.Stepping);
+            state.TargetPos = new Vector2((float)move.X, (float)move.Y);
+            state.Actor.Facing8 = move.Facing8;
+            state.Actor.Hp = move.Hp;
+            state.Actor.MaxHp = move.MaxHp;
+            state.View.Hp = move.Hp;
+            state.View.MaxHp = move.MaxHp;
+            state.View.FaceDirection(move.Facing8);
+            state.IsMoving = move.Stepping || ToVec(state.Actor.Pos).DistanceTo(state.TargetPos) > 1.0f;
+            state.MoveHoldTimer = 0.20; // Keep walking animation active for 200ms
         }
     }
 
     private void HandleRemotePlayerAction(ActionPacket action)
     {
-        if (_remotePlayerViews.TryGetValue(action.PlayerId, out var tuple))
+        if (_remotePlayerViews.TryGetValue(action.PlayerId, out var state))
         {
             if (action.ActionType == "attack")
             {
-                tuple.View.PlayAttack(_rng, rangedAttacker: false, rangedShot: false, cycleSeconds: 0.6, speedRatio: 1.0);
+                state.View.PlayAttack(_rng, rangedAttacker: false, rangedShot: false, cycleSeconds: 0.6, speedRatio: 1.0);
             }
             else if (action.ActionType == "cast")
             {
-                PlayCastAnim(tuple.View, tuple.Actor, null, action.SkillId, true);
+                PlayCastAnim(state.View, state.Actor, null, action.SkillId, true);
             }
         }
     }
 
     private void HandleRemotePlayerLeft(string playerId)
     {
-        if (_remotePlayerViews.Remove(playerId, out var tuple))
+        if (_remotePlayerViews.Remove(playerId, out var state))
         {
-            try { tuple.View.Free(); } catch { }
-            SlabLog($"[color=#fca5a5]🚪【隊友離線】{tuple.Actor.Disp} 已退出遊戲。[/color]");
+            try { state.View.Free(); } catch { }
+            SlabLog($"[color=#fca5a5]🚪【隊友離線】{state.Actor.Disp} 已退出遊戲。[/color]");
         }
     }
 
