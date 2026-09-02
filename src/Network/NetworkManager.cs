@@ -210,7 +210,10 @@ public sealed class NetworkManager
 
     public void SendPlayerHpSync(PlayerHpSyncPacket hpSync)
     {
-        hpSync.PlayerId = LocalPlayerId;
+        if (string.IsNullOrEmpty(hpSync.PlayerId))
+        {
+            hpSync.PlayerId = LocalPlayerId;
+        }
         Broadcast(NetEnvelope.Create(NetPacketType.PlayerHpSync, hpSync));
     }
 

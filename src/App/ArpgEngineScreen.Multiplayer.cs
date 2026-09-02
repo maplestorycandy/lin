@@ -520,11 +520,14 @@ public partial class ArpgEngineScreen
         {
             state.Actor.Pos = new WorldPoint(move.X, move.Y);
             state.Actor.Facing8 = move.Facing8;
-            state.Actor.Hp = move.Hp;
-            state.Actor.MaxHp = move.MaxHp;
-            state.Actor.Dead = move.Hp <= 0;
-            state.View.Hp = move.Hp;
-            state.View.MaxHp = move.MaxHp;
+            if (!NetworkManager.Instance.IsHost)
+            {
+                state.Actor.Hp = move.Hp;
+                state.Actor.MaxHp = move.MaxHp;
+                state.Actor.Dead = move.Hp <= 0;
+                state.View.Hp = move.Hp;
+                state.View.MaxHp = move.MaxHp;
+            }
             state.View.FaceDirection(move.Facing8);
             state.IsMoving = move.Stepping;
             state.MoveHoldTimer = 0.15;
