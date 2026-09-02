@@ -15,12 +15,14 @@ public partial class ArpgEngineScreen
     private Vector2 _lastSentNetPos;
     private int _lastSentNetFacing = -1;
     private string _lastSentWeaponId = "";
+    private double _lastSentHp = -1.0;
 
     private void InitMultiplayer()
     {
         NetworkManager.Instance.OnRemotePlayerJoined += HandleRemotePlayerJoined;
         NetworkManager.Instance.OnRemotePlayerMoved += HandleRemotePlayerMoved;
         NetworkManager.Instance.OnRemotePlayerEquipped += HandleRemotePlayerEquipped;
+        NetworkManager.Instance.OnPlayerHpSynced += HandlePlayerHpSynced;
         NetworkManager.Instance.OnRemotePlayerAction += HandleRemotePlayerAction;
         NetworkManager.Instance.OnChatReceived += HandleRemoteChatReceived;
         NetworkManager.Instance.OnRemotePlayerLeft += HandleRemotePlayerLeft;
@@ -44,6 +46,7 @@ public partial class ArpgEngineScreen
         NetworkManager.Instance.OnRemotePlayerJoined -= HandleRemotePlayerJoined;
         NetworkManager.Instance.OnRemotePlayerMoved -= HandleRemotePlayerMoved;
         NetworkManager.Instance.OnRemotePlayerEquipped -= HandleRemotePlayerEquipped;
+        NetworkManager.Instance.OnPlayerHpSynced -= HandlePlayerHpSynced;
         NetworkManager.Instance.OnRemotePlayerAction -= HandleRemotePlayerAction;
         NetworkManager.Instance.OnChatReceived -= HandleRemoteChatReceived;
         NetworkManager.Instance.OnRemotePlayerLeft -= HandleRemotePlayerLeft;
@@ -102,11 +105,13 @@ public partial class ArpgEngineScreen
                 Vector2 currentPos = PlayerPos();
                 int currentFacing = p.Facing8;
                 bool isMoving = _wasdMoving || p.MoveTarget.HasValue;
+                bool hpChanged = Math.Abs(p.Hp - _lastSentHp) > 0.01;
 
-                if (currentPos.DistanceSquaredTo(_lastSentNetPos) > 0.01f || currentFacing != _lastSentNetFacing)
+                if (currentPos.DistanceSquaredTo(_lastSentNetPos) > 0.01f || currentFacing != _lastSentNetFacing || hpChanged)
                 {
                     _lastSentNetPos = currentPos;
                     _lastSentNetFacing = currentFacing;
+                    _lastSentHp = p.Hp;
 
                     NetworkManager.Instance.SendMove(new MovePacket
                     {
@@ -114,6 +119,8 @@ public partial class ArpgEngineScreen
                         Y = currentPos.Y,
                         Facing8 = currentFacing,
                         Stepping = isMoving,
+                        Hp = p.Hp,
+                        MaxHp = p.MaxHp,
                         MapKey = _mapKey
                     });
                 }
@@ -182,28 +189,41 @@ public partial class ArpgEngineScreen
 
     public void NoteCombatDamageEvent(Combatant source, Combatant target, double dmg)
     {
-        if (!NetworkManager.Instance.IsConnected || target == null || target.Kind != CombatantKind.Mob) return;
+        if (!NetworkManager.Instance.IsConnected || target == null) return;
         try
         {
-            if (NetworkManager.Instance.IsHost)
+            if (target == _engine.Player)
             {
-                // Host broadcasts HP sync to all clients
-                NetworkManager.Instance.SendMobHpSync(new MobHpSyncPacket
+                // Local player took damage -> sync to other players
+                NetworkManager.Instance.SendPlayerHpSync(new PlayerHpSyncPacket
                 {
-                    MobId = target.Key,
-                    CurrentHp = target.Hp,
-                    DamageTaken = dmg,
-                    AttackerId = NetworkManager.Instance.LocalPlayerId
+                    Hp = _engine.Player.Hp,
+                    MaxHp = _engine.Player.MaxHp,
+                    DamageTaken = dmg
                 });
             }
-            else if (source == _engine.Player)
+            else if (target.Kind == CombatantKind.Mob)
             {
-                // Client tells Host it hit the mob
-                NetworkManager.Instance.SendMobHit(new MobHitPacket
+                if (NetworkManager.Instance.IsHost)
                 {
-                    MobId = target.Key,
-                    Damage = dmg
-                });
+                    // Host broadcasts HP sync to all clients
+                    NetworkManager.Instance.SendMobHpSync(new MobHpSyncPacket
+                    {
+                        MobId = target.Key,
+                        CurrentHp = target.Hp,
+                        DamageTaken = dmg,
+                        AttackerId = NetworkManager.Instance.LocalPlayerId
+                    });
+                }
+                else if (source == _engine.Player)
+                {
+                    // Client tells Host it hit the mob
+                    NetworkManager.Instance.SendMobHit(new MobHitPacket
+                    {
+                        MobId = target.Key,
+                        Damage = dmg
+                    });
+                }
             }
         }
         catch { }
@@ -237,8 +257,8 @@ public partial class ArpgEngineScreen
             WeaponPrefix = _build?.WeaponPrefix ?? "sword1",
             MainWeaponId = weaponId,
             Level = p.Level,
-            Hp = (int)p.Hp,
-            MaxHp = (int)p.MaxHp,
+            Hp = p.Hp,
+            MaxHp = p.MaxHp,
             X = pos.X,
             Y = pos.Y,
             Facing8 = p.Facing8,
@@ -295,6 +315,8 @@ public partial class ArpgEngineScreen
             ArpgActor view = CreateView(actor);
             view.SetNameWithoutLevel(actor.Disp, actor.Level);
             view.SetNameColor(Color.FromHtml("#66d9ef")); // Teammate Cyan
+            view.Hp = actor.Hp;
+            view.MaxHp = actor.MaxHp;
             view.Pos = ToVec(actor.Pos);
             view.FaceDirection(handshake.Facing8);
 
@@ -329,12 +351,33 @@ public partial class ArpgEngineScreen
         }
     }
 
+    private void HandlePlayerHpSynced(PlayerHpSyncPacket hpSync)
+    {
+        if (_remotePlayerViews.TryGetValue(hpSync.PlayerId, out var tuple))
+        {
+            tuple.Actor.Hp = hpSync.Hp;
+            tuple.Actor.MaxHp = hpSync.MaxHp;
+            tuple.View.Hp = hpSync.Hp;
+            tuple.View.MaxHp = hpSync.MaxHp;
+            tuple.View.Sync(1.0, 0.016f);
+
+            if (hpSync.DamageTaken > 0)
+            {
+                Float(ToVec(tuple.Actor.Pos), $"{(int)hpSync.DamageTaken}", Color.FromHtml("#ef4444"), big: false);
+            }
+        }
+    }
+
     private void HandleRemotePlayerMoved(MovePacket move)
     {
         if (_remotePlayerViews.TryGetValue(move.PlayerId, out var tuple))
         {
             tuple.Actor.Pos = new WorldPoint(move.X, move.Y);
             tuple.Actor.Facing8 = move.Facing8;
+            tuple.Actor.Hp = move.Hp;
+            tuple.Actor.MaxHp = move.MaxHp;
+            tuple.View.Hp = move.Hp;
+            tuple.View.MaxHp = move.MaxHp;
             tuple.View.Pos = ToVec(tuple.Actor.Pos);
             tuple.View.FaceDirection(move.Facing8);
             tuple.View.DriveLoop(move.Stepping);

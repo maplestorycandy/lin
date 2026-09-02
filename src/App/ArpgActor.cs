@@ -63,6 +63,8 @@ public sealed class ArpgActor
 	private readonly Label _name;
 
 	private readonly Label _status;
+	private readonly Node2D? _hpBarNode;
+	private readonly ColorRect? _hpBarFill;
 
 	private string _prefix;
 
@@ -178,7 +180,7 @@ public sealed class ArpgActor
 
 	public bool FixedFacing { get; set; }
 
-	private ArpgActor(AnimatedSprite2D? body, AnimatedSprite2D? shadow, AnimatedSprite2D[] clothes, AnimatedSprite2D? effect, Label name, Label status, string prefix, float scale, float contentH)
+	private ArpgActor(AnimatedSprite2D? body, AnimatedSprite2D? shadow, AnimatedSprite2D[] clothes, AnimatedSprite2D? effect, Label name, Label status, Node2D? hpBarNode, ColorRect? hpBarFill, string prefix, float scale, float contentH)
 	{
 		_body = body;
 		_shadow = shadow;
@@ -186,6 +188,8 @@ public sealed class ArpgActor
 		_effect = effect;
 		_name = name;
 		_status = status;
+		_hpBarNode = hpBarNode;
+		_hpBarFill = hpBarFill;
 		_prefix = prefix;
 		_scale = scale;
 		_contentH = contentH;
@@ -416,7 +420,33 @@ public sealed class ArpgActor
 		};
 		ClassicWorldText.Apply(label2, CStatus, 11);
 		ui.AddChild(label2, forceReadableName: false, Node.InternalMode.Disabled);
-		ArpgActor a = new ArpgActor(animatedSprite2D2, animatedSprite2D, list.ToArray(), effect, label, label2, prefix, scale, contentH)
+		Node2D hpBarNode = new Node2D();
+		ColorRect hpBarBorder = new ColorRect
+		{
+			Size = new Vector2(44f, 6f),
+			Color = Color.FromHtml("#020617"),
+			MouseFilter = Control.MouseFilterEnum.Ignore
+		};
+		ColorRect hpBarBg = new ColorRect
+		{
+			Position = new Vector2(1f, 1f),
+			Size = new Vector2(42f, 4f),
+			Color = Color.FromHtml("#1e293b"),
+			MouseFilter = Control.MouseFilterEnum.Ignore
+		};
+		ColorRect hpBarFill = new ColorRect
+		{
+			Position = new Vector2(1f, 1f),
+			Size = new Vector2(42f, 4f),
+			Color = Color.FromHtml("#22c55e"),
+			MouseFilter = Control.MouseFilterEnum.Ignore
+		};
+		hpBarNode.AddChild(hpBarBorder);
+		hpBarNode.AddChild(hpBarBg);
+		hpBarNode.AddChild(hpBarFill);
+		arena.AddChild(hpBarNode, forceReadableName: false, Node.InternalMode.Disabled);
+
+		ArpgActor a = new ArpgActor(animatedSprite2D2, animatedSprite2D, list.ToArray(), effect, label, label2, hpBarNode, hpBarFill, prefix, scale, contentH)
 		{
 			IsPlayer = isPlayer
 		};
@@ -1223,6 +1253,19 @@ public sealed class ArpgActor
 			_effect.ZIndex = num3 + 2;
 		}
 		float num4 = vector.Y - _contentH * _scale - 8f;
+		if (_hpBarNode != null && _hpBarFill != null)
+		{
+			_hpBarNode.Position = new Vector2(vector.X - 22f, num4 - 26f);
+			_hpBarNode.ZIndex = num3 + 10;
+			bool showHp = !Dead && MaxHp > 0;
+			_hpBarNode.Visible = showHp;
+			if (showHp)
+			{
+				float pct = Mathf.Clamp((float)(Hp / Math.Max(1.0, MaxHp)), 0f, 1f);
+				_hpBarFill.Size = new Vector2(42f * pct, 4f);
+				_hpBarFill.Color = pct > 0.5f ? Color.FromHtml("#22c55e") : (pct > 0.2f ? Color.FromHtml("#eab308") : Color.FromHtml("#ef4444"));
+			}
+		}
 		_name.Position = new Vector2(vector.X - 70f, num4 - 18f);
 		if (_status.Visible)
 		{
@@ -1335,7 +1378,7 @@ public sealed class ArpgActor
 
 	public void Free()
 	{
-		Node[] array = new Node[5] { _body, _shadow, _effect, _name, _status };
+		Node?[] array = new Node?[6] { _body, _shadow, _effect, _name, _status, _hpBarNode };
 		foreach (Node node in array)
 		{
 			if (node != null && GodotObject.IsInstanceValid(node))

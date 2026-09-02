@@ -31,6 +31,7 @@ public sealed class NetworkManager
     public event Action<HandshakePacket>? OnRemotePlayerJoined;
     public event Action<MovePacket>? OnRemotePlayerMoved;
     public event Action<EquipPacket>? OnRemotePlayerEquipped;
+    public event Action<PlayerHpSyncPacket>? OnPlayerHpSynced;
     public event Action<ActionPacket>? OnRemotePlayerAction;
     public event Action<ChatPacket>? OnChatReceived;
     public event Action<string>? OnRemotePlayerLeft;
@@ -204,6 +205,12 @@ public sealed class NetworkManager
     {
         equip.PlayerId = LocalPlayerId;
         Broadcast(NetEnvelope.Create(NetPacketType.Equip, equip));
+    }
+
+    public void SendPlayerHpSync(PlayerHpSyncPacket hpSync)
+    {
+        hpSync.PlayerId = LocalPlayerId;
+        Broadcast(NetEnvelope.Create(NetPacketType.PlayerHpSync, hpSync));
     }
 
     public void SendAction(ActionPacket action)
@@ -399,6 +406,14 @@ public sealed class NetworkManager
                 if (equip != null && equip.PlayerId != LocalPlayerId)
                 {
                     OnRemotePlayerEquipped?.Invoke(equip);
+                }
+                break;
+
+            case NetPacketType.PlayerHpSync:
+                var playerHp = envelope.Deserialize<PlayerHpSyncPacket>();
+                if (playerHp != null && playerHp.PlayerId != LocalPlayerId)
+                {
+                    OnPlayerHpSynced?.Invoke(playerHp);
                 }
                 break;
 

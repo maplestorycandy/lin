@@ -19,7 +19,8 @@ public enum NetPacketType
     MobBatchMove = 10,
     MobHit = 11,
     MobHpSync = 12,
-    MobDeath = 13
+    MobDeath = 13,
+    PlayerHpSync = 14
 }
 
 public class NetEnvelope
@@ -70,10 +71,10 @@ public class HandshakePacket
     public int Level { get; set; } = 1;
 
     [JsonPropertyName("hp")]
-    public int Hp { get; set; } = 100;
+    public double Hp { get; set; } = 100;
 
     [JsonPropertyName("maxHp")]
-    public int MaxHp { get; set; } = 100;
+    public double MaxHp { get; set; } = 100;
 
     [JsonPropertyName("x")]
     public double X { get; set; }
@@ -105,6 +106,12 @@ public class MovePacket
     [JsonPropertyName("stepping")]
     public bool Stepping { get; set; }
 
+    [JsonPropertyName("hp")]
+    public double Hp { get; set; } = 100;
+
+    [JsonPropertyName("maxHp")]
+    public double MaxHp { get; set; } = 100;
+
     [JsonPropertyName("map")]
     public string MapKey { get; set; } = "";
 }
@@ -119,6 +126,21 @@ public class EquipPacket
 
     [JsonPropertyName("weaponPrefix")]
     public string WeaponPrefix { get; set; } = "";
+}
+
+public class PlayerHpSyncPacket
+{
+    [JsonPropertyName("id")]
+    public string PlayerId { get; set; } = "";
+
+    [JsonPropertyName("hp")]
+    public double Hp { get; set; }
+
+    [JsonPropertyName("maxHp")]
+    public double MaxHp { get; set; }
+
+    [JsonPropertyName("dmg")]
+    public double DamageTaken { get; set; }
 }
 
 public class ActionPacket
