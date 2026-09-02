@@ -419,7 +419,7 @@ public sealed class NetworkManager
 
             case NetPacketType.PlayerHpSync:
                 var playerHp = envelope.Deserialize<PlayerHpSyncPacket>();
-                if (playerHp != null && playerHp.PlayerId != LocalPlayerId)
+                if (playerHp != null)
                 {
                     OnPlayerHpSynced?.Invoke(playerHp);
                 }
@@ -427,7 +427,7 @@ public sealed class NetworkManager
 
             case NetPacketType.Action:
                 var action = envelope.Deserialize<ActionPacket>();
-                if (action != null && action.PlayerId != LocalPlayerId)
+                if (action != null)
                 {
                     OnRemotePlayerAction?.Invoke(action);
                 }
