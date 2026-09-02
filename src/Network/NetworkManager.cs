@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -15,135 +14,147 @@ namespace IdleLineage.Network;
 
 public sealed class NetworkManager
 {
-    private static NetworkManager? _instance;
-    public static NetworkManager Instance => _instance ??= new NetworkManager();
+    private static readonly Lazy<NetworkManager> _instance = new(() => new NetworkManager());
+    public static NetworkManager Instance => _instance.Value;
+
+    public const int DefaultPort = 7777;
 
     public bool IsHost { get; private set; }
     public bool IsConnected { get; private set; }
-    public string LocalPlayerId { get; set; } = Guid.NewGuid().ToString("N")[..8];
-    public int Port { get; private set; } = 7777;
+    public string LocalPlayerId { get; private set; } = Guid.NewGuid().ToString("N")[..8];
 
-    // Events dispatched on main thread
+    // Thread-safe main thread dispatch queue
+    private readonly ConcurrentQueue<Action> _mainThreadQueue = new();
+
+    // Events
     public event Action<string>? OnStatusChanged;
     public event Action<HandshakePacket>? OnRemotePlayerJoined;
     public event Action<MovePacket>? OnRemotePlayerMoved;
+    public event Action<EquipPacket>? OnRemotePlayerEquipped;
     public event Action<ActionPacket>? OnRemotePlayerAction;
     public event Action<ChatPacket>? OnChatReceived;
     public event Action<string>? OnRemotePlayerLeft;
 
-    public readonly ConcurrentDictionary<string, HandshakePacket> ConnectedPlayers = new();
+    // Monster sync events
+    public event Action<MobSpawnPacket>? OnMobSpawned;
+    public event Action<MobBatchMovePacket>? OnMobBatchMoved;
+    public event Action<MobHitPacket>? OnMobHitReceived;
+    public event Action<MobHpSyncPacket>? OnMobHpSynced;
+    public event Action<MobDeathPacket>? OnMobDied;
 
+    // Host state
     private TcpListener? _listener;
     private readonly List<ConnectedPeer> _serverPeers = new();
+    private CancellationTokenSource? _hostCts;
+
+    // Client state
     private TcpClient? _client;
     private NetworkStream? _clientStream;
-    private CancellationTokenSource? _cts;
-    private readonly ConcurrentQueue<Action> _mainThreadQueue = new();
+    private CancellationTokenSource? _clientCts;
 
-    private sealed class ConnectedPeer
+    public readonly ConcurrentDictionary<string, HandshakePacket> ConnectedPlayers = new();
+
+    private class ConnectedPeer
     {
-        public string Id { get; set; } = "";
         public TcpClient Client { get; set; } = null!;
         public NetworkStream Stream { get; set; } = null!;
+        public string Id { get; set; } = "";
     }
 
     private NetworkManager() { }
 
     public static List<string> GetLocalIpAddresses()
     {
-        var ips = new List<string>();
+        var list = new List<string>();
         try
         {
-            foreach (var netInterface in NetworkInterface.GetAllNetworkInterfaces())
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
             {
-                if (netInterface.OperationalStatus != OperationalStatus.Up) continue;
-                if (netInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
-
-                var ipProps = netInterface.GetIPProperties();
-                foreach (var addr in ipProps.UnicastAddresses)
+                if (ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip))
                 {
-                    if (addr.Address.AddressFamily == AddressFamily.InterNetwork)
-                    {
-                        ips.Add(addr.Address.ToString());
-                    }
+                    list.Add(ip.ToString());
                 }
             }
         }
         catch { }
-        if (ips.Count == 0) ips.Add("127.0.0.1");
-        return ips;
+        if (list.Count == 0) list.Add("127.0.0.1");
+        return list;
     }
 
-    public void StartHost(int port = 7777)
+    public static string GetLocalIpAddress()
     {
-        Stop();
-        Port = port;
-        IsHost = true;
-        IsConnected = true;
-        _cts = new CancellationTokenSource();
-        ConnectedPlayers.Clear();
+        var ips = GetLocalIpAddresses();
+        return ips.Count > 0 ? ips[0] : "127.0.0.1";
+    }
 
+    public void StartHost(int port = DefaultPort)
+    {
+        _ = StartHostAsync(port);
+    }
+
+    public void ConnectToHost(string hostIp, int port = DefaultPort)
+    {
+        _ = ConnectToHostAsync(hostIp, port);
+    }
+
+    public async Task<bool> StartHostAsync(int port = DefaultPort)
+    {
+        Disconnect();
         try
         {
+            _hostCts = new CancellationTokenSource();
             _listener = new TcpListener(IPAddress.Any, port);
             _listener.Start();
-            Task.Run(() => ServerListenLoop(_cts.Token), _cts.Token);
-            _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[伺服器] 已啟動，監聽通訊埠 {port}"));
+
+            IsHost = true;
+            IsConnected = true;
+
+            _ = ServerListenLoop(_hostCts.Token);
+            OnStatusChanged?.Invoke($"[房長開房] 伺服器已建立於 Port {port}，等待隊友加入...");
+            return true;
         }
         catch (Exception ex)
         {
-            IsConnected = false;
-            _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[伺服器] 啟動失敗: {ex.Message}"));
+            Disconnect();
+            OnStatusChanged?.Invoke($"[房長開房失敗] {ex.Message}");
+            return false;
         }
     }
 
-    public void ConnectToHost(string hostIp, int port = 7777)
+    public async Task<bool> ConnectToHostAsync(string hostIp, int port = DefaultPort)
     {
-        Stop();
-        Port = port;
-        IsHost = false;
-        _cts = new CancellationTokenSource();
-        ConnectedPlayers.Clear();
-
-        Task.Run(async () =>
+        Disconnect();
+        try
         {
-            try
-            {
-                _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[連線] 正在連線至 {hostIp}:{port}..."));
-                _client = new TcpClient();
-                await _client.ConnectAsync(hostIp, port);
-                _clientStream = _client.GetStream();
-                IsConnected = true;
+            _clientCts = new CancellationTokenSource();
+            _client = new TcpClient();
+            await _client.ConnectAsync(hostIp, port, _clientCts.Token);
 
-                _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[連線] 成功連接至房間！"));
+            _clientStream = _client.GetStream();
+            IsHost = false;
+            IsConnected = true;
 
-                // Send initial handshake
-                SendHandshake(new HandshakePacket
-                {
-                    PlayerId = LocalPlayerId,
-                    Name = "連線玩家 " + LocalPlayerId[..4],
-                    ClassId = "knight",
-                    Level = 1,
-                    Hp = 100,
-                    MaxHp = 100
-                });
-
-                _ = ClientReceiveLoop(_cts.Token);
-            }
-            catch (Exception ex)
-            {
-                IsConnected = false;
-                _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[連線] 連線失敗: {ex.Message}"));
-            }
-        });
+            _ = ClientReceiveLoop(_clientCts.Token);
+            OnStatusChanged?.Invoke($"[連線成功] 已加入主機 {hostIp}:{port}！");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Disconnect();
+            OnStatusChanged?.Invoke($"[連線失敗] 無法連線至 {hostIp}:{port} ({ex.Message})");
+            return false;
+        }
     }
 
-    public void Stop()
+    public void Disconnect()
     {
-        _cts?.Cancel();
-        _cts = null;
+        _hostCts?.Cancel();
+        _hostCts = null;
+        _clientCts?.Cancel();
+        _clientCts = null;
 
-        if (IsHost && _listener != null)
+        if (_listener != null)
         {
             try { _listener.Stop(); } catch { }
             _listener = null;
@@ -173,7 +184,7 @@ public sealed class NetworkManager
     {
         while (_mainThreadQueue.TryDequeue(out var action))
         {
-            try { action(); } catch (Exception ex) { GD.PushError($"[Network] MainThread exception: {ex}"); }
+            try { action(); } catch (Exception ex) { GD.PushWarning($"[Network] MainThread warning: {ex.Message}"); }
         }
     }
 
@@ -187,6 +198,12 @@ public sealed class NetworkManager
     {
         move.PlayerId = LocalPlayerId;
         Broadcast(NetEnvelope.Create(NetPacketType.Move, move));
+    }
+
+    public void SendEquip(EquipPacket equip)
+    {
+        equip.PlayerId = LocalPlayerId;
+        Broadcast(NetEnvelope.Create(NetPacketType.Equip, equip));
     }
 
     public void SendAction(ActionPacket action)
@@ -205,6 +222,32 @@ public sealed class NetworkManager
             ColorHex = colorHex
         };
         Broadcast(NetEnvelope.Create(NetPacketType.Chat, chat));
+    }
+
+    public void SendMobSpawn(MobSpawnPacket spawn)
+    {
+        Broadcast(NetEnvelope.Create(NetPacketType.MobSpawn, spawn));
+    }
+
+    public void SendMobBatchMove(MobBatchMovePacket batch)
+    {
+        Broadcast(NetEnvelope.Create(NetPacketType.MobBatchMove, batch));
+    }
+
+    public void SendMobHit(MobHitPacket hit)
+    {
+        hit.AttackerId = LocalPlayerId;
+        Broadcast(NetEnvelope.Create(NetPacketType.MobHit, hit));
+    }
+
+    public void SendMobHpSync(MobHpSyncPacket hpSync)
+    {
+        Broadcast(NetEnvelope.Create(NetPacketType.MobHpSync, hpSync));
+    }
+
+    public void SendMobDeath(MobDeathPacket death)
+    {
+        Broadcast(NetEnvelope.Create(NetPacketType.MobDeath, death));
     }
 
     private void Broadcast(NetEnvelope envelope)
@@ -351,6 +394,14 @@ public sealed class NetworkManager
                 }
                 break;
 
+            case NetPacketType.Equip:
+                var equip = envelope.Deserialize<EquipPacket>();
+                if (equip != null && equip.PlayerId != LocalPlayerId)
+                {
+                    OnRemotePlayerEquipped?.Invoke(equip);
+                }
+                break;
+
             case NetPacketType.Action:
                 var action = envelope.Deserialize<ActionPacket>();
                 if (action != null && action.PlayerId != LocalPlayerId)
@@ -373,6 +424,46 @@ public sealed class NetworkManager
                 {
                     ConnectedPlayers.Remove(leave.PlayerId, out _);
                     OnRemotePlayerLeft?.Invoke(leave.PlayerId);
+                }
+                break;
+
+            case NetPacketType.MobSpawn:
+                var mobSpawn = envelope.Deserialize<MobSpawnPacket>();
+                if (mobSpawn != null)
+                {
+                    OnMobSpawned?.Invoke(mobSpawn);
+                }
+                break;
+
+            case NetPacketType.MobBatchMove:
+                var mobBatch = envelope.Deserialize<MobBatchMovePacket>();
+                if (mobBatch != null)
+                {
+                    OnMobBatchMoved?.Invoke(mobBatch);
+                }
+                break;
+
+            case NetPacketType.MobHit:
+                var mobHit = envelope.Deserialize<MobHitPacket>();
+                if (mobHit != null)
+                {
+                    OnMobHitReceived?.Invoke(mobHit);
+                }
+                break;
+
+            case NetPacketType.MobHpSync:
+                var mobHp = envelope.Deserialize<MobHpSyncPacket>();
+                if (mobHp != null)
+                {
+                    OnMobHpSynced?.Invoke(mobHp);
+                }
+                break;
+
+            case NetPacketType.MobDeath:
+                var mobDeath = envelope.Deserialize<MobDeathPacket>();
+                if (mobDeath != null)
+                {
+                    OnMobDied?.Invoke(mobDeath);
                 }
                 break;
         }

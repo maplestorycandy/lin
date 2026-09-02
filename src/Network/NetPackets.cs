@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -12,7 +13,13 @@ public enum NetPacketType
     Chat = 4,
     Leave = 5,
     SyncRequest = 6,
-    Ping = 7
+    Ping = 7,
+    Equip = 8,
+    MobSpawn = 9,
+    MobBatchMove = 10,
+    MobHit = 11,
+    MobHpSync = 12,
+    MobDeath = 13
 }
 
 public class NetEnvelope
@@ -55,6 +62,9 @@ public class HandshakePacket
 
     [JsonPropertyName("weapon")]
     public string WeaponPrefix { get; set; } = "";
+
+    [JsonPropertyName("mainWeapon")]
+    public string MainWeaponId { get; set; } = "";
 
     [JsonPropertyName("lvl")]
     public int Level { get; set; } = 1;
@@ -99,6 +109,18 @@ public class MovePacket
     public string MapKey { get; set; } = "";
 }
 
+public class EquipPacket
+{
+    [JsonPropertyName("id")]
+    public string PlayerId { get; set; } = "";
+
+    [JsonPropertyName("mainWeapon")]
+    public string MainWeaponId { get; set; } = "";
+
+    [JsonPropertyName("weaponPrefix")]
+    public string WeaponPrefix { get; set; } = "";
+}
+
 public class ActionPacket
 {
     [JsonPropertyName("id")]
@@ -139,4 +161,91 @@ public class LeavePacket
 {
     [JsonPropertyName("id")]
     public string PlayerId { get; set; } = "";
+}
+
+public class MobSpawnPacket
+{
+    [JsonPropertyName("mobId")]
+    public string MobId { get; set; } = "";
+
+    [JsonPropertyName("mobKey")]
+    public string MobKey { get; set; } = "";
+
+    [JsonPropertyName("x")]
+    public double X { get; set; }
+
+    [JsonPropertyName("y")]
+    public double Y { get; set; }
+
+    [JsonPropertyName("hp")]
+    public double Hp { get; set; }
+
+    [JsonPropertyName("maxHp")]
+    public double MaxHp { get; set; }
+
+    [JsonPropertyName("facing")]
+    public int Facing8 { get; set; }
+
+    [JsonPropertyName("map")]
+    public string MapKey { get; set; } = "";
+}
+
+public class MobMoveEntry
+{
+    [JsonPropertyName("mobId")]
+    public string MobId { get; set; } = "";
+
+    [JsonPropertyName("x")]
+    public double X { get; set; }
+
+    [JsonPropertyName("y")]
+    public double Y { get; set; }
+
+    [JsonPropertyName("facing")]
+    public int Facing8 { get; set; }
+
+    [JsonPropertyName("stepping")]
+    public bool Stepping { get; set; }
+}
+
+public class MobBatchMovePacket
+{
+    [JsonPropertyName("moves")]
+    public List<MobMoveEntry> Moves { get; set; } = new();
+}
+
+public class MobHitPacket
+{
+    [JsonPropertyName("mobId")]
+    public string MobId { get; set; } = "";
+
+    [JsonPropertyName("attackerId")]
+    public string AttackerId { get; set; } = "";
+
+    [JsonPropertyName("damage")]
+    public double Damage { get; set; }
+}
+
+public class MobHpSyncPacket
+{
+    [JsonPropertyName("mobId")]
+    public string MobId { get; set; } = "";
+
+    [JsonPropertyName("hp")]
+    public double CurrentHp { get; set; }
+
+    [JsonPropertyName("damage")]
+    public double DamageTaken { get; set; }
+
+    [JsonPropertyName("attackerId")]
+    public string AttackerId { get; set; } = "";
+}
+
+public class MobDeathPacket
+{
+    [JsonPropertyName("mobId")]
+    public string MobId { get; set; } = "";
+
+    [JsonPropertyName("killerId")]
+    public string KillerId { get; set; } = "";
 }

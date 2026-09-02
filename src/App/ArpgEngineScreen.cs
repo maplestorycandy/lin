@@ -11,6 +11,7 @@ using Godot;
 using IdleLineage.Combat;
 using IdleLineage.Core;
 using IdleLineage.Data;
+using IdleLineage.Network;
 
 namespace IdleLineage.App;
 
@@ -3066,10 +3067,12 @@ public sealed partial class ArpgEngineScreen : Control
 					{
 						GameAudio.Instance?.PlayMobHurt(item.Target.Avatar, item.Target.Disp);
 					}
+					NoteCombatDamageEvent(item.Source, item.Target, item.Amount);
 				}
 				break;
 			}
 			case CombatEventKind.Death:
+				NoteCombatDeathEvent(item.Target);
 				PlayL1jWorldNpcDeath(item.Target);
 				ReleaseFixedSpawnSlot(item.Target, killed: true);
 				if (HandleCastleWarDeath(item.Target))
@@ -6624,6 +6627,10 @@ public sealed partial class ArpgEngineScreen : Control
 
 	private void ExplorationSpawnStep()
 	{
+		if (NetworkManager.Instance.IsConnected && !NetworkManager.Instance.IsHost)
+		{
+			return;
+		}
 		if (_spawnSession == null)
 		{
 			return;
@@ -6664,6 +6671,7 @@ public sealed partial class ArpgEngineScreen : Control
 			double item2 = tuple.Y;
 			double perfProbeNowMs = PerfProbeNowMs;
 			Combatant combatant = _engine.SpawnMob(valueOrDefault.MobKey, new WorldPoint(item, item2));
+			NoteHostSpawnedMob(combatant, valueOrDefault.MobKey);
 			_perfProbeSpawnAccumMs += PerfProbeNowMs - perfProbeNowMs;
 			_spawnSession.NoteSpawnPlaced(valueOrDefault);
 			_fixedSpawnSlots[combatant] = valueOrDefault.SlotKey;

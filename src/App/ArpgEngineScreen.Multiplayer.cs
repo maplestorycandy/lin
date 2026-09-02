@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using IdleLineage.Combat;
 using IdleLineage.Network;
@@ -10,16 +11,26 @@ public partial class ArpgEngineScreen
 {
     private readonly Dictionary<string, (Combatant Actor, ArpgActor View, bool IsMoving)> _remotePlayerViews = new();
     private double _netSyncTimer = 0.0;
+    private double _netMobSyncTimer = 0.0;
     private Vector2 _lastSentNetPos;
     private int _lastSentNetFacing = -1;
+    private string _lastSentWeaponId = "";
 
     private void InitMultiplayer()
     {
         NetworkManager.Instance.OnRemotePlayerJoined += HandleRemotePlayerJoined;
         NetworkManager.Instance.OnRemotePlayerMoved += HandleRemotePlayerMoved;
+        NetworkManager.Instance.OnRemotePlayerEquipped += HandleRemotePlayerEquipped;
         NetworkManager.Instance.OnRemotePlayerAction += HandleRemotePlayerAction;
         NetworkManager.Instance.OnChatReceived += HandleRemoteChatReceived;
         NetworkManager.Instance.OnRemotePlayerLeft += HandleRemotePlayerLeft;
+
+        // Mob sync
+        NetworkManager.Instance.OnMobSpawned += HandleMobSpawned;
+        NetworkManager.Instance.OnMobBatchMoved += HandleMobBatchMoved;
+        NetworkManager.Instance.OnMobHitReceived += HandleMobHitReceived;
+        NetworkManager.Instance.OnMobHpSynced += HandleMobHpSynced;
+        NetworkManager.Instance.OnMobDied += HandleMobDied;
 
         if (NetworkManager.Instance.IsConnected)
         {
@@ -32,9 +43,16 @@ public partial class ArpgEngineScreen
     {
         NetworkManager.Instance.OnRemotePlayerJoined -= HandleRemotePlayerJoined;
         NetworkManager.Instance.OnRemotePlayerMoved -= HandleRemotePlayerMoved;
+        NetworkManager.Instance.OnRemotePlayerEquipped -= HandleRemotePlayerEquipped;
         NetworkManager.Instance.OnRemotePlayerAction -= HandleRemotePlayerAction;
         NetworkManager.Instance.OnChatReceived -= HandleRemoteChatReceived;
         NetworkManager.Instance.OnRemotePlayerLeft -= HandleRemotePlayerLeft;
+
+        NetworkManager.Instance.OnMobSpawned -= HandleMobSpawned;
+        NetworkManager.Instance.OnMobBatchMoved -= HandleMobBatchMoved;
+        NetworkManager.Instance.OnMobHitReceived -= HandleMobHitReceived;
+        NetworkManager.Instance.OnMobHpSynced -= HandleMobHpSynced;
+        NetworkManager.Instance.OnMobDied -= HandleMobDied;
 
         foreach (var tuple in _remotePlayerViews.Values)
         {
@@ -64,6 +82,18 @@ public partial class ArpgEngineScreen
                 catch { }
             }
 
+            // Sync weapon change if local player switched weapon in bag
+            string currentWeapon = _engine.Player.MainWeaponId ?? "";
+            if (currentWeapon != _lastSentWeaponId)
+            {
+                _lastSentWeaponId = currentWeapon;
+                NetworkManager.Instance.SendEquip(new EquipPacket
+                {
+                    MainWeaponId = currentWeapon,
+                    WeaponPrefix = _build?.WeaponPrefix ?? ""
+                });
+            }
+
             _netSyncTimer += delta;
             if (_netSyncTimer >= 0.03) // ~30Hz sync rate
             {
@@ -88,6 +118,107 @@ public partial class ArpgEngineScreen
                     });
                 }
             }
+
+            // Host broadcasts living mob positions to clients at 10Hz
+            if (NetworkManager.Instance.IsHost)
+            {
+                _netMobSyncTimer += delta;
+                if (_netMobSyncTimer >= 0.10)
+                {
+                    _netMobSyncTimer = 0.0;
+                    BroadcastHostMobs();
+                }
+            }
+        }
+        catch { }
+    }
+
+    private void BroadcastHostMobs()
+    {
+        try
+        {
+            var moves = new List<MobMoveEntry>();
+            foreach (Combatant c in _engine.Combatants)
+            {
+                if (c.Kind == CombatantKind.Mob && !c.Dead)
+                {
+                    moves.Add(new MobMoveEntry
+                    {
+                        MobId = c.Key,
+                        X = c.Pos.X,
+                        Y = c.Pos.Y,
+                        Facing8 = c.Facing8,
+                        Stepping = c.MoveSpeed > 0.1
+                    });
+                }
+            }
+            if (moves.Count > 0)
+            {
+                NetworkManager.Instance.SendMobBatchMove(new MobBatchMovePacket { Moves = moves });
+            }
+        }
+        catch { }
+    }
+
+    public void NoteHostSpawnedMob(Combatant mob, string mobKey)
+    {
+        if (!NetworkManager.Instance.IsConnected || !NetworkManager.Instance.IsHost) return;
+        try
+        {
+            NetworkManager.Instance.SendMobSpawn(new MobSpawnPacket
+            {
+                MobId = mob.Key,
+                MobKey = mobKey,
+                X = mob.Pos.X,
+                Y = mob.Pos.Y,
+                Hp = mob.Hp,
+                MaxHp = mob.MaxHp,
+                Facing8 = mob.Facing8,
+                MapKey = _mapKey
+            });
+        }
+        catch { }
+    }
+
+    public void NoteCombatDamageEvent(Combatant source, Combatant target, double dmg)
+    {
+        if (!NetworkManager.Instance.IsConnected || target == null || target.Kind != CombatantKind.Mob) return;
+        try
+        {
+            if (NetworkManager.Instance.IsHost)
+            {
+                // Host broadcasts HP sync to all clients
+                NetworkManager.Instance.SendMobHpSync(new MobHpSyncPacket
+                {
+                    MobId = target.Key,
+                    CurrentHp = target.Hp,
+                    DamageTaken = dmg,
+                    AttackerId = NetworkManager.Instance.LocalPlayerId
+                });
+            }
+            else if (source == _engine.Player)
+            {
+                // Client tells Host it hit the mob
+                NetworkManager.Instance.SendMobHit(new MobHitPacket
+                {
+                    MobId = target.Key,
+                    Damage = dmg
+                });
+            }
+        }
+        catch { }
+    }
+
+    public void NoteCombatDeathEvent(Combatant target)
+    {
+        if (!NetworkManager.Instance.IsConnected || !NetworkManager.Instance.IsHost || target == null || target.Kind != CombatantKind.Mob) return;
+        try
+        {
+            NetworkManager.Instance.SendMobDeath(new MobDeathPacket
+            {
+                MobId = target.Key,
+                KillerId = NetworkManager.Instance.LocalPlayerId
+            });
         }
         catch { }
     }
@@ -97,12 +228,14 @@ public partial class ArpgEngineScreen
         if (_engine?.Player == null) return;
         var p = _engine.Player;
         Vector2 pos = PlayerPos();
+        string weaponId = string.IsNullOrEmpty(p.MainWeaponId) ? (_build?.WeaponPrefix ?? "sword1") : p.MainWeaponId;
         NetworkManager.Instance.SendHandshake(new HandshakePacket
         {
             Name = p.Disp,
             ClassId = _build?.ClassId ?? "knight",
             Avatar = _build?.Avatar ?? "男騎士",
             WeaponPrefix = _build?.WeaponPrefix ?? "sword1",
+            MainWeaponId = weaponId,
             Level = p.Level,
             Hp = (int)p.Hp,
             MaxHp = (int)p.MaxHp,
@@ -129,7 +262,6 @@ public partial class ArpgEngineScreen
     {
         if (string.IsNullOrEmpty(handshake.PlayerId)) return;
 
-        // Clean up previous view if rejoining
         if (_remotePlayerViews.TryGetValue(handshake.PlayerId, out var existing))
         {
             try { existing.View.Free(); } catch { }
@@ -139,8 +271,8 @@ public partial class ArpgEngineScreen
         ClassDef? cdef = ClassCatalog.Find(handshake.ClassId);
         string avatar = string.IsNullOrEmpty(handshake.Avatar) ? (cdef?.MaleAvatar ?? "男騎士") : handshake.Avatar;
         string weapon = string.IsNullOrEmpty(handshake.WeaponPrefix) ? (cdef?.Weapon ?? "sword1") : handshake.WeaponPrefix;
+        string mainWeapon = string.IsNullOrEmpty(handshake.MainWeaponId) ? weapon : handshake.MainWeaponId;
 
-        // Create Combatant representation
         var actor = new Combatant
         {
             Kind = CombatantKind.Ally,
@@ -153,18 +285,22 @@ public partial class ArpgEngineScreen
             Mp = 100,
             ClassId = handshake.ClassId,
             Avatar = avatar,
+            MainWeaponId = mainWeapon,
             Pos = new WorldPoint(handshake.X, handshake.Y),
             Facing8 = handshake.Facing8
         };
 
         try
         {
-            // Create authentic view using game's built-in CreateView!
             ArpgActor view = CreateView(actor);
             view.SetNameWithoutLevel(actor.Disp, actor.Level);
             view.SetNameColor(Color.FromHtml("#66d9ef")); // Teammate Cyan
             view.Pos = ToVec(actor.Pos);
             view.FaceDirection(handshake.Facing8);
+
+            // Apply weapon visual immediately
+            var (desired, fallback) = CharacterWeaponAnimation.Resolve(actor, GameDataProvider.Shared);
+            view.SetWeaponPrefix(desired, fallback);
             view.Sync(1.0, 0f);
 
             _remotePlayerViews[handshake.PlayerId] = (actor, view, false);
@@ -176,10 +312,20 @@ public partial class ArpgEngineScreen
 
         SlabLog($"[color=#86efac]⚔️【隊友連線】{handshake.Name}（{handshake.ClassId} Lv.{handshake.Level}）已加入同地圖！[/color]");
 
-        // If we are Host, respond with our handshake so client gets host immediately
         if (NetworkManager.Instance.IsHost)
         {
             SendLocalHandshake();
+        }
+    }
+
+    private void HandleRemotePlayerEquipped(EquipPacket equip)
+    {
+        if (_remotePlayerViews.TryGetValue(equip.PlayerId, out var tuple))
+        {
+            tuple.Actor.MainWeaponId = equip.MainWeaponId;
+            var (desired, fallback) = CharacterWeaponAnimation.Resolve(tuple.Actor, GameDataProvider.Shared);
+            tuple.View.SetWeaponPrefix(desired, fallback);
+            tuple.View.Sync(1.0, 0f);
         }
     }
 
@@ -223,5 +369,93 @@ public partial class ArpgEngineScreen
     private void HandleRemoteChatReceived(ChatPacket chat)
     {
         SlabLog($"[color={chat.ColorHex}]💬【{chat.SenderName}】{chat.Message}[/color]");
+    }
+
+    // --- Monster Synchronization Handlers ---
+
+    private void HandleMobSpawned(MobSpawnPacket spawn)
+    {
+        if (NetworkManager.Instance.IsHost) return;
+        if (spawn.MapKey != _mapKey) return;
+
+        Combatant? existing = _engine.Combatants.FirstOrDefault(c => c.Key == spawn.MobId);
+        if (existing == null)
+        {
+            try
+            {
+                Combatant mob = _engine.SpawnMob(spawn.MobKey, new WorldPoint(spawn.X, spawn.Y));
+                mob.Key = spawn.MobId;
+                mob.Hp = spawn.Hp;
+                mob.MaxHp = spawn.MaxHp;
+                mob.Facing8 = spawn.Facing8;
+            }
+            catch { }
+        }
+    }
+
+    private void HandleMobBatchMoved(MobBatchMovePacket batch)
+    {
+        if (NetworkManager.Instance.IsHost) return;
+
+        foreach (var entry in batch.Moves)
+        {
+            Combatant? mob = _engine.Combatants.FirstOrDefault(c => c.Key == entry.MobId);
+            if (mob != null && !mob.Dead)
+            {
+                mob.Pos = new WorldPoint(entry.X, entry.Y);
+                mob.Facing8 = entry.Facing8;
+            }
+        }
+    }
+
+    private void HandleMobHitReceived(MobHitPacket hit)
+    {
+        if (!NetworkManager.Instance.IsHost) return;
+
+        Combatant? mob = _engine.Combatants.FirstOrDefault(c => c.Key == hit.MobId);
+        if (mob != null && !mob.Dead)
+        {
+            mob.Hp = Math.Max(0.0, mob.Hp - hit.Damage);
+            Float(ToVec(mob.Pos), $"{(int)hit.Damage}", Color.FromHtml("#ff5555"), big: false);
+
+            NetworkManager.Instance.SendMobHpSync(new MobHpSyncPacket
+            {
+                MobId = mob.Key,
+                CurrentHp = mob.Hp,
+                DamageTaken = hit.Damage,
+                AttackerId = hit.AttackerId
+            });
+
+            if (mob.Hp <= 0.0)
+            {
+                mob.Hp = 0;
+                mob.Dead = true;
+                NetworkManager.Instance.SendMobDeath(new MobDeathPacket
+                {
+                    MobId = mob.Key,
+                    KillerId = hit.AttackerId
+                });
+            }
+        }
+    }
+
+    private void HandleMobHpSynced(MobHpSyncPacket hpSync)
+    {
+        Combatant? mob = _engine.Combatants.FirstOrDefault(c => c.Key == hpSync.MobId);
+        if (mob != null)
+        {
+            mob.Hp = hpSync.CurrentHp;
+            Float(ToVec(mob.Pos), $"{(int)hpSync.DamageTaken}", Color.FromHtml("#ff5555"), big: false);
+        }
+    }
+
+    private void HandleMobDied(MobDeathPacket death)
+    {
+        Combatant? mob = _engine.Combatants.FirstOrDefault(c => c.Key == death.MobId);
+        if (mob != null && !mob.Dead)
+        {
+            mob.Hp = 0;
+            mob.Dead = true;
+        }
     }
 }
