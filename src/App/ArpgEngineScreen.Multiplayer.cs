@@ -53,23 +53,33 @@ public partial class ArpgEngineScreen
             return;
         }
 
+        // Sync each remote player view to Godot rendering tree
+        float dt = (float)delta;
+        foreach (var pair in _remotePlayerViews.Values)
+        {
+            pair.View.Pos = _engine.RenderPos(pair.Actor);
+            pair.View.MinimumWorldDepth = ResolveOpaqueWorldObjectActorDepthFloor(pair.Actor.Pos);
+            pair.View.Sync(0.0, dt);
+        }
+
         _netSyncTimer += delta;
-        if (_netSyncTimer >= 0.05) // 20Hz sync rate
+        if (_netSyncTimer >= 0.04) // 25Hz sync rate
         {
             _netSyncTimer = 0.0;
+            var p = _engine.Player;
             Vector2 currentPos = PlayerPos();
-            int currentFacing = _engine.Player.Facing8;
-            bool isMoving = _wasdMoving || _engine.Player.MoveTarget.HasValue;
+            int currentFacing = p.Facing8;
+            bool isMoving = _wasdMoving || p.MoveTarget.HasValue;
 
-            if (currentPos.DistanceSquaredTo(_lastSentNetPos) > 4.0f || currentFacing != _lastSentNetFacing)
+            if (currentPos.DistanceSquaredTo(_lastSentNetPos) > 1.0f || currentFacing != _lastSentNetFacing)
             {
                 _lastSentNetPos = currentPos;
                 _lastSentNetFacing = currentFacing;
 
                 NetworkManager.Instance.SendMove(new MovePacket
                 {
-                    X = currentPos.X,
-                    Y = currentPos.Y,
+                    X = p.Pos.X,
+                    Y = p.Pos.Y,
                     Facing8 = currentFacing,
                     Stepping = isMoving,
                     MapKey = _mapKey
@@ -145,7 +155,9 @@ public partial class ArpgEngineScreen
         view.VisualKey = CharacterVisualKey(actor);
         view.SetNameWithoutLevel(actor.Disp, actor.Level);
         view.SetNameColor(Color.FromHtml("#66d9ef")); // Teammate Cyan
-        view.Pos = new Vector2((float)handshake.X, (float)handshake.Y);
+        view.Pos = _engine.RenderPos(actor);
+        view.FaceDirection(handshake.Facing8);
+        view.Sync(0.0, 0f);
 
         _views[actor] = view;
         _remotePlayerViews[handshake.PlayerId] = (actor, view);
@@ -165,7 +177,7 @@ public partial class ArpgEngineScreen
         {
             pair.Actor.Pos = new WorldPoint(move.X, move.Y);
             pair.Actor.Facing8 = move.Facing8;
-            pair.View.Pos = new Vector2((float)move.X, (float)move.Y);
+            pair.View.Pos = _engine.RenderPos(pair.Actor);
             pair.View.FaceDirection(move.Facing8);
             pair.View.DriveLoop(move.Stepping);
         }
