@@ -297,6 +297,10 @@ public sealed class NetworkManager
                     Stream = tcpClient.GetStream()
                 };
                 lock (_serverPeers) { _serverPeers.Add(peer); }
+                _mainThreadQueue.Enqueue(() =>
+                {
+                    OnStatusChanged?.Invoke($"[隊友加入] 隊友已連線進房！(連線人數: {_serverPeers.Count + 1})");
+                });
                 _ = ServerPeerLoop(peer, token);
             }
             catch { break; }

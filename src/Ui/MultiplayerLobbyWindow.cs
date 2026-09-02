@@ -36,10 +36,17 @@ public sealed partial class MultiplayerLobbyWindow : Panel
         SetProcess(true);
     }
 
+    private int _lastPeerCount = -1;
     public override void _Process(double delta)
     {
         base._Process(delta);
         NetworkManager.Instance.Update();
+        int curPeers = NetworkManager.Instance.PeerCount;
+        if (curPeers != _lastPeerCount)
+        {
+            _lastPeerCount = curPeers;
+            RefreshPlayerList(null);
+        }
     }
 
     public override void _ExitTree()

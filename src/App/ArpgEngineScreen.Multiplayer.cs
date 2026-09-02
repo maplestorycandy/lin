@@ -286,7 +286,6 @@ public partial class ArpgEngineScreen
             {
                 if (NetworkManager.Instance.IsHost)
                 {
-                    target.Hp = Math.Max(0.0, target.Hp - dmg);
                     target.Dead = target.Hp <= 0.0;
                     NetworkManager.Instance.SendPlayerHpSync(new PlayerHpSyncPacket
                     {
