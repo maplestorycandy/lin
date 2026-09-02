@@ -23,7 +23,19 @@ public static class GodotDataFiles
 		{
 			return File.Exists(path);
 		}
-		return Godot.FileAccess.FileExists(path);
+		if (Godot.FileAccess.FileExists(path))
+		{
+			return true;
+		}
+		try
+		{
+			string global = ProjectSettings.GlobalizePath(path);
+			return File.Exists(global);
+		}
+		catch
+		{
+			return false;
+		}
 	}
 
 	private static string ReadAllText(string path)
@@ -33,11 +45,20 @@ public static class GodotDataFiles
 			return File.ReadAllText(path);
 		}
 		using Godot.FileAccess fileAccess = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
-		if (fileAccess == null)
+		if (fileAccess != null)
 		{
-			throw Missing(path);
+			return fileAccess.GetAsText();
 		}
-		return fileAccess.GetAsText();
+		try
+		{
+			string global = ProjectSettings.GlobalizePath(path);
+			if (File.Exists(global))
+			{
+				return File.ReadAllText(global);
+			}
+		}
+		catch { }
+		throw Missing(path);
 	}
 
 	private static byte[] ReadAllBytes(string path)
@@ -47,11 +68,20 @@ public static class GodotDataFiles
 			return File.ReadAllBytes(path);
 		}
 		using Godot.FileAccess fileAccess = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
-		if (fileAccess == null)
+		if (fileAccess != null)
 		{
-			throw Missing(path);
+			return fileAccess.GetBuffer((long)fileAccess.GetLength());
 		}
-		return fileAccess.GetBuffer((long)fileAccess.GetLength());
+		try
+		{
+			string global = ProjectSettings.GlobalizePath(path);
+			if (File.Exists(global))
+			{
+				return File.ReadAllBytes(global);
+			}
+		}
+		catch { }
+		throw Missing(path);
 	}
 
 	private static IOException Missing(string path)
