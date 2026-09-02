@@ -340,24 +340,6 @@ public sealed class NetworkManager
                     if (senderPeer != null) senderPeer.Id = handshake.PlayerId;
                     ConnectedPlayers[handshake.PlayerId] = handshake;
                     OnRemotePlayerJoined?.Invoke(handshake);
-
-                    // If Host received handshake, send host's handshake back to this peer
-                    if (IsHost && senderPeer != null)
-                    {
-                        var hostHs = new HandshakePacket
-                        {
-                            PlayerId = LocalPlayerId,
-                            Name = "房長",
-                            ClassId = "royal",
-                            Level = 1,
-                            Hp = 100,
-                            MaxHp = 100
-                        };
-                        var hostEnv = NetEnvelope.Create(NetPacketType.Handshake, hostHs);
-                        string json = JsonSerializer.Serialize(hostEnv) + "\n";
-                        byte[] bytes = Encoding.UTF8.GetBytes(json);
-                        try { senderPeer.Stream.Write(bytes, 0, bytes.Length); } catch { }
-                    }
                 }
                 break;
 

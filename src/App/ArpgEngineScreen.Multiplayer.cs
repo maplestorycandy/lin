@@ -46,44 +46,55 @@ public partial class ArpgEngineScreen
 
     private void MultiplayerStep(double delta)
     {
-        NetworkManager.Instance.Update();
-
-        if (!NetworkManager.Instance.IsConnected || _engine?.Player == null)
+        try
         {
-            return;
-        }
+            NetworkManager.Instance.Update();
 
-        // Sync each remote player view to Godot rendering tree
-        float dt = (float)delta;
-        foreach (var pair in _remotePlayerViews.Values)
-        {
-            pair.View.Pos = ToVec(pair.Actor.Pos);
-            pair.View.Sync(0.0, dt);
-        }
-
-        _netSyncTimer += delta;
-        if (_netSyncTimer >= 0.03) // ~30Hz sync rate
-        {
-            _netSyncTimer = 0.0;
-            var p = _engine.Player;
-            Vector2 currentPos = PlayerPos();
-            int currentFacing = p.Facing8;
-            bool isMoving = _wasdMoving || p.MoveTarget.HasValue;
-
-            if (currentPos.DistanceSquaredTo(_lastSentNetPos) > 0.01f || currentFacing != _lastSentNetFacing)
+            if (!NetworkManager.Instance.IsConnected || _engine?.Player == null)
             {
-                _lastSentNetPos = currentPos;
-                _lastSentNetFacing = currentFacing;
-
-                NetworkManager.Instance.SendMove(new MovePacket
-                {
-                    X = p.Pos.X,
-                    Y = p.Pos.Y,
-                    Facing8 = currentFacing,
-                    Stepping = isMoving,
-                    MapKey = _mapKey
-                });
+                return;
             }
+
+            // Sync each remote player view to Godot rendering tree
+            float dt = (float)delta;
+            foreach (var pair in _remotePlayerViews.Values)
+            {
+                try
+                {
+                    pair.View.Pos = ToVec(pair.Actor.Pos);
+                    pair.View.Sync(0.0, dt);
+                }
+                catch { }
+            }
+
+            _netSyncTimer += delta;
+            if (_netSyncTimer >= 0.03) // ~30Hz sync rate
+            {
+                _netSyncTimer = 0.0;
+                var p = _engine.Player;
+                Vector2 currentPos = PlayerPos();
+                int currentFacing = p.Facing8;
+                bool isMoving = _wasdMoving || p.MoveTarget.HasValue;
+
+                if (currentPos.DistanceSquaredTo(_lastSentNetPos) > 0.01f || currentFacing != _lastSentNetFacing)
+                {
+                    _lastSentNetPos = currentPos;
+                    _lastSentNetFacing = currentFacing;
+
+                    NetworkManager.Instance.SendMove(new MovePacket
+                    {
+                        X = p.Pos.X,
+                        Y = p.Pos.Y,
+                        Facing8 = currentFacing,
+                        Stepping = isMoving,
+                        MapKey = _mapKey
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            GD.PushWarning($"[Multiplayer] Step non-fatal warning: {ex.Message}");
         }
     }
 
@@ -94,9 +105,9 @@ public partial class ArpgEngineScreen
         NetworkManager.Instance.SendHandshake(new HandshakePacket
         {
             Name = p.Disp,
-            ClassId = _build.ClassId,
-            Avatar = string.IsNullOrEmpty(_build.Avatar) ? p.Avatar : _build.Avatar,
-            WeaponPrefix = string.IsNullOrEmpty(_build.WeaponPrefix) ? "" : _build.WeaponPrefix,
+            ClassId = _build?.ClassId ?? "knight",
+            Avatar = _build?.Avatar ?? "男騎士",
+            WeaponPrefix = _build?.WeaponPrefix ?? "sword1",
             Level = p.Level,
             Hp = (int)p.Hp,
             MaxHp = (int)p.MaxHp,
@@ -133,6 +144,7 @@ public partial class ArpgEngineScreen
 
         ClassDef? cdef = ClassCatalog.Find(handshake.ClassId);
         string avatar = string.IsNullOrEmpty(handshake.Avatar) ? (cdef?.MaleAvatar ?? "男騎士") : handshake.Avatar;
+        string weapon = string.IsNullOrEmpty(handshake.WeaponPrefix) ? (cdef?.Weapon ?? "sword1") : handshake.WeaponPrefix;
 
         // Create Combatant representation
         var actor = new Combatant
@@ -151,16 +163,23 @@ public partial class ArpgEngineScreen
             Facing8 = handshake.Facing8
         };
 
-        // Create authentic view using game's built-in CreateView!
-        ArpgActor view = CreateView(actor);
-        view.SetNameWithoutLevel(actor.Disp, actor.Level);
-        view.SetNameColor(Color.FromHtml("#66d9ef")); // Teammate Cyan
-        view.Pos = ToVec(actor.Pos);
-        view.FaceDirection(handshake.Facing8);
-        view.Sync(0.0, 0f);
+        try
+        {
+            // Create authentic view using game's built-in CreateView!
+            ArpgActor view = CreateView(actor);
+            view.SetNameWithoutLevel(actor.Disp, actor.Level);
+            view.SetNameColor(Color.FromHtml("#66d9ef")); // Teammate Cyan
+            view.Pos = ToVec(actor.Pos);
+            view.FaceDirection(handshake.Facing8);
+            view.Sync(0.0, 0f);
 
-        _views[actor] = view;
-        _remotePlayerViews[handshake.PlayerId] = (actor, view);
+            _views[actor] = view;
+            _remotePlayerViews[handshake.PlayerId] = (actor, view);
+        }
+        catch (Exception ex)
+        {
+            GD.PushWarning($"[Multiplayer] Create view warning: {ex.Message}");
+        }
 
         SlabLog($"[color=#86efac]⚔️【隊友連線】{handshake.Name}（{handshake.ClassId} Lv.{handshake.Level}）已加入同地圖！[/color]");
 
