@@ -73,6 +73,10 @@ public static class DayNight
 
 	public static bool IsDark(double unixSeconds, string mapName)
 	{
+		if (GameRateConfig.AlwaysDaylight)
+		{
+			return false;
+		}
 		if (!IsCave(mapName))
 		{
 			return !IsDay(unixSeconds);

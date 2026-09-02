@@ -31,4 +31,9 @@ public static class GameRateConfig
     /// 是否關閉負重限制（true = 無限負重，負重永遠為 0%，自然回血施法不受限）
     /// </summary>
     public static bool DisableWeightPenalty = true;
+
+    /// <summary>
+    /// 是否全地圖永晝/視野全開（true = 關閉黑夜遮罩，全螢幕明亮清晰；false = 原版天堂日夜交替與燈籠系統）
+    /// </summary>
+    public static bool AlwaysDaylight = true;
 }
