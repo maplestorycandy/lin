@@ -3022,6 +3022,10 @@ public sealed partial class ArpgEngineScreen : Control
 					{
 						SendLocalAction("attack");
 					}
+					else if (NetworkManager.Instance.IsHost && item.Source != null && item.Source.Kind == CombatantKind.Mob)
+					{
+						SendLocalAction("mob_attack", item.Source.Key, item.Target?.Pos.X ?? 0, item.Target?.Pos.Y ?? 0);
+					}
 				}
 				if (item.Target != null && _views.TryGetValue(item.Target, out ArpgActor value9))
 				{
@@ -3412,10 +3416,17 @@ public sealed partial class ArpgEngineScreen : Control
 	private ArpgActor CreateView(Combatant c)
 	{
 		ArpgActor arpgActor;
-		if (c.Kind == CombatantKind.Player)
+		if (c.Kind == CombatantKind.Player && !c.IsRemote)
 		{
 			CharacterMorphAnimation.Spec spec = ResolveCharacterVisual(c, _build.Avatar, _build.WeaponPrefix);
 			arpgActor = (_playerView = ArpgActor.Create(_atlas, _arena, _ui, spec.Group, spec.Atlas, spec.WeaponPrefix, isPlayer: true, 1f, spec.ThreeDirection));
+		}
+		else if (UsesCharacterPresentation(c) || c.IsRemote)
+		{
+			string avatar = string.IsNullOrEmpty(c.Avatar) ? "男騎士" : c.Avatar;
+			string weaponPrefix = string.IsNullOrEmpty(c.WeaponPrefix) ? "sword1" : c.WeaponPrefix;
+			CharacterMorphAnimation.Spec spec2 = ResolveCharacterVisual(c, avatar, weaponPrefix);
+			arpgActor = ArpgActor.Create(_atlas, _arena, _ui, spec2.Group, spec2.Atlas, spec2.WeaponPrefix, isPlayer: true, 0.98f, spec2.ThreeDirection);
 		}
 		else if (UsesCharacterPresentation(c))
 		{

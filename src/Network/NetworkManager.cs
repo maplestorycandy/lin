@@ -21,6 +21,7 @@ public sealed class NetworkManager
 
     public bool IsHost { get; private set; }
     public bool IsConnected { get; private set; }
+    public int PeerCount { get { lock (_serverPeers) { return _serverPeers.Count; } } }
     public string LocalPlayerId { get; private set; } = Guid.NewGuid().ToString("N")[..8];
 
     // Thread-safe main thread dispatch queue

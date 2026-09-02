@@ -276,6 +276,7 @@ public partial class ArpgEngineScreen
             {
                 NetworkManager.Instance.SendPlayerHpSync(new PlayerHpSyncPacket
                 {
+                    PlayerId = NetworkManager.Instance.LocalPlayerId,
                     Hp = _engine.Player.Hp,
                     MaxHp = _engine.Player.MaxHp,
                     DamageTaken = dmg
@@ -283,9 +284,10 @@ public partial class ArpgEngineScreen
             }
             else if (target.IsRemote)
             {
-                // Host mob hit remote client player -> send damage to client
                 if (NetworkManager.Instance.IsHost)
                 {
+                    target.Hp = Math.Max(0.0, target.Hp - dmg);
+                    target.Dead = target.Hp <= 0.0;
                     NetworkManager.Instance.SendPlayerHpSync(new PlayerHpSyncPacket
                     {
                         PlayerId = target.Key,
@@ -340,12 +342,16 @@ public partial class ArpgEngineScreen
         var p = _engine.Player;
         Vector2 pos = PlayerPos();
         string weaponId = string.IsNullOrEmpty(p.MainWeaponId) ? (_build?.WeaponPrefix ?? "sword1") : p.MainWeaponId;
+        string avatar = string.IsNullOrEmpty(p.Avatar) ? (_build?.Avatar ?? "男騎士") : p.Avatar;
+        string classId = string.IsNullOrEmpty(p.ClassId) ? (_build?.ClassId ?? "knight") : p.ClassId;
+        string weaponPrefix = string.IsNullOrEmpty(p.WeaponPrefix) ? (_build?.WeaponPrefix ?? "sword1") : p.WeaponPrefix;
+
         NetworkManager.Instance.SendHandshake(new HandshakePacket
         {
             Name = p.Disp,
-            ClassId = _build?.ClassId ?? "knight",
-            Avatar = _build?.Avatar ?? "男騎士",
-            WeaponPrefix = _build?.WeaponPrefix ?? "sword1",
+            ClassId = classId,
+            Avatar = avatar,
+            WeaponPrefix = weaponPrefix,
             MainWeaponId = weaponId,
             Level = p.Level,
             Hp = p.Hp,
@@ -380,9 +386,8 @@ public partial class ArpgEngineScreen
             _remotePlayerViews.Remove(handshake.PlayerId);
         }
 
-        ClassDef? cdef = ClassCatalog.Find(handshake.ClassId);
-        string avatar = string.IsNullOrEmpty(handshake.Avatar) ? (cdef?.MaleAvatar ?? "男騎士") : handshake.Avatar;
-        string weapon = string.IsNullOrEmpty(handshake.WeaponPrefix) ? (cdef?.Weapon ?? "sword1") : handshake.WeaponPrefix;
+        string avatar = string.IsNullOrEmpty(handshake.Avatar) ? "男騎士" : handshake.Avatar;
+        string weapon = string.IsNullOrEmpty(handshake.WeaponPrefix) ? "sword1" : handshake.WeaponPrefix;
         string mainWeapon = string.IsNullOrEmpty(handshake.MainWeaponId) ? weapon : handshake.MainWeaponId;
 
         var actor = new Combatant
@@ -398,6 +403,7 @@ public partial class ArpgEngineScreen
             Mp = 100,
             ClassId = handshake.ClassId,
             Avatar = avatar,
+            WeaponPrefix = weapon,
             MainWeaponId = mainWeapon,
             Pos = new WorldPoint(handshake.X, handshake.Y),
             Facing8 = handshake.Facing8
@@ -405,7 +411,6 @@ public partial class ArpgEngineScreen
 
         try
         {
-            // Register remote player into CombatEngine so Host monster AI sees and targets them!
             _engine?.Engine?.Add(actor);
 
             ArpgActor view = CreateView(actor);
@@ -441,7 +446,6 @@ public partial class ArpgEngineScreen
         {
             SendLocalHandshake();
 
-            // Host syncs all current active monsters to the newly joined player!
             foreach (Combatant c in _engine.Combatants)
             {
                 if (c.Kind == CombatantKind.Mob && !c.Dead)
@@ -478,10 +482,19 @@ public partial class ArpgEngineScreen
     {
         if (hpSync.PlayerId == NetworkManager.Instance.LocalPlayerId || string.IsNullOrEmpty(hpSync.PlayerId))
         {
-            // Local player was damaged
-            if (hpSync.DamageTaken > 0 && _engine?.Player != null)
+            if (_engine?.Player != null)
             {
-                Float(PlayerPos(), $"{(int)hpSync.DamageTaken}", Color.FromHtml("#ef4444"), big: false);
+                _engine.Player.Hp = Math.Max(0.0, hpSync.Hp);
+                if (hpSync.DamageTaken > 0)
+                {
+                    Float(PlayerPos(), $"{(int)hpSync.DamageTaken}", Color.FromHtml("#ef4444"), big: false);
+                    _playerView?.PlayOneShot("hurt");
+                    GameAudio.Instance?.PlayPartyHurt(_engine.Player);
+                }
+                if (_engine.Player.Hp <= 0.0)
+                {
+                    _engine.Player.Hp = 0; _engine.Player.Dead = true;
+                }
             }
             return;
         }
@@ -521,6 +534,17 @@ public partial class ArpgEngineScreen
 
     private void HandleRemotePlayerAction(ActionPacket action)
     {
+        if (action.ActionType == "mob_attack")
+        {
+            Combatant? mob = _engine.Combatants.FirstOrDefault(c => c.Key == action.SkillId);
+            if (mob != null && _views.TryGetValue(mob, out ArpgActor? mobView))
+            {
+                mobView.PlayAttack(_rng, rangedAttacker: mob.AttackRange > 48.0, rangedShot: false, cycleSeconds: 0.6, speedRatio: 1.0);
+                PlayAttackSfx(mob);
+            }
+            return;
+        }
+
         if (_remotePlayerViews.TryGetValue(action.PlayerId, out var state))
         {
             if (action.ActionType == "attack")
@@ -602,7 +626,6 @@ public partial class ArpgEngineScreen
             mob.Hp = Math.Max(0.0, mob.Hp - hit.Damage);
             if (attacker != null)
             {
-                // Mob generates hate towards client and retaliates!
                 _engine.Engine.AddHateExternal(mob, attacker, hit.Damage);
             }
 

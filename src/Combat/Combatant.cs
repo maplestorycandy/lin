@@ -19,6 +19,7 @@ public sealed class Combatant
 	public string ClassId = "";
 
 	public string Avatar = "";
+	public string WeaponPrefix = "";
 
 	public int Level = 1;
 
