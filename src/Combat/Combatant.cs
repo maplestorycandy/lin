@@ -8,6 +8,7 @@ public sealed class Combatant
 	public CombatantKind Kind = CombatantKind.Mob;
 
 	public bool UsesMonsterTemplate;
+	public bool IsRemote;
 
 	public string Key = "";
 

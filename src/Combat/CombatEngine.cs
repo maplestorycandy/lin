@@ -2480,6 +2480,7 @@ public sealed class CombatEngine
 		{
 			combatant2.VelX = 0.0;
 			combatant2.VelY = 0.0;
+			if (combatant2.IsRemote) continue;
 			double num = CombatModifierRules.EffectiveMoveSpeed(combatant2, _data);
 			if (!combatant2.IsAlive)
 			{
@@ -2897,6 +2898,7 @@ public sealed class CombatEngine
 		{
 			return;
 		}
+		if (attacker.IsRemote) return;
 		if (!attacker.IsAlive)
 		{
 			_manualCastQueue.Remove(attacker);
@@ -5359,6 +5361,11 @@ public sealed class CombatEngine
 			return value.ContainsKey(source);
 		}
 		return false;
+	}
+
+	public void AddHateExternal(Combatant npc, Combatant source, double amount)
+	{
+		AddHate(npc, source, amount, linkFamily: true);
 	}
 
 	private void AddHate(Combatant npc, Combatant? source, double amount, bool linkFamily = true)
