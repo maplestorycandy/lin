@@ -17,6 +17,7 @@ public sealed class ArpgActor
 	public double MaxHp;
 
 	public bool IsPlayer;
+	public bool IsRemote;
 
 	public bool Dead;
 
@@ -727,7 +728,7 @@ public sealed class ArpgActor
 				}
 			}
 		}
-		if (stepping && num >= 2)
+		if (stepping && num >= 2 && !IsRemote)
 		{
 			Vector2[] array = _atlas.FrameAnchorOffsets(_group, CurrentAtlasName(), anim);
 			if (array != null && array.Length >= num)

@@ -137,15 +137,6 @@ public sealed class NetworkManager
             IsConnected = true;
 
             _ = ClientReceiveLoop(_clientCts.Token);
-
-            // Send instant initial lobby presence
-            SendHandshake(new HandshakePacket
-            {
-                Name = "隊友 (大廳中)",
-                ClassId = "knight",
-                Level = 1
-            });
-
             OnStatusChanged?.Invoke($"[連線成功] 已加入主機 {hostIp}:{port}！");
             return true;
         }
@@ -302,23 +293,9 @@ public sealed class NetworkManager
                 var peer = new ConnectedPeer
                 {
                     Client = tcpClient,
-                    Stream = tcpClient.GetStream(),
-                    Id = Guid.NewGuid().ToString("N")[..8]
+                    Stream = tcpClient.GetStream()
                 };
                 lock (_serverPeers) { _serverPeers.Add(peer); }
-
-                var tempHandshake = new HandshakePacket
-                {
-                    PlayerId = peer.Id,
-                    Name = "已連線隊友 (大廳等待中)"
-                };
-                ConnectedPlayers[peer.Id] = tempHandshake;
-                _mainThreadQueue.Enqueue(() =>
-                {
-                    OnRemotePlayerJoined?.Invoke(tempHandshake);
-                    OnStatusChanged?.Invoke("[隊友加入] 隊友已加入房間大廳！");
-                });
-
                 _ = ServerPeerLoop(peer, token);
             }
             catch { break; }
@@ -410,14 +387,7 @@ public sealed class NetworkManager
                 var handshake = envelope.Deserialize<HandshakePacket>();
                 if (handshake != null && handshake.PlayerId != LocalPlayerId)
                 {
-                    if (senderPeer != null)
-                    {
-                        if (senderPeer.Id != handshake.PlayerId)
-                        {
-                            ConnectedPlayers.Remove(senderPeer.Id, out _);
-                        }
-                        senderPeer.Id = handshake.PlayerId;
-                    }
+                    if (senderPeer != null) senderPeer.Id = handshake.PlayerId;
                     ConnectedPlayers[handshake.PlayerId] = handshake;
                     OnRemotePlayerJoined?.Invoke(handshake);
                 }

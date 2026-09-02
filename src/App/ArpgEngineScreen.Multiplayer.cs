@@ -16,7 +16,6 @@ public partial class ArpgEngineScreen
         public bool IsMoving { get; set; }
         public float WalkProgress { get; set; }
         public double MoveHoldTimer { get; set; }
-        public Vector2 TargetPos { get; set; }
     }
 
     private readonly Dictionary<string, RemotePlayerState> _remotePlayerViews = new();
@@ -116,21 +115,6 @@ public partial class ArpgEngineScreen
                         {
                             state.IsMoving = false;
                         }
-                    }
-
-                    // Smooth interpolate remote player movement
-                    Vector2 currentPos = ToVec(state.Actor.Pos);
-                    float dist = currentPos.DistanceTo(state.TargetPos);
-                    if (dist > 200f)
-                    {
-                        state.Actor.Pos = new WorldPoint(state.TargetPos.X, state.TargetPos.Y);
-                    }
-                    else if (dist > 0.5f)
-                    {
-                        float speed = Mathf.Max(150f, dist * 8.0f);
-                        Vector2 next = currentPos.MoveToward(state.TargetPos, speed * dt);
-                        state.Actor.Pos = new WorldPoint(next.X, next.Y);
-                        state.IsMoving = true;
                     }
 
                     if (state.IsMoving)
@@ -405,6 +389,7 @@ public partial class ArpgEngineScreen
         try
         {
             ArpgActor view = CreateView(actor);
+            view.IsRemote = true;
             view.SetNameWithoutLevel(actor.Disp, actor.Level);
             view.SetNameColor(Color.FromHtml("#66d9ef"));
             view.Hp = actor.Hp;
@@ -422,8 +407,7 @@ public partial class ArpgEngineScreen
                 View = view,
                 IsMoving = false,
                 WalkProgress = 0f,
-                MoveHoldTimer = 0.0,
-                TargetPos = new Vector2((float)handshake.X, (float)handshake.Y)
+                MoveHoldTimer = 0.0
             };
         }
         catch (Exception ex)
@@ -471,15 +455,15 @@ public partial class ArpgEngineScreen
     {
         if (_remotePlayerViews.TryGetValue(move.PlayerId, out var state))
         {
-            state.TargetPos = new Vector2((float)move.X, (float)move.Y);
+            state.Actor.Pos = new WorldPoint(move.X, move.Y);
             state.Actor.Facing8 = move.Facing8;
             state.Actor.Hp = move.Hp;
             state.Actor.MaxHp = move.MaxHp;
             state.View.Hp = move.Hp;
             state.View.MaxHp = move.MaxHp;
             state.View.FaceDirection(move.Facing8);
-            state.IsMoving = move.Stepping || ToVec(state.Actor.Pos).DistanceTo(state.TargetPos) > 1.0f;
-            state.MoveHoldTimer = 0.20; // Keep walking animation active for 200ms
+            state.IsMoving = move.Stepping;
+            state.MoveHoldTimer = 0.15;
         }
     }
 
