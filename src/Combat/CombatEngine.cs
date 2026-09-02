@@ -10,6 +10,8 @@ namespace IdleLineage.Combat;
 
 public sealed class CombatEngine
 {
+	public bool DisableMobAi { get; set; } = false;
+
 	private sealed class AllySkillPlan
 	{
 		public int LearnedCount;
@@ -2273,7 +2275,10 @@ public sealed class CombatEngine
 			AdvanceCubeBuffs();
 			_legacyTimerAccumulator -= 0.1;
 		}
-		AdvanceMobSkills();
+		if (!DisableMobAi)
+		{
+			AdvanceMobSkills();
+		}
 		AdvanceSummonLifetimes();
 		AdvanceMagicDolls();
 		AdvanceMovement(deltaSeconds);
@@ -2488,6 +2493,10 @@ public sealed class CombatEngine
 				}
 				if (combatant2.Kind == CombatantKind.Mob)
 				{
+					if (DisableMobAi)
+					{
+						continue;
+					}
 					if (AdvanceFleeOnlyMob(combatant2, deltaSeconds, num))
 					{
 						continue;
@@ -2884,6 +2893,10 @@ public sealed class CombatEngine
 
 	private void AdvanceCombatant(Combatant attacker, double deltaSeconds)
 	{
+		if (DisableMobAi && attacker.Kind == CombatantKind.Mob)
+		{
+			return;
+		}
 		if (!attacker.IsAlive)
 		{
 			_manualCastQueue.Remove(attacker);

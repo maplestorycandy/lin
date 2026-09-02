@@ -10,6 +10,7 @@ namespace IdleLineage.App;
 public partial class ArpgEngineScreen
 {
     private readonly Dictionary<string, (Combatant Actor, ArpgActor View, bool IsMoving)> _remotePlayerViews = new();
+    private readonly Dictionary<string, (Vector2 TargetPos, int Facing8, bool Stepping)> _clientMobTargets = new();
     private double _netSyncTimer = 0.0;
     private double _netMobSyncTimer = 0.0;
     private Vector2 _lastSentNetPos;
@@ -34,6 +35,11 @@ public partial class ArpgEngineScreen
         NetworkManager.Instance.OnMobHpSynced += HandleMobHpSynced;
         NetworkManager.Instance.OnMobDied += HandleMobDied;
 
+        if (_engine?.Engine != null)
+        {
+            _engine.Engine.DisableMobAi = NetworkManager.Instance.IsConnected && !NetworkManager.Instance.IsHost;
+        }
+
         if (NetworkManager.Instance.IsConnected)
         {
             SendLocalHandshake();
@@ -57,11 +63,17 @@ public partial class ArpgEngineScreen
         NetworkManager.Instance.OnMobHpSynced -= HandleMobHpSynced;
         NetworkManager.Instance.OnMobDied -= HandleMobDied;
 
+        if (_engine?.Engine != null)
+        {
+            _engine.Engine.DisableMobAi = false;
+        }
+
         foreach (var tuple in _remotePlayerViews.Values)
         {
             try { tuple.View.Free(); } catch { }
         }
         _remotePlayerViews.Clear();
+        _clientMobTargets.Clear();
     }
 
     private void MultiplayerStep(double delta)
@@ -75,7 +87,14 @@ public partial class ArpgEngineScreen
                 return;
             }
 
+            if (_engine.Engine != null)
+            {
+                _engine.Engine.DisableMobAi = !NetworkManager.Instance.IsHost;
+            }
+
             float dt = (float)delta;
+
+            // 1. Update Remote Player Views
             foreach (var tuple in _remotePlayerViews.Values)
             {
                 try
@@ -85,7 +104,41 @@ public partial class ArpgEngineScreen
                 catch { }
             }
 
-            // Sync weapon change if local player switched weapon in bag
+            // 2. Client-side Smooth Mob Movement Interpolation (No Jitter!)
+            if (!NetworkManager.Instance.IsHost && _clientMobTargets.Count > 0)
+            {
+                foreach (var (mobId, info) in _clientMobTargets)
+                {
+                    Combatant? mob = _engine.Combatants.FirstOrDefault(c => c.Key == mobId);
+                    if (mob != null && !mob.Dead)
+                    {
+                        Vector2 current = ToVec(mob.Pos);
+                        float dist = current.DistanceTo(info.TargetPos);
+
+                        if (dist > 180f)
+                        {
+                            // Teleport if too far
+                            mob.Pos = new WorldPoint(info.TargetPos.X, info.TargetPos.Y);
+                        }
+                        else if (dist > 0.5f)
+                        {
+                            // Smooth move towards target
+                            float speed = Mathf.Max(120f, dist * 6.0f);
+                            Vector2 next = current.MoveToward(info.TargetPos, speed * dt);
+                            mob.Pos = new WorldPoint(next.X, next.Y);
+                        }
+
+                        mob.Facing8 = info.Facing8;
+                        if (_views.TryGetValue(mob, out ArpgActor? view))
+                        {
+                            view.FaceDirection(info.Facing8);
+                            view.DriveLoop(info.Stepping);
+                        }
+                    }
+                }
+            }
+
+            // 3. Sync weapon change if local player switched weapon in bag
             string currentWeapon = _engine.Player.MainWeaponId ?? "";
             if (currentWeapon != _lastSentWeaponId)
             {
@@ -97,8 +150,9 @@ public partial class ArpgEngineScreen
                 });
             }
 
+            // 4. Send Player Move & HP (30Hz)
             _netSyncTimer += delta;
-            if (_netSyncTimer >= 0.03) // ~30Hz sync rate
+            if (_netSyncTimer >= 0.03)
             {
                 _netSyncTimer = 0.0;
                 var p = _engine.Player;
@@ -126,11 +180,11 @@ public partial class ArpgEngineScreen
                 }
             }
 
-            // Host broadcasts living mob positions to clients at 10Hz
+            // 5. Host broadcasts living mob positions to clients at 20Hz
             if (NetworkManager.Instance.IsHost)
             {
                 _netMobSyncTimer += delta;
-                if (_netMobSyncTimer >= 0.10)
+                if (_netMobSyncTimer >= 0.05) // 20Hz
                 {
                     _netMobSyncTimer = 0.0;
                     BroadcastHostMobs();
@@ -431,6 +485,7 @@ public partial class ArpgEngineScreen
                 mob.Hp = spawn.Hp;
                 mob.MaxHp = spawn.MaxHp;
                 mob.Facing8 = spawn.Facing8;
+                _clientMobTargets[spawn.MobId] = (new Vector2((float)spawn.X, (float)spawn.Y), spawn.Facing8, false);
             }
             catch { }
         }
@@ -442,12 +497,7 @@ public partial class ArpgEngineScreen
 
         foreach (var entry in batch.Moves)
         {
-            Combatant? mob = _engine.Combatants.FirstOrDefault(c => c.Key == entry.MobId);
-            if (mob != null && !mob.Dead)
-            {
-                mob.Pos = new WorldPoint(entry.X, entry.Y);
-                mob.Facing8 = entry.Facing8;
-            }
+            _clientMobTargets[entry.MobId] = (new Vector2((float)entry.X, (float)entry.Y), entry.Facing8, entry.Stepping);
         }
     }
 
@@ -473,6 +523,7 @@ public partial class ArpgEngineScreen
             {
                 mob.Hp = 0;
                 mob.Dead = true;
+                _clientMobTargets.Remove(mob.Key);
                 NetworkManager.Instance.SendMobDeath(new MobDeathPacket
                 {
                     MobId = mob.Key,
@@ -494,6 +545,7 @@ public partial class ArpgEngineScreen
 
     private void HandleMobDied(MobDeathPacket death)
     {
+        _clientMobTargets.Remove(death.MobId);
         Combatant? mob = _engine.Combatants.FirstOrDefault(c => c.Key == death.MobId);
         if (mob != null && !mob.Dead)
         {
