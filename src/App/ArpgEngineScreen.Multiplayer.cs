@@ -8,7 +8,7 @@ namespace IdleLineage.App;
 
 public partial class ArpgEngineScreen
 {
-    private readonly Dictionary<string, (Combatant Actor, ArpgActor View)> _remotePlayerViews = new();
+    private readonly Dictionary<string, (Combatant Actor, ArpgActor View, bool IsMoving)> _remotePlayerViews = new();
     private double _netSyncTimer = 0.0;
     private Vector2 _lastSentNetPos;
     private int _lastSentNetFacing = -1;
@@ -36,10 +36,9 @@ public partial class ArpgEngineScreen
         NetworkManager.Instance.OnChatReceived -= HandleRemoteChatReceived;
         NetworkManager.Instance.OnRemotePlayerLeft -= HandleRemotePlayerLeft;
 
-        foreach (var pair in _remotePlayerViews.Values)
+        foreach (var tuple in _remotePlayerViews.Values)
         {
-            _views.Remove(pair.Actor);
-            try { pair.View.Free(); } catch { }
+            try { tuple.View.Free(); } catch { }
         }
         _remotePlayerViews.Clear();
     }
@@ -55,14 +54,12 @@ public partial class ArpgEngineScreen
                 return;
             }
 
-            // Sync each remote player view to Godot rendering tree
             float dt = (float)delta;
-            foreach (var pair in _remotePlayerViews.Values)
+            foreach (var tuple in _remotePlayerViews.Values)
             {
                 try
                 {
-                    pair.View.Pos = ToVec(pair.Actor.Pos);
-                    pair.View.Sync(0.0, dt);
+                    UpdateView(tuple.View, tuple.Actor, (ToVec(tuple.Actor.Pos), 0f, tuple.IsMoving), dt, false);
                 }
                 catch { }
             }
@@ -83,8 +80,8 @@ public partial class ArpgEngineScreen
 
                     NetworkManager.Instance.SendMove(new MovePacket
                     {
-                        X = p.Pos.X,
-                        Y = p.Pos.Y,
+                        X = currentPos.X,
+                        Y = currentPos.Y,
                         Facing8 = currentFacing,
                         Stepping = isMoving,
                         MapKey = _mapKey
@@ -92,16 +89,14 @@ public partial class ArpgEngineScreen
                 }
             }
         }
-        catch (Exception ex)
-        {
-            GD.PushWarning($"[Multiplayer] Step non-fatal warning: {ex.Message}");
-        }
+        catch { }
     }
 
     private void SendLocalHandshake()
     {
         if (_engine?.Player == null) return;
         var p = _engine.Player;
+        Vector2 pos = PlayerPos();
         NetworkManager.Instance.SendHandshake(new HandshakePacket
         {
             Name = p.Disp,
@@ -111,8 +106,8 @@ public partial class ArpgEngineScreen
             Level = p.Level,
             Hp = (int)p.Hp,
             MaxHp = (int)p.MaxHp,
-            X = p.Pos.X,
-            Y = p.Pos.Y,
+            X = pos.X,
+            Y = pos.Y,
             Facing8 = p.Facing8,
             MapKey = _mapKey
         });
@@ -137,7 +132,6 @@ public partial class ArpgEngineScreen
         // Clean up previous view if rejoining
         if (_remotePlayerViews.TryGetValue(handshake.PlayerId, out var existing))
         {
-            _views.Remove(existing.Actor);
             try { existing.View.Free(); } catch { }
             _remotePlayerViews.Remove(handshake.PlayerId);
         }
@@ -171,10 +165,9 @@ public partial class ArpgEngineScreen
             view.SetNameColor(Color.FromHtml("#66d9ef")); // Teammate Cyan
             view.Pos = ToVec(actor.Pos);
             view.FaceDirection(handshake.Facing8);
-            view.Sync(0.0, 0f);
+            view.Sync(1.0, 0f);
 
-            _views[actor] = view;
-            _remotePlayerViews[handshake.PlayerId] = (actor, view);
+            _remotePlayerViews[handshake.PlayerId] = (actor, view, false);
         }
         catch (Exception ex)
         {
@@ -192,39 +185,38 @@ public partial class ArpgEngineScreen
 
     private void HandleRemotePlayerMoved(MovePacket move)
     {
-        if (_remotePlayerViews.TryGetValue(move.PlayerId, out var pair))
+        if (_remotePlayerViews.TryGetValue(move.PlayerId, out var tuple))
         {
-            pair.Actor.Pos = new WorldPoint(move.X, move.Y);
-            pair.Actor.Facing8 = move.Facing8;
-            pair.View.Pos = ToVec(pair.Actor.Pos);
-            pair.View.FaceDirection(move.Facing8);
-            pair.View.DriveLoop(move.Stepping);
-            pair.View.Sync(0.0, 0.016f);
+            tuple.Actor.Pos = new WorldPoint(move.X, move.Y);
+            tuple.Actor.Facing8 = move.Facing8;
+            tuple.View.Pos = ToVec(tuple.Actor.Pos);
+            tuple.View.FaceDirection(move.Facing8);
+            tuple.View.DriveLoop(move.Stepping);
+            _remotePlayerViews[move.PlayerId] = (tuple.Actor, tuple.View, move.Stepping);
         }
     }
 
     private void HandleRemotePlayerAction(ActionPacket action)
     {
-        if (_remotePlayerViews.TryGetValue(action.PlayerId, out var pair))
+        if (_remotePlayerViews.TryGetValue(action.PlayerId, out var tuple))
         {
             if (action.ActionType == "attack")
             {
-                pair.View.PlayAttack(_rng, rangedAttacker: false, rangedShot: false, cycleSeconds: 0.6, speedRatio: 1.0);
+                tuple.View.PlayAttack(_rng, rangedAttacker: false, rangedShot: false, cycleSeconds: 0.6, speedRatio: 1.0);
             }
             else if (action.ActionType == "cast")
             {
-                PlayCastAnim(pair.View, pair.Actor, null, action.SkillId, true);
+                PlayCastAnim(tuple.View, tuple.Actor, null, action.SkillId, true);
             }
         }
     }
 
     private void HandleRemotePlayerLeft(string playerId)
     {
-        if (_remotePlayerViews.Remove(playerId, out var pair))
+        if (_remotePlayerViews.Remove(playerId, out var tuple))
         {
-            _views.Remove(pair.Actor);
-            try { pair.View.Free(); } catch { }
-            SlabLog($"[color=#fca5a5]🚪【隊友離線】{pair.Actor.Disp} 已退出遊戲。[/color]");
+            try { tuple.View.Free(); } catch { }
+            SlabLog($"[color=#fca5a5]🚪【隊友離線】{tuple.Actor.Disp} 已退出遊戲。[/color]");
         }
     }
 
