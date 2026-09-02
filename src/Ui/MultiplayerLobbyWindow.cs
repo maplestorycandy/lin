@@ -247,9 +247,15 @@ public sealed partial class MultiplayerLobbyWindow : Panel
             _playerList.AddItem($"⚔️ [已連線本機玩家]");
         }
 
+        int count = 0;
         foreach (var p in NetworkManager.Instance.ConnectedPlayers.Values)
         {
             _playerList.AddItem($"⚔️ {p.Name} ({p.ClassId} Lv.{p.Level})");
+            count++;
+        }
+        if (count == 0 && NetworkManager.Instance.IsConnected && !NetworkManager.Instance.IsHost)
+        {
+            _playerList.AddItem("👑 [房長主機] (進入遊戲後自動同步)");
         }
     }
 }
