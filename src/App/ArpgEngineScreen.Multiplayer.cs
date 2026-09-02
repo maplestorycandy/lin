@@ -57,8 +57,7 @@ public partial class ArpgEngineScreen
         float dt = (float)delta;
         foreach (var pair in _remotePlayerViews.Values)
         {
-            pair.View.Pos = _engine.RenderPos(pair.Actor);
-            pair.View.MinimumWorldDepth = ResolveOpaqueWorldObjectActorDepthFloor(pair.Actor.Pos);
+            pair.View.Pos = ToVec(pair.Actor.Pos);
             pair.View.Sync(0.0, dt);
         }
 
@@ -149,13 +148,11 @@ public partial class ArpgEngineScreen
             Facing8 = handshake.Facing8
         };
 
-        // Create authentic view
-        CharacterMorphAnimation.Spec spec = ResolveCharacterVisual(actor, handshake.Avatar, handshake.WeaponPrefix);
-        ArpgActor view = ArpgActor.Create(_atlas, _arena, _ui, spec.Group, spec.Atlas, spec.WeaponPrefix, isPlayer: true, 1.0f, spec.ThreeDirection);
-        view.VisualKey = CharacterVisualKey(actor);
+        // Create authentic view using game's built-in CreateView!
+        ArpgActor view = CreateView(actor);
         view.SetNameWithoutLevel(actor.Disp, actor.Level);
         view.SetNameColor(Color.FromHtml("#66d9ef")); // Teammate Cyan
-        view.Pos = _engine.RenderPos(actor);
+        view.Pos = ToVec(actor.Pos);
         view.FaceDirection(handshake.Facing8);
         view.Sync(0.0, 0f);
 
@@ -177,9 +174,10 @@ public partial class ArpgEngineScreen
         {
             pair.Actor.Pos = new WorldPoint(move.X, move.Y);
             pair.Actor.Facing8 = move.Facing8;
-            pair.View.Pos = _engine.RenderPos(pair.Actor);
+            pair.View.Pos = ToVec(pair.Actor.Pos);
             pair.View.FaceDirection(move.Facing8);
             pair.View.DriveLoop(move.Stepping);
+            pair.View.Sync(0.0, 0.016f);
         }
     }
 

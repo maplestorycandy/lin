@@ -7152,8 +7152,9 @@ public sealed partial class ArpgEngineScreen : Control
 			return false;
 		}
 		L1jNpcSpawn? closestNpc = null;
+		Vector2 closestPos = Vector2.Zero;
 		float closestDistSq = float.MaxValue;
-		const float maxClickDist = 64f;
+		const float maxClickDist = 28f;
 
 		foreach (var live in _liveWorldNpcs)
 		{
@@ -7168,11 +7169,17 @@ public sealed partial class ArpgEngineScreen : Control
 			{
 				closestDistSq = distSq;
 				closestNpc = npc;
+				closestPos = npcPos;
 			}
 		}
 
 		if (closestNpc != null)
 		{
+			if (PlayerPos().DistanceSquaredTo(closestPos) > 9216f)
+			{
+				_engine.SetPlayerMoveTarget(closestPos);
+				return true;
+			}
 			_engine.StopPlayer();
 			OpenL1jWorldNpcPanel(closestNpc);
 			return true;
