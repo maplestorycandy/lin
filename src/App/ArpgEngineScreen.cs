@@ -10338,6 +10338,7 @@ public sealed partial class ArpgEngineScreen : Control
 				WorldPoint valueOrDefault = worldPoint.GetValueOrDefault();
 				Combatant combatant = _engine.SpawnMob(minion.MobKey, valueOrDefault);
 				combatant.Facing8 = leader.Facing8;
+				NoteHostSpawnedMob(combatant, minion.MobKey);
 				list.Add(combatant);
 			}
 		}

@@ -420,6 +420,26 @@ public partial class ArpgEngineScreen
         if (NetworkManager.Instance.IsHost)
         {
             SendLocalHandshake();
+
+            // Host syncs all current active monsters to the newly joined player!
+            foreach (Combatant c in _engine.Combatants)
+            {
+                if (c.Kind == CombatantKind.Mob && !c.Dead)
+                {
+                    string mKey = string.IsNullOrEmpty(c.Avatar) ? "goblin" : c.Avatar;
+                    NetworkManager.Instance.SendMobSpawn(new MobSpawnPacket
+                    {
+                        MobId = c.Key,
+                        MobKey = mKey,
+                        X = c.Pos.X,
+                        Y = c.Pos.Y,
+                        Hp = c.Hp,
+                        MaxHp = c.MaxHp,
+                        Facing8 = c.Facing8,
+                        MapKey = _mapKey
+                    });
+                }
+            }
         }
     }
 
@@ -516,6 +536,14 @@ public partial class ArpgEngineScreen
                 _clientMobTargets[spawn.MobId] = (new Vector2((float)spawn.X, (float)spawn.Y), spawn.Facing8, false);
             }
             catch { }
+        }
+        else
+        {
+            existing.Hp = spawn.Hp;
+            existing.MaxHp = spawn.MaxHp;
+            existing.Pos = new WorldPoint(spawn.X, spawn.Y);
+            existing.Facing8 = spawn.Facing8;
+            _clientMobTargets[spawn.MobId] = (new Vector2((float)spawn.X, (float)spawn.Y), spawn.Facing8, false);
         }
     }
 
