@@ -62,7 +62,7 @@ public partial class ArpgEngineScreen
         }
 
         _netSyncTimer += delta;
-        if (_netSyncTimer >= 0.04) // 25Hz sync rate
+        if (_netSyncTimer >= 0.03) // ~30Hz sync rate
         {
             _netSyncTimer = 0.0;
             var p = _engine.Player;
@@ -70,7 +70,7 @@ public partial class ArpgEngineScreen
             int currentFacing = p.Facing8;
             bool isMoving = _wasdMoving || p.MoveTarget.HasValue;
 
-            if (currentPos.DistanceSquaredTo(_lastSentNetPos) > 1.0f || currentFacing != _lastSentNetFacing)
+            if (currentPos.DistanceSquaredTo(_lastSentNetPos) > 0.01f || currentFacing != _lastSentNetFacing)
             {
                 _lastSentNetPos = currentPos;
                 _lastSentNetFacing = currentFacing;
@@ -95,8 +95,8 @@ public partial class ArpgEngineScreen
         {
             Name = p.Disp,
             ClassId = _build.ClassId,
-            Avatar = _build.Avatar,
-            WeaponPrefix = _build.WeaponPrefix,
+            Avatar = string.IsNullOrEmpty(_build.Avatar) ? p.Avatar : _build.Avatar,
+            WeaponPrefix = string.IsNullOrEmpty(_build.WeaponPrefix) ? "" : _build.WeaponPrefix,
             Level = p.Level,
             Hp = (int)p.Hp,
             MaxHp = (int)p.MaxHp,
@@ -131,6 +131,9 @@ public partial class ArpgEngineScreen
             _remotePlayerViews.Remove(handshake.PlayerId);
         }
 
+        ClassDef? cdef = ClassCatalog.Find(handshake.ClassId);
+        string avatar = string.IsNullOrEmpty(handshake.Avatar) ? (cdef?.MaleAvatar ?? "男騎士") : handshake.Avatar;
+
         // Create Combatant representation
         var actor = new Combatant
         {
@@ -143,7 +146,7 @@ public partial class ArpgEngineScreen
             MaxMp = 100,
             Mp = 100,
             ClassId = handshake.ClassId,
-            Avatar = handshake.Avatar,
+            Avatar = avatar,
             Pos = new WorldPoint(handshake.X, handshake.Y),
             Facing8 = handshake.Facing8
         };

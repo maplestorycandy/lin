@@ -2879,11 +2879,6 @@ public sealed partial class ArpgEngineScreen : Control
 					GetViewport().SetInputAsHandled();
 					return;
 				}
-				if (HandleWorldNpcClick(localMousePosition))
-				{
-					GetViewport().SetInputAsHandled();
-					return;
-				}
 				_engine.SetPlayerPathTarget(localMousePosition);
 				_playerView?.InterruptOneShot();
 			}
