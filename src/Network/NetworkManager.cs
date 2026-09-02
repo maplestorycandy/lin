@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -19,45 +20,52 @@ public sealed class NetworkManager
 
     public bool IsHost { get; private set; }
     public bool IsConnected { get; private set; }
-    public string LocalPlayerId { get; private set; } = Guid.NewGuid().ToString("N")[..8];
+    public string LocalPlayerId { get; set; } = Guid.NewGuid().ToString("N")[..8];
     public int Port { get; private set; } = 7777;
 
-    private TcpListener? _listener;
-    private TcpClient? _client;
-    private NetworkStream? _clientStream;
-    private readonly List<ConnectedPeer> _serverPeers = new();
-    private readonly ConcurrentQueue<Action> _mainThreadQueue = new();
-    private CancellationTokenSource? _cts;
-
-    // Events for Game UI & ARPG Screen
+    // Events dispatched on main thread
+    public event Action<string>? OnStatusChanged;
     public event Action<HandshakePacket>? OnRemotePlayerJoined;
     public event Action<MovePacket>? OnRemotePlayerMoved;
     public event Action<ActionPacket>? OnRemotePlayerAction;
     public event Action<ChatPacket>? OnChatReceived;
     public event Action<string>? OnRemotePlayerLeft;
-    public event Action<string>? OnStatusChanged;
 
-    public readonly Dictionary<string, HandshakePacket> ConnectedPlayers = new();
+    public readonly ConcurrentDictionary<string, HandshakePacket> ConnectedPlayers = new();
 
-    private class ConnectedPeer
+    private TcpListener? _listener;
+    private readonly List<ConnectedPeer> _serverPeers = new();
+    private TcpClient? _client;
+    private NetworkStream? _clientStream;
+    private CancellationTokenSource? _cts;
+    private readonly ConcurrentQueue<Action> _mainThreadQueue = new();
+
+    private sealed class ConnectedPeer
     {
         public string Id { get; set; } = "";
         public TcpClient Client { get; set; } = null!;
         public NetworkStream Stream { get; set; } = null!;
-        public HandshakePacket? Handshake { get; set; }
     }
+
+    private NetworkManager() { }
 
     public static List<string> GetLocalIpAddresses()
     {
         var ips = new List<string>();
         try
         {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
+            foreach (var netInterface in NetworkInterface.GetAllNetworkInterfaces())
             {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                if (netInterface.OperationalStatus != OperationalStatus.Up) continue;
+                if (netInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
+
+                var ipProps = netInterface.GetIPProperties();
+                foreach (var addr in ipProps.UnicastAddresses)
                 {
-                    ips.Add(ip.ToString());
+                    if (addr.Address.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        ips.Add(addr.Address.ToString());
+                    }
                 }
             }
         }
@@ -80,12 +88,12 @@ public sealed class NetworkManager
             _listener = new TcpListener(IPAddress.Any, port);
             _listener.Start();
             Task.Run(() => ServerListenLoop(_cts.Token), _cts.Token);
-            OnStatusChanged?.Invoke($"[伺服器] 已啟動，監聽通訊埠 {port}");
+            _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[伺服器] 已啟動，監聽通訊埠 {port}"));
         }
         catch (Exception ex)
         {
             IsConnected = false;
-            OnStatusChanged?.Invoke($"[伺服器] 啟動失敗: {ex.Message}");
+            _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[伺服器] 啟動失敗: {ex.Message}"));
         }
     }
 
@@ -106,7 +114,20 @@ public sealed class NetworkManager
                 await _client.ConnectAsync(hostIp, port);
                 _clientStream = _client.GetStream();
                 IsConnected = true;
+
                 _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[連線] 成功連接至房間！"));
+
+                // Send initial handshake
+                SendHandshake(new HandshakePacket
+                {
+                    PlayerId = LocalPlayerId,
+                    Name = "連線玩家 " + LocalPlayerId[..4],
+                    ClassId = "knight",
+                    Level = 1,
+                    Hp = 100,
+                    MaxHp = 100
+                });
+
                 _ = ClientReceiveLoop(_cts.Token);
             }
             catch (Exception ex)
@@ -174,7 +195,7 @@ public sealed class NetworkManager
         Broadcast(NetEnvelope.Create(NetPacketType.Action, action));
     }
 
-    public void SendChat(string senderName, string message, string colorHex = "#66d9ef")
+    public void SendChat(string message, string senderName, string colorHex = "#ffffff")
     {
         var chat = new ChatPacket
         {
@@ -197,28 +218,17 @@ public sealed class NetworkManager
         {
             lock (_serverPeers)
             {
-                for (int i = _serverPeers.Count - 1; i >= 0; i--)
+                foreach (var peer in _serverPeers)
                 {
-                    try
-                    {
-                        _serverPeers[i].Stream.Write(bytes, 0, bytes.Length);
-                    }
-                    catch
-                    {
-                        _serverPeers.RemoveAt(i);
-                    }
+                    try { peer.Stream.Write(bytes, 0, bytes.Length); } catch { }
                 }
             }
         }
-        else if (_clientStream != null && _client != null && _client.Connected)
+        else
         {
-            try
+            if (_clientStream != null)
             {
-                _clientStream.Write(bytes, 0, bytes.Length);
-            }
-            catch (Exception ex)
-            {
-                _mainThreadQueue.Enqueue(() => OnStatusChanged?.Invoke($"[連線] 傳送中斷: {ex.Message}"));
+                try { _clientStream.Write(bytes, 0, bytes.Length); } catch { }
             }
         }
     }
@@ -281,7 +291,7 @@ public sealed class NetworkManager
             {
                 _mainThreadQueue.Enqueue(() =>
                 {
-                    ConnectedPlayers.Remove(peer.Id);
+                    ConnectedPlayers.Remove(peer.Id, out _);
                     OnRemotePlayerLeft?.Invoke(peer.Id);
                 });
                 var leaveEnv = NetEnvelope.Create(NetPacketType.Leave, new LeavePacket { PlayerId = peer.Id });
@@ -330,6 +340,24 @@ public sealed class NetworkManager
                     if (senderPeer != null) senderPeer.Id = handshake.PlayerId;
                     ConnectedPlayers[handshake.PlayerId] = handshake;
                     OnRemotePlayerJoined?.Invoke(handshake);
+
+                    // If Host received handshake, send host's handshake back to this peer
+                    if (IsHost && senderPeer != null)
+                    {
+                        var hostHs = new HandshakePacket
+                        {
+                            PlayerId = LocalPlayerId,
+                            Name = "房長",
+                            ClassId = "royal",
+                            Level = 1,
+                            Hp = 100,
+                            MaxHp = 100
+                        };
+                        var hostEnv = NetEnvelope.Create(NetPacketType.Handshake, hostHs);
+                        string json = JsonSerializer.Serialize(hostEnv) + "\n";
+                        byte[] bytes = Encoding.UTF8.GetBytes(json);
+                        try { senderPeer.Stream.Write(bytes, 0, bytes.Length); } catch { }
+                    }
                 }
                 break;
 
@@ -361,7 +389,7 @@ public sealed class NetworkManager
                 var leave = envelope.Deserialize<LeavePacket>();
                 if (leave != null)
                 {
-                    ConnectedPlayers.Remove(leave.PlayerId);
+                    ConnectedPlayers.Remove(leave.PlayerId, out _);
                     OnRemotePlayerLeft?.Invoke(leave.PlayerId);
                 }
                 break;

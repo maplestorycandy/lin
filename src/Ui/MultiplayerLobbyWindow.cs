@@ -33,6 +33,13 @@ public sealed partial class MultiplayerLobbyWindow : Panel
         BuildUi();
         RegisterNetworkEvents();
         UpdateLocalIps();
+        SetProcess(true);
+    }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        NetworkManager.Instance.Update();
     }
 
     public override void _ExitTree()
@@ -154,6 +161,14 @@ public sealed partial class MultiplayerLobbyWindow : Panel
         _joinBtn.Pressed += OnJoinPressed;
         joinTab.AddChild(_joinBtn);
 
+        var joinHint = new Label
+        {
+            Text = "同台電腦測試請填 127.0.0.1，不同電腦請填主機的區網/實體 IP",
+            AutowrapMode = TextServer.AutowrapMode.WordSmart
+        };
+        joinHint.AddThemeColorOverride("font_color", new Color(0.7f, 0.7f, 0.7f));
+        joinTab.AddChild(joinHint);
+
         // Status Label
         _statusLabel = new Label
         {
@@ -202,7 +217,6 @@ public sealed partial class MultiplayerLobbyWindow : Panel
         if (int.TryParse(_portInput.Text, out int port))
         {
             NetworkManager.Instance.ConnectToHost(ip, port);
-            _startBtn.Visible = true;
         }
     }
 
@@ -211,14 +225,28 @@ public sealed partial class MultiplayerLobbyWindow : Panel
         _statusLabel.Text = status;
         if (NetworkManager.Instance.IsConnected)
         {
+            _statusLabel.AddThemeColorOverride("font_color", new Color(0.5f, 1.0f, 0.5f));
             _startBtn.Visible = true;
+            RefreshPlayerList(null);
+        }
+        else
+        {
+            _statusLabel.AddThemeColorOverride("font_color", new Color(1.0f, 0.5f, 0.5f));
         }
     }
 
     private void RefreshPlayerList(HandshakePacket? _)
     {
         _playerList.Clear();
-        _playerList.AddItem($"👑 [主機本機玩家]");
+        if (NetworkManager.Instance.IsHost)
+        {
+            _playerList.AddItem($"👑 [主機 (我)]");
+        }
+        else
+        {
+            _playerList.AddItem($"⚔️ [已連線本機玩家]");
+        }
+
         foreach (var p in NetworkManager.Instance.ConnectedPlayers.Values)
         {
             _playerList.AddItem($"⚔️ {p.Name} ({p.ClassId} Lv.{p.Level})");
