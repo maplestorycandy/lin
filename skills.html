@@ -265,7 +265,9 @@
         html += `
           <div class="db-card">
             <div class="db-card-header">
-              <span style="font-size:20px">✨</span>
+              <div class="db-thumb-box" style="width:38px;height:38px;min-width:38px">
+                <img src="${s.img || 'assets/icons/skills/' + s.n + '.png'}" class="db-thumb" loading="lazy" alt="${s.n}" onerror="this.onerror=null;this.src='assets/images/nostalgia_gear.png'">
+              </div>
               <div class="db-card-title">${s.n}</div>
               <span class="badge normal">${s.class}</span>
             </div>

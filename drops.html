@@ -361,11 +361,13 @@
         html += `
           <tr>
             <td>
-              <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:18px">💎</span>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div class="db-thumb-box" onclick="showDropDetail('${item.id}')" style="cursor:pointer">
+                  <img src="${item.img || 'assets/images/nostalgia_gear.png'}" class="db-thumb" loading="lazy" alt="${item.n}" onerror="this.onerror=null;this.src='assets/images/nostalgia_gear.png'">
+                </div>
                 <div>
-                  <div style="font-weight:800;color:#fff;font-size:14px;cursor:pointer" onclick="showDropDetail('${item.id}')">${item.n}</div>
-                  <div style="font-size:11px;color:var(--tx3)">ID: ${item.id}</div>
+                  <div style="font-weight:800;color:#fff;font-size:14.5px;cursor:pointer" onclick="showDropDetail('${item.id}')">${item.n}</div>
+                  <div style="font-size:11px;color:var(--tx3);font-family:monospace">ID: ${item.id}</div>
                 </div>
               </div>
             </td>
@@ -433,10 +435,18 @@
         const bossBadge = d.isBoss ? '<span class="badge boss">BOSS 首領</span>' : '<span class="badge normal">一般怪</span>';
         const rateBadge = getRateBadge(d.p);
         const mapList = (d.maps && d.maps.length > 0) ? d.maps.filter(m => !m.includes('???')).map(m => `<span class="badge cat">${m}</span>`).join(' ') : '<span style="color:var(--tx3)">野外/神殿隨機刷新</span>';
+        const mobAvatar = d.img ? `<div class="mob-thumb-box" style="width:32px;height:32px;min-width:32px"><img src="${d.img}" class="mob-thumb" loading="lazy" onerror="this.src='assets/images/nostalgia_gear.png'"></div>` : '';
 
         rows += `
           <tr>
-            <td><b>${d.m}</b> ${bossBadge}</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px">
+                ${mobAvatar}
+                <div>
+                  <b>${d.m}</b> ${bossBadge}
+                </div>
+              </div>
+            </td>
             <td><span style="color:var(--gold2);font-weight:700">Lv.${d.mlv || '?'}</span></td>
             <td>${rateBadge}</td>
             <td>${d.min} ~ ${d.max} 個</td>

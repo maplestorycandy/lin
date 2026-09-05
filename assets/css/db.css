@@ -810,3 +810,100 @@ footer .wrap {
   .db-grid { grid-template-columns: 1fr; }
   footer .wrap { flex-direction: column; text-align: center; }
 }
+
+/* ==========================================================================
+   天堂ARPG 遊戲原畫圖標與立繪專用樣式
+   ========================================================================== */
+.db-thumb-box {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background: radial-gradient(circle, rgba(30,42,66,0.8) 0%, rgba(13,18,32,0.95) 100%);
+  border: 1px solid rgba(212,175,55,0.4);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.6);
+  position: relative;
+  flex-shrink: 0;
+}
+.db-thumb {
+  max-width: 34px;
+  max-height: 34px;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  transition: transform 0.15s ease;
+}
+.db-thumb-box:hover .db-thumb {
+  transform: scale(1.15);
+}
+
+.mob-thumb-box {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: radial-gradient(circle, rgba(40,25,35,0.8) 0%, rgba(13,18,32,0.95) 100%);
+  border: 1px solid rgba(212,175,55,0.45);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.7);
+  position: relative;
+  flex-shrink: 0;
+}
+.mob-thumb {
+  max-width: 44px;
+  max-height: 44px;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+  transition: transform 0.2s ease;
+}
+.mob-thumb-box:hover .mob-thumb {
+  transform: scale(1.2);
+}
+
+.map-card-thumb-box {
+  width: 100%;
+  height: 120px;
+  background: #080b12;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+.map-card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+  transition: transform 0.3s ease;
+}
+.map-card:hover .map-card-thumb {
+  transform: scale(1.05);
+}
+
+.drawer-mob-avatar {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));
+}
+.drawer-map-hero {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--gold);
+  margin-bottom: 14px;
+}
+

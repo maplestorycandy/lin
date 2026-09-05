@@ -314,13 +314,15 @@
         html += `
           <tr>
             <td>
-              <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:18px">${mob.isBoss ? '👑' : '🐺'}</span>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div class="mob-thumb-box" onclick="showMobDrops('${mob.id}')" style="cursor:pointer">
+                  <img src="${mob.img || 'assets/images/nostalgia_gear.png'}" class="mob-thumb" loading="lazy" alt="${mob.n}" onerror="this.onerror=null;this.src='assets/images/nostalgia_gear.png'">
+                </div>
                 <div>
-                  <div style="font-weight:800;color:#fff;font-size:14px;cursor:pointer" onclick="showMobDrops('${mob.id}')">
+                  <div style="font-weight:800;color:#fff;font-size:14.5px;cursor:pointer" onclick="showMobDrops('${mob.id}')">
                     ${mob.n} ${bossTag}
                   </div>
-                  <div style="font-size:11px;color:var(--tx3)">ID: ${mob.id}</div>
+                  <div style="font-size:11px;color:var(--tx3);font-family:monospace">ID: ${mob.id}</div>
                 </div>
               </div>
             </td>
@@ -393,13 +395,22 @@
       let rows = '';
       drops.forEach(d => {
         const rateBadge = getRateBadge(d.p);
+        const itemImg = d.img ? `<div class="db-thumb-box" style="width:32px;height:32px;min-width:32px"><img src="${d.img}" class="db-thumb" loading="lazy" onerror="this.style.display='none'"></div>` : '';
         rows += `
           <tr>
-            <td><b>${d.n}</b></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                ${itemImg}
+                <div>
+                  <b style="color:#fff;font-size:13.5px">${d.n}</b>
+                  <div style="font-size:11px;color:var(--tx3)">${d.id || ''}</div>
+                </div>
+              </div>
+            </td>
             <td>${rateBadge}</td>
             <td>${d.min} ~ ${d.max}</td>
             <td>
-              <a href="drops.html" onclick="sessionStorage.setItem('search_query', '${d.n}')" class="btn-action" style="padding:2px 8px;font-size:11px">全服查詢 ↗</a>
+              <a href="drops.html" onclick="sessionStorage.setItem('search_query', '${d.n}')" class="btn-action" style="padding:4px 10px;font-size:11.5px">全服查詢 ↗</a>
             </td>
           </tr>
         `;
@@ -408,24 +419,29 @@
       const mapList = (mob.maps && mob.maps.length > 0) ? mob.maps.filter(m => !m.includes('???')).join('、 ') : '野外隨機出沒';
 
       const bodyHtml = `
-        <div style="margin-bottom:16px;background:#0d1220;padding:14px;border-radius:8px;border:1px solid var(--line)">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <span style="font-size:18px;font-weight:900;color:var(--gold2)">👹 ${mob.n} (${mob.isBoss ? '首領 BOSS' : '一般魔物'})</span>
-            <span style="color:var(--gold);font-weight:900">Lv.${mob.lv}</span>
+        <div style="margin-bottom:16px;background:#0d1220;padding:16px;border-radius:10px;border:1px solid var(--line);display:flex;gap:16px;align-items:center">
+          <div class="mob-thumb-box" style="width:72px;height:72px;min-width:72px">
+            <img src="${mob.img || 'assets/images/nostalgia_gear.png'}" class="drawer-mob-avatar" loading="lazy" alt="${mob.n}" onerror="this.src='assets/images/nostalgia_gear.png'">
           </div>
-          <div style="font-size:13px;color:var(--tx2);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px">
-            <span>生命值: <b style="color:var(--green)">${mob.hp.toLocaleString()}</b></span>
-            <span>魔力值: <b style="color:var(--blue)">${mob.mp.toLocaleString()}</b></span>
-            <span>防禦: <b style="color:var(--blue)">AC ${mob.ac}</b></span>
-            <span>經驗值: <b style="color:var(--gold2)">${mob.exp.toLocaleString()}</b></span>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span style="font-size:19px;font-weight:900;color:var(--gold2)">${mob.n} <span style="font-size:12px;font-weight:normal;color:var(--tx3)">(${mob.isBoss ? '首領 BOSS' : '一般魔物'})</span></span>
+              <span style="color:var(--gold);font-weight:900;font-size:16px">Lv.${mob.lv}</span>
+            </div>
+            <div style="font-size:13px;color:var(--tx2);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px">
+              <span>HP: <b style="color:var(--green)">${mob.hp.toLocaleString()}</b></span>
+              <span>MP: <b style="color:var(--blue)">${mob.mp.toLocaleString()}</b></span>
+              <span>防禦: <b style="color:var(--blue)">AC ${mob.ac}</b></span>
+              <span>經驗值: <b style="color:var(--gold2)">${mob.exp.toLocaleString()}</b></span>
+            </div>
+            <div style="font-size:12px;color:var(--tx3)">出沒地圖: ${mapList}</div>
           </div>
-          <div style="font-size:12px;color:var(--tx3)">出沒地圖: ${mapList}</div>
         </div>
         <div class="table-wrap" style="max-height:50vh;overflow-y:auto">
           <table class="db-table">
             <thead>
               <tr>
-                <th>掉落道具名稱</th>
+                <th>掉落道具</th>
                 <th>掉落機率</th>
                 <th>數量</th>
                 <th>操作</th>
