@@ -1570,7 +1570,8 @@
     // 設定參數 (Configuration)
     // --------------------------------------------------------------------------
     // 部署 Google Apps Script 後產生的網路應用程式網址 (Web App URL)
-    let APPS_SCRIPT_URL = localStorage.getItem('lin_apps_script_url') || "";
+    const DEFAULT_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-if16oaLbWggYT_izxXOJdLMriMR6AjW1VsZusnkDbmCe3pJ2Wf8qzTH1nR9OaIE/exec";
+    let APPS_SCRIPT_URL = localStorage.getItem('lin_apps_script_url') || DEFAULT_APPS_SCRIPT_URL;
     const GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0";
 
     // 職業對應圖示
@@ -1903,16 +1904,16 @@
         return;
       }
 
-      // 優先使用 fetch POST
+      // 使用 text/plain + no-cors 防止 GAS 跨域 302 錯誤
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       })
-      .then(res => res.json())
-      .then(data => {
-        console.log('試算表同步回傳：', data);
-        if (callback) callback(data);
+      .then(() => {
+        console.log('試算表 POST 請求已送出');
+        if (callback) callback({ status: 'success' });
       })
       .catch(err => {
         console.warn('POST 請求受限，自動切換 GET 備援通道推送...', err);
@@ -1920,17 +1921,16 @@
         const queryParams = new URLSearchParams({
           action: (payload.type === 'chat') ? 'add_chat' : 'add_board',
           type: payload.type,
-          name: payload.name,
+          name: payload.name || '',
           job: payload.job || '',
           category: payload.category || '',
           contact: payload.contact || '',
-          message: payload.message
+          message: payload.message || ''
         }).toString();
 
-        fetch(`${APPS_SCRIPT_URL}?${queryParams}`)
-          .then(res => res.json())
-          .then(data => {
-            if (callback) callback(data);
+        fetch(`${APPS_SCRIPT_URL}?${queryParams}`, { mode: 'no-cors' })
+          .then(() => {
+            if (callback) callback({ status: 'success' });
           })
           .catch(e => {
             console.error('推送失敗，已保留本機備份', e);
