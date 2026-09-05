@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>養成天堂 官方網站 ｜ 經典天堂 × 放置掛機 × 爽快養成</title>
+  <meta name="description" content="養成天堂 官方網站 — 經典天堂原汁原味重現，融合全新放置掛機、獨家物品掉落過濾器、奇岩1元福利衝裝、全職業試煉一鍵領取與防具詞綴解鎖！">
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --bg2: #121826;
+      --panel: #151c2c;
+      --panel2: #1b2438;
+      --line: #2a3550;
+      --gold: #d4af37;
+      --gold2: #f1d98c;
+      --tx: #dbe2f0;
+      --tx2: #8fa0bf;
+      --red: #f87171;
+      --green: #4ade80;
+      --blue: #60a5fa;
+      --purple: #c084fc;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--tx);
+      font: 15px/1.75 "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    a { color: var(--gold2); text-decoration: none; transition: 0.2s; }
+    a:hover { color: #fff; text-decoration: underline; }
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 16px; }
+
+    /* Header */
+    header {
+      background: linear-gradient(180deg, #1c243c, #0d1220);
+      border-bottom: 2px solid var(--gold);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .hd {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 2px;
+      font-family: "Noto Serif TC", serif;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, var(--gold), #997314);
+      color: #111;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .brand small {
+      display: block;
+      font-size: 12px;
+      color: var(--tx2);
+      letter-spacing: 1px;
+      font-weight: 400;
+    }
+    nav {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+    nav a {
+      padding: 8px 14px;
+      border-radius: 6px;
+      color: var(--tx);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    nav a:hover, nav a.on {
+      background: var(--panel2);
+      color: var(--gold2);
+      text-decoration: none;
+      border: 1px solid var(--line);
+    }
+
+    /* Sub Bar */
+    .playbar {
+      background: #090c12;
+      border-bottom: 1px solid var(--line);
+      padding: 8px 0;
+      font-size: 13px;
+    }
+    .playbar .wrap {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      border: 1px solid var(--gold);
+      color: var(--gold2);
+      background: rgba(212,175,55,0.08);
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: var(--gold);
+      color: #191400;
+      text-decoration: none;
+      box-shadow: 0 0 14px rgba(212,175,55,0.4);
+    }
+    .btn.big {
+      font-size: 18px;
+      padding: 13px 36px;
+      background: linear-gradient(180deg, #e8c860, #b8912a);
+      color: #191400;
+      border: none;
+      box-shadow: 0 4px 20px rgba(212,175,55,.4);
+    }
+    .btn.big:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+    }
+    .btn.ghost {
+      border-color: var(--line);
+      color: var(--tx);
+      background: var(--panel);
+    }
+    .btn.ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold2);
+    }
+
+    /* Hero Banner */
+    .hero {
+      position: relative;
+      min-height: 440px;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #101728 0%, #080b11 100%);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 35%, rgba(212,175,55,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero .wrap {
+      position: relative;
+      z-index: 2;
+      padding: 60px 16px;
+      text-align: center;
+      width: 100%;
+    }
+    .hero h1 {
+      font-size: 46px;
+      color: var(--gold2);
+      font-family: "Noto Serif TC", serif;
+      letter-spacing: 6px;
+      text-shadow: 0 3px 18px rgba(0,0,0,0.8);
+      margin-bottom: 12px;
+    }
+    .hero p.desc {
+      color: var(--tx);
+      max-width: 740px;
+      margin: 0 auto 26px;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+    .hero .btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-notice {
+      margin: 24px auto 0;
+      max-width: 700px;
+      background: rgba(212,175,55,.08);
+      border: 1px solid rgba(212,175,55,.35);
+      border-radius: 10px;
+      padding: 12px 18px;
+      color: var(--tx);
+      font-size: 14px;
+    }
+
+    /* Main Layout */
+    main { padding: 32px 0 60px; }
+    .cols {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+    }
+    @media (max-width: 960px) {
+      .cols { grid-template-columns: 1fr; }
+    }
+
+    /* Panels */
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .panel-h {
+      background: linear-gradient(90deg, #263350, #151c2c);
+      border-bottom: 1px solid var(--line);
+      padding: 11px 18px;
+      font-weight: 900;
+      color: var(--gold2);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .panel-h::before {
+      content: "";
+      width: 4px;
+      height: 18px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+    .panel-b { padding: 18px; }
+
+    /* Grids */
+    .grid { display: grid; gap: 14px; }
+    .g2 { grid-template-columns: repeat(2, 1fr); }
+    .g3 { grid-template-columns: repeat(3, 1fr); }
+    .g4 { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 860px) {
+      .g4, .g3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 540px) {
+      .g4, .g3, .g2 { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    }
+    .card h3 {
+      color: var(--gold2);
+      font-size: 16px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p {
+      font-size: 13.5px;
+      color: var(--tx2);
+      line-height: 1.6;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(212,175,55,0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold2);
+      margin-left: auto;
+    }
+    .badge.hot {
+      background: rgba(248,113,113,0.15);
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .badge.new {
+      background: rgba(74,222,128,0.15);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    /* Scroll preview icons */
+    .scroll-preview {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      align-items: center;
+      background: rgba(0,0,0,0.25);
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    .scroll-preview img {
+      width: 32px;
+      height: 32px;
+      image-rendering: pixelated;
+      background: #090c12;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+
+    /* Stats Hub */
+    .stats-hub {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 12px;
+      padding: 10px 0 20px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+    .stat-item { text-align: center; padding: 6px 14px; }
+    .stat-num {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--gold2);
+      line-height: 1.1;
+      font-family: monospace;
+    }
+    .stat-lbl { font-size: 13px; color: var(--tx2); margin-top: 4px; }
+
+    /* Class Avatars */
+    .class-row {
+      display: flex;
+      gap: 14px;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    .class-box {
+      text-align: center;
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 10px;
+      width: 110px;
+      transition: 0.2s;
+    }
+    .class-box:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+    .class-icon {
+      font-size: 36px;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .class-title {
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--gold2);
+    }
+    .class-sub {
+      font-size: 11px;
+      color: var(--tx2);
+    }
+
+    /* News */
+    .news-list { list-style: none; }
+    .news-list li {
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--line);
+      display: flex;
+      gap: 12px;
+      font-size: 13.5px;
+    }
+    .news-list time {
+      color: var(--gold2);
+      font-family: monospace;
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+
+    /* Footer */
+    footer {
+      background: #080b11;
+      border-top: 1px solid var(--line);
+      padding: 30px 0;
+      color: var(--tx2);
+      font-size: 13.5px;
+    }
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Search Box */
+    .searchbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .searchbar input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #0d1220;
+      color: var(--tx);
+      font-size: 14.5px;
+    }
+    .searchbar input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(212,175,55,.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="wrap hd">
+      <div class="brand">
+        <span>養成天堂</span>
+        <span class="brand-badge">PRO</span>
+        <small>經典放置天堂 官方資訊站</small>
+      </div>
+      <nav>
+        <a href="#hero" class="on">首頁</a>
+        <a href="#features">專屬特色</a>
+        <a href="#classes">八大職業</a>
+        <a href="#database">資料庫</a>
+        <a href="#systems">玩法系統</a>
+        <a href="#news">最新更新</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Playbar -->
+  <div class="playbar">
+    <div class="wrap">
+      <span style="color:var(--gold2)">⚔️ 遊戲版本：</span>
+      <span>2026 全新優化加固版</span>
+      <span style="color:var(--tx2); margin-left:auto">💡 提示：免安裝解壓縮即玩 ｜ 1元福利商城 ｜ 專屬物品掉落過濾</span>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <h1>養成天堂</h1>
+      <p class="desc">
+        經典天堂 1.0~3.8 原汁原味完美重現 × 現代放置爽快養成！<br>
+        上班上課自動掛機練功打寶，獨家物品過濾器遠離垃圾，奇岩一元卷軸衝裝圓夢，重溫熱血傳奇。
+      </p>
+      <div class="btns">
+        <a class="btn big" href="#download">🛡️ 下載 / 開始遊戲</a>
+        <a class="btn ghost" href="#features">✨ 查看獨家特色</a>
+        <a class="btn ghost" href="#news">📜 最新更新報告</a>
+      </div>
+      <div class="hero-notice">
+        📢 <b>2026 重大特色發布：</b> 新增「物品掉落過濾器」、全職業試煉一鍵領取（修復法師瑪娜斗篷）、防具詞綴全面解禁（威儀/尋寶/承載）、常駐全白天無漆黑夜晚！
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main>
+    <div class="wrap cols">
+
+      <!-- Left Column -->
+      <div>
+
+        <!-- Database Stats -->
+        <div class="panel" id="database" style="border-color:var(--gold)">
+          <div class="panel-h">📚 遊戲資料庫概覽</div>
+          <div class="panel-b">
+            <div class="stats-hub">
+              <div class="stat-item">
+                <div class="stat-num">2,202+</div>
+                <div class="stat-lbl">經典裝備與道具</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">430+</div>
+                <div class="stat-lbl">傳奇魔物與首領</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">205+</div>
+                <div class="stat-lbl">懷舊獵場地圖</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">8</div>
+                <div class="stat-lbl">完整平衡職業</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">100%</div>
+                <div class="stat-lbl">全白天無受限視野</div>
+              </div>
+            </div>
+
+            <div class="searchbar">
+              <input type="text" placeholder="🔍 快速檢索裝備、怪物、獵場、掉落資料庫…" readonly onclick="alert('資料庫系統已就緒，請在遊戲內右下角過濾器直接檢索！')">
+              <button class="btn" onclick="alert('資料庫系統已就緒，請在遊戲內右下角過濾器直接檢索！')">搜尋</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exclusive Features -->
+        <div class="panel" id="features">
+          <div class="panel-h">🔥 本服專屬獨家特色</div>
+          <div class="panel-b grid g2">
+
+            <div class="card">
+              <h3>🧹 物品掉落過濾器 <span class="badge hot">獨家首創</span></h3>
+              <p>右下角專屬功能按鈕，支援道具名稱即時搜尋與黑名單勾選。被過濾的道具直接不產生地面雜物，打寶畫面乾淨清爽，徹底告別滿地垃圾！</p>
+            </div>
+
+            <div class="card">
+              <h3>🏪 奇岩 1 元福利商人 <span class="badge">超佛福利</span></h3>
+              <p>白武、祝武、詛武、白防、祝防、詛防全數置頂販售，單價僅 1 金幣！人人皆可暢享衝裝快感，圓夢全身 +7、+8、+9 閃耀神裝。</p>
+              <div class="scroll-preview">
+                <img src="assets/icons/items/scroll_weapon.png" alt="白武" title="對武器施法的卷軸">
+                <img src="assets/icons/items/scroll_weapon_b.png" alt="祝武" title="祝福的 對武器施法的卷軸">
+                <img src="assets/icons/items/scroll_weapon_c.png" alt="詛武" title="受詛咒的 對武器施法的卷軸">
+                <img src="assets/icons/items/scroll_armor.png" alt="白防" title="對盔甲施法的卷軸">
+                <img src="assets/icons/items/scroll_armor_b.png" alt="祝防" title="祝福的 對盔甲施法的卷軸">
+                <img src="assets/icons/items/scroll_armor_c.png" alt="詛防" title="受詛咒的 對盔甲施法的卷軸">
+                <span style="font-size:12px;color:var(--gold2);margin-left:auto">正版像素卷軸</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>👑 全職業試煉一鍵領取 <span class="badge new">完美修復</span></h3>
+              <p>等級達到條件後，前往各職業導師 NPC 即可直接領取試煉神兵！全面修復法師 45 級試煉獎勵（瑪娜斗篷、神聖魔法書正常取得無報錯）。</p>
+            </div>
+
+            <div class="card">
+              <h3>🛡️ 解除防具磁條（詞綴）限制 <span class="badge">戰力暴增</span></h3>
+              <p>防具（盔甲、頭盔、斗篷、手套、長靴、飾品等）全面解禁開放「威儀」、「尋寶」頂級詞綴！承載詞條大幅提升至 5000 上限，配裝更自由。</p>
+            </div>
+
+            <div class="card">
+              <h3>☀️ 常駐全白天視野 & 隨身傳送 <span class="badge">舒適體驗</span></h3>
+              <p>拒絕烏漆麻黑！永久全白天清晰視野，告別蠟燭與夜視藥水；夢幻之島隨身卷軸自由回村、遺忘之島免坐船，地圖探索暢行無阻。</p>
+            </div>
+
+            <div class="card">
+              <h3>⚡ 爽快戰鬥節奏（移除怪物回血） <span class="badge">暢快打怪</span></h3>
+              <p>關閉野外怪物自然生命回復機制，杜絕刮痧拖台錢。每一刀傷害實打實，打怪練功效率飆升！</p>
+            </div>
+
+            <div class="card">
+              <h3>🎒 裝備紙娃娃極速穿脫同步 <span class="badge">UI優化</span></h3>
+              <p>雙擊背包穿戴裝備，左側紙娃娃裝備欄即時連動刷新！+7 強化字樣清晰可見，穿脫絕不消失，支援滑鼠拖曳自定義佈局。</p>
+            </div>
+
+            <div class="card">
+              <h3>✨ 正版專屬卷軸圖示 <span class="badge">原汁原味</span></h3>
+              <p>祝武/詛武、祝防/詛防採用正統金光與紅光像素圖示，並於代碼底層內嵌硬編碼防護，資源永不遺失、永不跑版。</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Classes -->
+        <div class="panel" id="classes">
+          <div class="panel-h">👑 八大經典職業一覽</div>
+          <div class="panel-b">
+            <div class="class-row">
+              <div class="class-box">
+                <span class="class-icon">👑</span>
+                <div class="class-title">王族</div>
+                <div class="class-sub">君主 / 盟戰領導</div>
+              </div>
+              <div class="class-box">
+                <span class="class-icon">🛡️</span>
+                <div class="class-title">騎士</div>
+                <div class="class-sub">近戰肉盾 / 衝暈反屏</div>
+              </div>
+              <div class="class-box">
+                <span class="class-icon">🏹</span>
+                <div class="class-title">妖精</div>
+                <div class="class-sub">遠程游俠 / 三重矢</div>
+              </div>
+              <div class="class-box">
+                <span class="class-icon">🔮</span>
+                <div class="class-title">法師</div>
+                <div class="class-sub">十階神法 / 究光秒殺</div>
+              </div>
+              <div class="class-box">
+                <span class="class-icon">🗡️</span>
+                <div class="class-title">黑暗妖精</div>
+                <div class="class-sub">暗殺極致 / 會心一擊</div>
+              </div>
+              <div class="class-box">
+                <span class="class-icon">🪓</span>
+                <div class="class-title">戰士</div>
+                <div class="class-sub">狂暴雙斧 / 泰坦反擊</div>
+              </div>
+              <div class="class-box">
+                <span class="class-icon">🐉</span>
+                <div class="class-title">龍騎士</div>
+                <div class="class-sub">龍語屠宰 / 三龍覺醒</div>
+              </div>
+              <div class="class-box">
+                <span class="class-icon">🌀</span>
+                <div class="class-title">幻術士</div>
+                <div class="class-sub">奇蹟立方 / 幻象心靈</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Core Gameplay Systems -->
+        <div class="panel" id="systems">
+          <div class="panel-h">⚙️ 核心玩法機制</div>
+          <div class="panel-b grid g3">
+            <div class="card">
+              <h3>🔨 強化系統</h3>
+              <p>遵循經典安定值機制，武器安定 6、防具安定 4。祝福卷軸隨機跳 +1~+3，強化數值越高獲得越恐怖的傷害增幅！</p>
+            </div>
+            <div class="card">
+              <h3>🐾 寵物與收服</h3>
+              <p>野外使用肉塊誘捕杜賓狗等戰鬥夥伴，法師支援迷魅術收服魔物，魅力屬性可召喚多隻強大夥伴一同出征！</p>
+            </div>
+            <div class="card">
+              <h3>🏰 經典三大城堡攻防</h3>
+              <p>肯特城、風木城、海音城攻防戰，突破城門、粉碎守護塔，成為全服之王！</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Sidebar -->
+      <div>
+
+        <!-- Quick Access -->
+        <div class="panel" id="download">
+          <div class="panel-h">🎮 遊戲快速開始</div>
+          <div class="panel-b" style="display:grid;gap:10px">
+            <button class="btn big" style="width:100%;justify-content:center" onclick="alert('請直接啟動遊戲資料夾內的 IdleLineage.exe 即可直接暢玩！')">🚀 立即啟動遊戲</button>
+            <div style="font-size:13px;color:var(--tx2);line-height:1.6;background:#0d1220;padding:10px;border-radius:8px;border:1px solid var(--line)">
+              <b>系統需求：</b><br>
+              作業系統：Windows 10 / 11 (64-bit)<br>
+              安裝說明：綠色免安裝版，解壓縮點擊 <code>IdleLineage.exe</code> 即開即玩！
+            </div>
+          </div>
+        </div>
+
+        <!-- Latest Updates -->
+        <div class="panel" id="news">
+          <div class="panel-h">📢 最新更新歷程</div>
+          <div class="panel-b">
+            <ul class="news-list">
+              <li>
+                <time>2026-09</time>
+                <div><b>【核心重大更新】</b> 整合物品掉落過濾器、修復法師45試煉瑪娜斗篷、解除防具詞綴限制、核心代碼加密加固。</div>
+              </li>
+              <li>
+                <time>2026-09</time>
+                <div><b>【視覺與UI連動】</b> 裝備欄與紙娃娃穿脫即時刷新、+7 強化數值同步、專屬祝武詛武圖示內嵌。</div>
+              </li>
+              <li>
+                <time>2026-08</time>
+                <div><b>【福利商面上線】</b> 奇岩 1 元福利商人、白/祝/詛武防卷全面上架。</div>
+              </li>
+              <li>
+                <time>2026-08</time>
+                <div><b>【環境優化】</b> 常駐全白天視野、怪物重生點校正、移除魔物自然回血。</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Community / Customer Support -->
+        <div class="panel">
+          <div class="panel-h">🎧 玩家交流與客服</div>
+          <div class="panel-b" style="text-align:center;font-size:13.5px">
+            <p style="margin-bottom:12px;color:var(--tx2)">遊戲問題回報、攻略交流、更新建議</p>
+            <div style="background:rgba(212,175,55,0.05);border:1px dashed var(--gold);padding:14px;border-radius:10px;margin-bottom:12px">
+              <div style="font-size:24px;margin-bottom:4px">💬</div>
+              <div style="font-weight:700;color:var(--gold2)">官方 LINE / Discord 社群</div>
+              <div style="font-size:12px;color:var(--tx2)">歡迎各位勇者加入討論</div>
+            </div>
+            <button class="btn" style="width:100%;justify-content:center" onclick="alert('歡迎加入社群！請聯繫管理員獲取邀請連結。')">加入玩家討論群</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div>© 2026 養成天堂 官方網站 ｜ 經典放置天堂 綠色懷舊版</div>
+      <div>
+        <a href="#hero">回到頂部</a> ｜
+        <a href="#features">專屬特色</a> ｜
+        <a href="#classes">職業介紹</a> ｜
+        <a href="#download">遊戲下載</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
