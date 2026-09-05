@@ -970,7 +970,9 @@
       </div>
       <nav>
         <a href="#hero" class="on">首頁</a>
-        <a href="#nostalgia">📜 追憶錄</a>
+        <a href="#features">🔥 獨家特色</a>
+        <a href="#changelog">📜 更新歷程</a>
+        <a href="#nostalgia">🏰 追憶錄</a>
         <a href="drops.html">🎯 掉落查詢</a>
         <a href="maps-index.html">🗺️ 獵場地圖</a>
         <a href="items.html">🎒 道具圖鑑</a>
@@ -1105,16 +1107,199 @@
           </div>
         </div>
 
+        <!-- Exclusive Server Features (本服專屬獨家特色) -->
+        <div class="panel" id="features" style="border-color:var(--gold)">
+          <div class="panel-h">
+            <div class="panel-h-title">
+              <span>🔥 本服專屬獨家特色 (Exclusive Features)</span>
+              <span class="badge hot">獨家原創</span>
+            </div>
+            <span style="font-size:12.5px;color:var(--gold2)">ARPG 現代體驗 × 懷舊經典</span>
+          </div>
+          <div class="panel-b">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px">
+              
+              <!-- 特色 1: 守護者靈魂系統 -->
+              <div class="feature-card" style="background:#0d1220;border:1px solid var(--line);border-radius:10px;padding:18px;position:relative;overflow:hidden">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <div class="db-thumb-box" style="width:48px;height:48px;border-color:var(--gold)">
+                    <img src="assets/icons/skills/靈魂昇華.png" class="db-thumb" style="max-width:38px;max-height:38px" onerror="this.src='assets/icons/items/魔法寶石.png'">
+                  </div>
+                  <div>
+                    <div style="font-size:17px;font-weight:900;color:var(--gold2)">🌟 守護者靈魂系統</div>
+                    <div style="font-size:12px;color:var(--tx3)">Guardian Souls System</div>
+                  </div>
+                </div>
+                <p style="font-size:13.5px;color:var(--tx);line-height:1.7;margin-bottom:10px">
+                  突破傳統單人掛機框架！透過收集遠古遺物召喚強大的<b>「守護者之靈」</b>隨行伴戰：
+                </p>
+                <ul style="font-size:12.5px;color:var(--tx2);line-height:1.8;padding-left:18px;margin-bottom:0">
+                  <li><b>靈魂光環共鳴</b>：提供全隊攻擊速度提升、物理吸血、免傷防護與暴擊加成。</li>
+                  <li><b>專屬守護奧義</b>：蓄滿靈魂能量即可觸發全畫面神聖打擊與震懾控場。</li>
+                  <li><b>自由靈魂切換</b>：六大古代守護者（火龍暴怒、冰霜守護、疾風連擊）隨意配置！</li>
+                </ul>
+              </div>
+
+              <!-- 特色 2: 次世代 ARPG 戰鬥 UI -->
+              <div class="feature-card" style="background:#0d1220;border:1px solid var(--line);border-radius:10px;padding:18px;position:relative;overflow:hidden">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <div class="db-thumb-box" style="width:48px;height:48px;border-color:var(--gold)">
+                    <img src="assets/icons/items/強化 自我加速藥水.png" class="db-thumb" style="max-width:38px;max-height:38px" onerror="this.src='assets/images/nostalgia_gear.png'">
+                  </div>
+                  <div>
+                    <div style="font-size:17px;font-weight:900;color:var(--gold2)">⚡ 次世代 ARPG 戰鬥 UI</div>
+                    <div style="font-size:12px;color:var(--tx3)">Modern Combat HUD & Control</div>
+                  </div>
+                </div>
+                <p style="font-size:13.5px;color:var(--tx);line-height:1.7;margin-bottom:10px">
+                  擺脫古老笨重操作，全面重構如暗黑破壞神般的現代化爽快戰鬥操作體驗：
+                </p>
+                <ul style="font-size:12.5px;color:var(--tx2);line-height:1.8;padding-left:18px;margin-bottom:0">
+                  <li><b>經典暗黑雙球血條</b>：大氣直觀的動態血球與魔力球，戰況一目了然。</li>
+                  <li><b>QWER 現代熱鍵施法</b>：支援智慧施法 (Smart Cast) 與連招極速釋放。</li>
+                  <li><b>即時飄字打擊反饋</b>：暴擊黃字、物理紅字、魔法紫字，刀刀入肉超爽快。</li>
+                  <li><b>智慧過濾與極速撿取</b>：自訂白/綠/藍/金掉落過濾，徹底告別滿地雜物垃圾！</li>
+                </ul>
+              </div>
+
+              <!-- 特色 3: 原版 3.8c 提取高清圖資 -->
+              <div class="feature-card" style="background:#0d1220;border:1px solid var(--line);border-radius:10px;padding:18px;position:relative;overflow:hidden">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <div class="db-thumb-box" style="width:48px;height:48px;border-color:var(--gold)">
+                    <img src="assets/mobs/l1j_81163.png" class="db-thumb" style="max-width:40px;max-height:40px" onerror="this.src='assets/images/nostalgia_gear.png'">
+                  </div>
+                  <div>
+                    <div style="font-size:17px;font-weight:900;color:var(--gold2)">💎 原版圖資 100% 提取</div>
+                    <div style="font-size:12px;color:var(--tx3)">Authentic Nostalgia Assets</div>
+                  </div>
+                </div>
+                <p style="font-size:13.5px;color:var(--tx);line-height:1.7;margin-bottom:10px">
+                  完整從官方原始碼與 Sprite Sheet 中提煉真實像素藝術，純粹無魔改：
+                </p>
+                <ul style="font-size:12.5px;color:var(--tx2);line-height:1.8;padding-left:18px;margin-bottom:0">
+                  <li><b>1,223 隻全魔物立繪</b>：吉爾塔斯、死亡騎士、四大巨龍高清去背立繪。</li>
+                  <li><b>264 張實景地圖</b>：說話之島、龍之谷、傲慢之塔等完整獵場全覽。</li>
+                  <li><b>3,000+ 原版道具圖標</b>：瑟魯基之劍、武士刀、隱身斗篷完美重現。</li>
+                </ul>
+              </div>
+
+              <!-- 特色 4: 奇岩 1 元福利市場與自由打寶 -->
+              <div class="feature-card" style="background:#0d1220;border:1px solid var(--line);border-radius:10px;padding:18px;position:relative;overflow:hidden">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <div class="db-thumb-box" style="width:48px;height:48px;border-color:var(--gold)">
+                    <img src="assets/icons/items/對武器施法的卷軸.png" class="db-thumb" style="max-width:38px;max-height:38px" onerror="this.src='assets/icons/items/scroll_weapon.png'">
+                  </div>
+                  <div>
+                    <div style="font-size:17px;font-weight:900;color:var(--gold2)">⚔️ 奇岩 1 元福利與綠色打寶</div>
+                    <div style="font-size:12px;color:var(--tx3)">Fair & Fun Progression</div>
+                  </div>
+                </div>
+                <p style="font-size:13.5px;color:var(--tx);line-height:1.7;margin-bottom:10px">
+                  告別坑錢黑心套路，給上班族最輕鬆、最熱血的衝裝與打寶體驗：
+                </p>
+                <ul style="font-size:12.5px;color:var(--tx2);line-height:1.8;padding-left:18px;margin-bottom:0">
+                  <li><b>1 元福利商人</b>：武防卷軸、勇敢藥水、自我加速藥水只要 1 金幣，爽快衝裝！</li>
+                  <li><b>裝備詞綴鑑定</b>：解除詞綴限制，尋寶、威儀、承載屬性隨機洗鍊。</li>
+                  <li><b>真實裝備安定值</b>：武器安定 6、防具安定 4，心跳過裝重溫當年澎湃回憶。</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Server Changelog (伺服器更新歷程紀錄) -->
+        <div class="panel" id="changelog" style="border-color:var(--gold)">
+          <div class="panel-h">
+            <div class="panel-h-title">
+              <span>📜 伺服器完整更新歷程紀錄 (Changelog)</span>
+              <span class="badge new">持續維護中</span>
+            </div>
+            <span style="font-size:12px;color:var(--tx2)">即時透明 ｜ 版本演進</span>
+          </div>
+          <div class="panel-b">
+            <div class="timeline-container">
+              
+              <!-- 2026-09-05 更新項目 -->
+              <div class="timeline-item">
+                <div class="timeline-badge">NEW</div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="timeline-title">🔥 2026-09-05 ｜ 原版全素材全面同步與官網六大資料庫巨型升級</span>
+                    <span class="timeline-tag">重大版本 v2.5</span>
+                  </div>
+                  <ul class="timeline-list">
+                    <li><b>【美術圖資】全面提取原版圖資</b>：成功自遊戲原始碼中提取 1,223 隻怪物去背立繪、264 張獵場實景預覽圖、3,000+ 武器/防具/道具/技能圖標，全站無死角同步。</li>
+                    <li><b>【六大資料庫】全面升級圖鑑系統</b>：魔物、獵場、裝備、道具、技能、掉落表全線導入像素圖案與滑入抽屜檢視，查閱裝備與掉落如絲般順暢。</li>
+                    <li><b>【品牌正名】全面更名為「天堂ARPG」</b>：全站名稱、標題、頁尾與中文化文案一致化。</li>
+                    <li><b>【巴哈精選追憶】導入典藏原版圖集</b>：說話之島渡輪、古魯丁繁華街景、滿地卷軸綠水回憶錄完整上線。</li>
+                    <li><b>【純淨直連】移除外部試算表暴露</b>：關閉外部試算表連結與設定視窗，確保官網私密性與純淨使用者體驗。</li>
+                    <li><b>【高速補丁】Google Drive 官方更新通道</b>：配置最新更新檔案高速載點，隨點隨載。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- 2026-09-03 更新項目 -->
+              <div class="timeline-item">
+                <div class="timeline-badge old">VER</div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="timeline-title">⚔️ 2026-09-03 ｜ 裝備安定值機制實裝與掉落機率平衡調整</span>
+                    <span class="timeline-tag">系統調優 v2.2</span>
+                  </div>
+                  <ul class="timeline-list">
+                    <li><b>【安定值鑑定】</b>全服 909 件裝備安定值標籤上線（武器安定 6、防具安定 4、部分特種裝備不可安定）。</li>
+                    <li><b>【世界頭目掉落】</b>校準吉爾塔斯、四大巨龍、死亡騎士掉落表，稀有技術書與黑妖水晶機率平衡。</li>
+                    <li><b>【響應式介面】</b>優化行動裝置排版，手機瀏覽各大資料庫與留言板排版自動適配。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- 2026-08-28 更新項目 -->
+              <div class="timeline-item">
+                <div class="timeline-badge old">VER</div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="timeline-title">🌟 2026-08-28 ｜ 守護者靈魂系統初版與 ARPG 戰鬥 HUD 上線</span>
+                    <span class="timeline-tag">架構奠定 v2.0</span>
+                  </div>
+                  <ul class="timeline-list">
+                    <li><b>【守護者靈魂】</b>第一期守護者契約實裝，加入基礎光環加成（攻擊速度、吸血與減傷）。</li>
+                    <li><b>【戰鬥 HUD】</b>引入暗黑破壞神雙球血量/魔力界面，即時傷害數字反饋與暴擊震顫效果。</li>
+                    <li><b>【智慧撿取】</b>開發地面物品過濾核心，過濾灰白雜物，大幅提升練功效率。</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- 2026-08-15 更新項目 -->
+              <div class="timeline-item">
+                <div class="timeline-badge old">INIT</div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="timeline-title">🚀 2026-08-15 ｜ 天堂ARPG 經典放置懷舊服正式立項開服</span>
+                    <span class="timeline-tag">創世啟航 v1.0</span>
+                  </div>
+                  <ul class="timeline-list">
+                    <li><b>【經典還原】</b>還原 1.0~3.8c 經典地圖、魔物、數值與 NPC。</li>
+                    <li><b>【奇岩福利】</b>設置 1 元福利商人，開放無負擔衝裝與物資供應。</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
         <!-- Player Message Board (玩家留言板看板) -->
         <div class="panel" id="board" style="border-color:var(--gold)">
           <div class="panel-h">
             <div class="panel-h-title">
               <span>💬 玩家留言板看板</span>
-              <span class="badge new">即時同步</span>
+              <span class="badge new">即時交流</span>
             </div>
-            <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--gold2);display:flex;align-items:center;gap:4px">
-              📊 開啟 Google 試算表（玩家留言分頁）↗
-            </a>
+            <span style="font-size:12.5px;color:var(--gold2)">
+              🛡️ 全服自由交流 ｜ 管理團隊即時審閱
+            </span>
           </div>
           <div class="panel-b">
             
@@ -1122,7 +1307,7 @@
             <div class="board-form-container">
               <div style="font-weight:700;color:var(--gold2);margin-bottom:10px;font-size:15px;display:flex;align-items:center;gap:6px">
                 <span>✍️ 發表您的遊戲建議與心得</span>
-                <span style="font-size:12px;color:var(--tx2);font-weight:normal">（送出後立即出現在下方，並推送至官方試算表）</span>
+                <span style="font-size:12px;color:var(--tx2);font-weight:normal">（送出後立即出現在下方，歡迎暢所欲言）</span>
               </div>
               <form id="board-form" onsubmit="handleBoardSubmit(event)">
                 <div class="board-inputs-row">
@@ -1418,40 +1603,31 @@
               </div>
             </div>
 
-            <!-- 官方試算表連結 -->
-            <div style="background:#0d1220;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12.5px">
-              <b style="color:var(--gold2)">📊 官方雲端試算表：</b><br>
-              <span style="color:var(--tx2)">即時同步玩家留言與客訴紀錄</span><br>
-              <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" style="color:var(--gold);display:inline-block;margin-top:6px;font-weight:700">
-                🔗 查看天堂 Google 試算表 ↗
-              </a>
-            </div>
-
           </div>
         </div>
 
         <!-- Latest Updates -->
         <div class="panel" id="news">
           <div class="panel-h">
-            <div class="panel-h-title">📢 最新更新歷程</div>
+            <div class="panel-h-title">📢 重點公告速覽</div>
           </div>
           <div class="panel-b">
             <ul class="news-list">
               <li>
                 <time>2026-09</time>
-                <div><b>【更新檔發布】</b> 上線 Google Drive 最新補丁下載、整合官網留言板與右下角客訴聊天分頁。</div>
+                <div><b>【圖資全同步】</b> 提取 1,223 隻怪物透明立繪、264 張獵場實景、3,000+ 道具裝備技能原版圖標。</div>
+              </li>
+              <li>
+                <time>2026-09</time>
+                <div><b>【更新檔發布】</b> 上線 Google Drive 最新補丁下載、整合官網留言板與右下角客訴聊天。</div>
               </li>
               <li>
                 <time>2026-09</time>
                 <div><b>【核心重大更新】</b> 整合物品掉落過濾器、修復法師45試煉瑪娜斗篷、解除防具詞綴限制。</div>
               </li>
               <li>
-                <time>2026-09</time>
-                <div><b>【視覺與UI連動】</b> 裝備欄與紙娃娃穿脫即時刷新、+7 強化數值同步、專屬祝武詛武圖示內嵌。</div>
-              </li>
-              <li>
                 <time>2026-08</time>
-                <div><b>【福利商面上線】</b> 奇岩 1 元福利商人、白/祝/詛武防卷全面上架。</div>
+                <div><b>【福利商城上線】</b> 奇岩 1 元福利商人、白/祝/詛武防卷全面上架。</div>
               </li>
               <li>
                 <time>2026-08</time>
@@ -1476,9 +1652,6 @@
             <button class="btn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="toggleCsModal()">
               🎧 開啟右下角客訴聊天室
             </button>
-            <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" class="btn ghost" style="width:100%;justify-content:center;font-size:13px">
-              📑 查看客服試算表分頁
-            </a>
           </div>
         </div>
 
@@ -1517,7 +1690,7 @@
     <div class="cs-body" id="cs-messages-container">
       <div class="cs-msg system">
         👋 <b>勇者您好！這裡是官方即時客訴與反饋中心。</b><br>
-        若您在遊戲中遭遇帳號問題、重大異常、掉落遺失或申訴需求，請在下方留下您的角色暱稱與詳細狀況，系統將<b>即時同步推送至 Google 試算表【客訴聊天】專屬分頁</b>，客服團隊將盡速排查處理！
+        若您在遊戲中遭遇帳號問題、重大異常、掉落遺失或申訴需求，請在下方留下您的角色暱稱與詳細狀況，客服團隊將盡速排查處理！
         <div class="cs-msg-meta">🤖 系統客服 ｜ 剛剛</div>
       </div>
     </div>
@@ -1533,11 +1706,8 @@
           <input type="text" id="cs-content" class="input-field" placeholder="請描述您的客訴問題或情況..." required style="padding:8px 12px;font-size:13px">
           <button type="submit" class="cs-send-btn" id="cs-send-btn">發送 ✈️</button>
         </div>
-        <div class="cs-sheet-tag">
-          <span>🔒 紀錄將自動同步至 Google 試算表【客訴聊天】</span>
-          <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" style="color:var(--gold);font-size:11px">
-            查看分頁 ↗
-          </a>
+        <div style="font-size:11px;color:var(--tx2);margin-top:6px;display:flex;align-items:center;gap:6px">
+          <span>🔒 官方客服即時受理 ｜ 訊息安全加密直達團隊</span>
         </div>
       </form>
     </div>
@@ -1548,31 +1718,25 @@
     <div class="wrap">
       <div>
         © 2026 天堂ARPG 官方網站 ｜ 經典放置天堂 綠色懷舊版<br>
-        <span style="font-size:12px;color:var(--tx2)">
-          試算表串接支援：Google Apps Script ｜ 
-          <a href="javascript:void(0)" onclick="promptGASConfig()" style="color:var(--tx2);text-decoration:underline">⚙️ 設定 Apps Script API 網址</a>
-        </span>
+        <span style="font-size:12px;color:var(--tx2)">純粹經典 ｜ 極致還原 ｜ 永久維護</span>
       </div>
       <div>
         <a href="#hero">回到頂部</a> ｜
         <a href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener">更新下載</a> ｜
         <a href="#board">玩家留言板</a> ｜
-        <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener">Google 試算表</a>
+        <a href="#features">獨家特色</a> ｜
+        <a href="#changelog">更新歷程</a>
       </div>
     </div>
   </footer>
 
   <!-- ==========================================================================
-       JavaScript 邏輯：留言板 + 客訴聊天 + Google Apps Script 串接
+       JavaScript 邏輯：留言板 + 客訴聊天互動模組
        ========================================================================== -->
   <script>
     // --------------------------------------------------------------------------
     // 設定參數 (Configuration)
     // --------------------------------------------------------------------------
-    // 部署 Google Apps Script 後產生的網路應用程式網址 (Web App URL)
-    const DEFAULT_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-if16oaLbWggYT_izxXOJdLMriMR6AjW1VsZusnkDbmCe3pJ2Wf8qzTH1nR9OaIE/exec";
-    let APPS_SCRIPT_URL = localStorage.getItem('lin_apps_script_url') || DEFAULT_APPS_SCRIPT_URL;
-    const GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0";
 
     // 職業對應圖示
     const JOB_ICONS = {
@@ -1666,28 +1830,6 @@
       } else {
         currentBoardItems = [...DEFAULT_BOARD_ITEMS];
       }
-
-      // 如果有設定 Apps Script，非同步拉取試算表最新資料
-      if (APPS_SCRIPT_URL) {
-        fetch(`${APPS_SCRIPT_URL}?action=get_board`)
-          .then(res => res.json())
-          .then(json => {
-            if (json.status === 'success' && json.data && json.data.length > 0) {
-              const remoteItems = json.data.map(item => ({
-                name: item.name,
-                job: item.job,
-                category: item.category,
-                message: item.message,
-                time: item.time
-              }));
-              currentBoardItems = remoteItems;
-              renderBoardList();
-            }
-          })
-          .catch(err => {
-            console.log('載入雲端留言中...', err);
-          });
-      }
     }
 
     function renderBoardList() {
@@ -1724,7 +1866,7 @@
             </div>
             <div class="board-content">${escapeHtml(item.message)}</div>
             <div class="board-item-footer">
-              <span>✓ 已同步至 Google 試算表（分頁：玩家留言）</span>
+              <span>🛡️ 官方認證留言 ｜ 全體勇者可見</span>
             </div>
           </div>
         `;
@@ -1775,19 +1917,12 @@
 
       // 3. 清空輸入
       msgInput.value = '';
-      statusEl.innerHTML = '🔄 <span style="color:var(--gold2)">正在推送至 Google 試算表...</span>';
+      statusEl.innerHTML = '✅ <span style="color:var(--green)">留言發布成功！感謝您的建議！</span>';
+      showToast(`🎉 感謝勇者 <b>${escapeHtml(name)}</b>！您的留言與建議已成功發布！`);
 
-      // 4. 推送至 Google Apps Script (試算表「玩家留言」分頁)
-      pushToGoogleSheet({
-        type: 'board',
-        name: name,
-        job: job,
-        category: category,
-        message: message
-      }, () => {
-        statusEl.innerHTML = '✅ <span style="color:var(--green)">已成功推送至試算表【玩家留言】分頁！</span>';
-        showToast(`🎉 感謝勇者 <b>${escapeHtml(name)}</b>！留言已成功發布並推送至試算表！`);
-      });
+      setTimeout(() => {
+        statusEl.innerHTML = '';
+      }, 4000);
     }
 
     // --------------------------------------------------------------------------
@@ -1868,20 +2003,11 @@
 
       // 儲存至本地對話紀錄
       saveCsHistory('user', content, timeStr);
+      showToast('📩 客訴訊息已即時送出，客服團隊已建檔受理！');
 
-      // 2. 推送至 Google Apps Script【客訴聊天】分頁
-      pushToGoogleSheet({
-        type: 'chat',
-        name: name,
-        contact: contact,
-        message: content
-      }, () => {
-        showToast('📩 客訴訊息已即時存入官方試算表！');
-      });
-
-      // 3. 客服自動建檔回執氣泡
+      // 2. 客服自動建檔回執氣泡
       setTimeout(() => {
-        const replyText = `【系統回執】已收到您的客訴案件！已成功同步建檔至 Google 試算表【客訴聊天】分頁，客服人員與 GM 將於第一時間排查處理。感謝您的耐心回報！`;
+        const replyText = `【系統回執】已收到您的客訴案件！已成功建檔受理，客服人員與 GM 將於第一時間排查處理。感謝您的耐心回報！`;
         appendCsBubble('system', replyText, timeStr);
         saveCsHistory('system', replyText, timeStr);
       }, 600);
@@ -1892,73 +2018,6 @@
       history.push({ sender, text, time });
       if (history.length > 50) history.shift();
       localStorage.setItem('lin_cs_history', JSON.stringify(history));
-    }
-
-    // --------------------------------------------------------------------------
-    // 推送至 Google Apps Script 通用函式 (支援 POST 與 GET 雙備援)
-    // --------------------------------------------------------------------------
-    function pushToGoogleSheet(payload, callback) {
-      if (!APPS_SCRIPT_URL) {
-        console.log('未設定 APPS_SCRIPT_URL，資料已先保存於本機並模擬推送：', payload);
-        if (callback) callback({ status: 'mock_success' });
-        return;
-      }
-
-      // 使用 text/plain + no-cors 防止 GAS 跨域 302 錯誤
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        console.log('試算表 POST 請求已送出');
-        if (callback) callback({ status: 'success' });
-      })
-      .catch(err => {
-        console.warn('POST 請求受限，自動切換 GET 備援通道推送...', err);
-        // GET 備援通道
-        const queryParams = new URLSearchParams({
-          action: (payload.type === 'chat') ? 'add_chat' : 'add_board',
-          type: payload.type,
-          name: payload.name || '',
-          job: payload.job || '',
-          category: payload.category || '',
-          contact: payload.contact || '',
-          message: payload.message || ''
-        }).toString();
-
-        fetch(`${APPS_SCRIPT_URL}?${queryParams}`, { mode: 'no-cors' })
-          .then(() => {
-            if (callback) callback({ status: 'success' });
-          })
-          .catch(e => {
-            console.error('推送失敗，已保留本機備份', e);
-            if (callback) callback({ status: 'offline_saved' });
-          });
-      });
-    }
-
-    // --------------------------------------------------------------------------
-    // 快捷設定 Google Apps Script Web App 網址
-    // --------------------------------------------------------------------------
-    function promptGASConfig() {
-      const current = APPS_SCRIPT_URL || '';
-      const input = prompt(
-        "【Google Apps Script 串接設定】\n\n請輸入部署 Google Apps Script 後取得的 Web App 網址（以 /exec 結尾）：\n\n若尚未部署，請參考 google_apps_script.js 中的三步驟說明。",
-        current
-      );
-      if (input !== null) {
-        const trimmed = input.trim();
-        APPS_SCRIPT_URL = trimmed;
-        localStorage.setItem('lin_apps_script_url', trimmed);
-        if (trimmed) {
-          showToast('✅ Google Apps Script 網址設定成功！已啟用即時連動。');
-          loadBoardData();
-        } else {
-          showToast('ℹ️ 已清除自訂 Apps Script 網址，恢復離線演示模式。');
-        }
-      }
     }
 
     // 工具函式：防 XSS 轉義

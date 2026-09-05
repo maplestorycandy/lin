@@ -907,3 +907,103 @@ footer .wrap {
   margin-bottom: 14px;
 }
 
+/* ==========================================================================
+   時間軸與更新歷程樣式 (Timeline & Changelog)
+   ========================================================================== */
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  padding-left: 28px;
+  margin-top: 8px;
+}
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 10px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--gold) 0%, rgba(212,175,55,0.2) 100%);
+}
+.timeline-item {
+  position: relative;
+}
+.timeline-badge {
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #111;
+  font-size: 9px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(212,175,55,0.6);
+}
+.timeline-badge.old {
+  background: #232d40;
+  color: var(--tx2);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+.timeline-content {
+  background: #0d1220;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(42,53,80,0.6);
+  padding-bottom: 8px;
+}
+.timeline-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--gold2);
+}
+.timeline-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  background: rgba(212,175,55,0.15);
+  color: var(--gold);
+  font-weight: 700;
+  border: 1px solid rgba(212,175,55,0.3);
+}
+.timeline-list {
+  font-size: 13px;
+  color: var(--tx);
+  line-height: 1.8;
+  padding-left: 18px;
+  margin: 0;
+}
+.timeline-list li {
+  margin-bottom: 6px;
+}
+.timeline-list li b {
+  color: var(--gold2);
+}
+
+.feature-card {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.feature-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold) !important;
+  box-shadow: 0 6px 20px rgba(212,175,55,0.15);
+}
+
+
