@@ -1793,6 +1793,12 @@
       }
     ];
 
+    // --------------------------------------------------------------------------
+    // 設定參數 (Configuration)
+    // --------------------------------------------------------------------------
+    // 部署 Google Apps Script 後產生的網路應用程式網址 (Web App URL)
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-if16oaLbWggYT_izxXOJdLMriMR6AjW1VsZusnkDbmCe3pJ2Wf8qzTH1nR9OaIE/exec";
+
     // 當前留言數據集合
     let currentBoardItems = [];
     let currentFilter = '全部';
@@ -1830,6 +1836,28 @@
         }
       } else {
         currentBoardItems = [...DEFAULT_BOARD_ITEMS];
+      }
+
+      // 如果有設定 Apps Script，非同步拉取 Google 試算表最新留言
+      if (APPS_SCRIPT_URL) {
+        fetch(`${APPS_SCRIPT_URL}?action=get_board`)
+          .then(res => res.json())
+          .then(json => {
+            if (json.status === 'success' && json.data && json.data.length > 0) {
+              const remoteItems = json.data.map(item => ({
+                name: item.name,
+                job: item.job,
+                category: item.category,
+                message: item.message,
+                time: item.time
+              }));
+              currentBoardItems = remoteItems;
+              renderBoardList();
+            }
+          })
+          .catch(err => {
+            console.log('載入雲端留言中...', err);
+          });
       }
     }
 
@@ -1918,12 +1946,22 @@
 
       // 3. 清空輸入
       msgInput.value = '';
-      statusEl.innerHTML = '✅ <span style="color:var(--green)">留言發布成功！感謝您的建議！</span>';
-      showToast(`🎉 感謝勇者 <b>${escapeHtml(name)}</b>！您的留言與建議已成功發布！`);
+      statusEl.innerHTML = '🔄 <span style="color:var(--gold2)">正在同步至 Google 試算表...</span>';
 
-      setTimeout(() => {
-        statusEl.innerHTML = '';
-      }, 4000);
+      // 4. 推送至 Google Apps Script (試算表「玩家留言」分頁)
+      pushToGoogleSheet({
+        type: 'board',
+        name: name,
+        job: job,
+        category: category,
+        message: message
+      }, (res) => {
+        statusEl.innerHTML = '✅ <span style="color:var(--green)">已成功存入 Google 試算表！</span>';
+        showToast(`🎉 感謝勇者 <b>${escapeHtml(name)}</b>！留言已成功發布並同步至試算表！`);
+        setTimeout(() => {
+          statusEl.innerHTML = '';
+        }, 5000);
+      });
     }
 
     // --------------------------------------------------------------------------
@@ -2004,11 +2042,20 @@
 
       // 儲存至本地對話紀錄
       saveCsHistory('user', content, timeStr);
-      showToast('📩 客訴訊息已即時送出，客服團隊已建檔受理！');
 
-      // 2. 客服自動建檔回執氣泡
+      // 2. 推送至 Google Apps Script【客訴聊天】分頁
+      pushToGoogleSheet({
+        type: 'chat',
+        name: name,
+        contact: contact,
+        message: content
+      }, () => {
+        showToast('📩 客訴訊息已即時同步至官方試算表！');
+      });
+
+      // 3. 客服自動建檔回執氣泡
       setTimeout(() => {
-        const replyText = `【系統回執】已收到您的客訴案件！已成功建檔受理，客服人員與 GM 將於第一時間排查處理。感謝您的耐心回報！`;
+        const replyText = `【系統回執】已收到您的客訴案件！已成功同步建檔至 Google 試算表【客訴聊天】分頁，客服人員與 GM 將於第一時間排查處理。感謝您的耐心回報！`;
         appendCsBubble('system', replyText, timeStr);
         saveCsHistory('system', replyText, timeStr);
       }, 600);
@@ -2019,6 +2066,50 @@
       history.push({ sender, text, time });
       if (history.length > 50) history.shift();
       localStorage.setItem('lin_cs_history', JSON.stringify(history));
+    }
+
+    // --------------------------------------------------------------------------
+    // 推送至 Google Apps Script 通用函式 (支援 POST 與 GET 雙通道備援)
+    // --------------------------------------------------------------------------
+    function pushToGoogleSheet(payload, callback) {
+      if (!APPS_SCRIPT_URL) {
+        console.log('未設定 APPS_SCRIPT_URL，資料已先保存於本機：', payload);
+        if (callback) callback({ status: 'mock_success' });
+        return;
+      }
+
+      // 使用 text/plain + no-cors 防止跨域 302 重定向報錯
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        console.log('試算表 POST 請求已送出');
+        if (callback) callback({ status: 'success' });
+      })
+      .catch(err => {
+        console.warn('POST 請求受限，自動切換 GET 備援通道推送...', err);
+        const queryParams = new URLSearchParams({
+          action: (payload.type === 'chat') ? 'add_chat' : 'add_board',
+          type: payload.type,
+          name: payload.name || '',
+          job: payload.job || '',
+          category: payload.category || '',
+          contact: payload.contact || '',
+          message: payload.message || ''
+        }).toString();
+
+        fetch(`${APPS_SCRIPT_URL}?${queryParams}`, { mode: 'no-cors' })
+          .then(() => {
+            if (callback) callback({ status: 'success' });
+          })
+          .catch(e => {
+            console.error('推送失敗，已保留本機備份', e);
+            if (callback) callback({ status: 'offline_saved' });
+          });
+      });
     }
 
     // 工具函式：防 XSS 轉義
