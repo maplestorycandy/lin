@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>技能圖鑑 ｜ 養成天堂 官方資料庫</title>
+  <meta name="description" content="養成天堂 技能圖鑑 — 完整收錄王族、騎士、妖精、法師十階神法、黑妖、龍騎士、幻術士與戰士全職業技能消耗、冷卻時間與效果。">
+  <link rel="stylesheet" href="assets/css/db.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="wrap hd">
+      <a href="index.html" class="brand">
+        <span>養成天堂</span>
+        <span class="brand-badge">PRO</span>
+        <small>官方資料庫站</small>
+      </a>
+      <nav>
+        <a href="index.html">首頁</a>
+        <a href="drops.html" class="">掉落查詢</a>
+        <a href="maps-index.html" class="">獵場地圖</a>
+        <a href="items.html" class="">道具圖鑑</a>
+        <a href="equip.html" class="">裝備圖鑑</a>
+        <a href="mobs.html" class="">怪物圖鑑</a>
+        <a href="skills.html" class="on">技能圖鑑</a>
+        <a href="index.html#board">💬 留言板</a>
+        <a href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener" class="highlight-nav">📥 下載更新</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Playbar -->
+  <div class="playbar">
+    <div class="wrap">
+      <span style="color:var(--gold2)">⚔️ 官方資料庫：</span>
+      <span>2026 全新完整拆包魔物、掉落、裝備、技能數據已同步</span>
+      <span style="color:var(--tx2); margin-left:auto">💡 提示：點擊任何怪物或裝備即可展開即時掉落來源</span>
+    </div>
+  </div>
+
+  <!-- DB Subnav -->
+  <div class="wrap" style="margin-top: 16px;">
+    <div class="db-subnav">
+      <a href="drops.html" class="db-subnav-link ">🎯 掉落查詢</a>
+      <a href="maps-index.html" class="db-subnav-link ">🗺️ 獵場地圖</a>
+      <a href="items.html" class="db-subnav-link ">🎒 道具圖鑑</a>
+      <a href="equip.html" class="db-subnav-link ">⚔️ 裝備圖鑑</a>
+      <a href="mobs.html" class="db-subnav-link ">👹 怪物圖鑑</a>
+      <a href="skills.html" class="db-subnav-link active">✨ 技能圖鑑</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="db-hero">
+    <div class="wrap">
+      <h1>✨ 技能圖鑑資料庫</h1>
+      <p>八大職業經典與特色技能百科！包含法師 1~10 階魔法（究極光裂術、流星雨、聖結界）、騎士衝暈反屏、妖精精靈魔法與龍騎士龍語覺醒。</p>
+      <div class="db-stats-row">
+        <div class="db-stat-chip">技能收錄總數：<b id="stat-total-skills">191</b> 個</div>
+        <div class="db-stat-chip">涵蓋職業：<b>八大職業全收錄</b></div>
+        <div class="db-stat-chip">神級魔法：<b>究極光裂術 / 聖結界 / 三重矢 / 反擊屏障</b></div>
+        <div class="db-stat-chip">平衡設定：<b>依正服 1:1 復刻消耗與冷卻</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="wrap" style="padding-top: 24px;">
+    <!-- Filter Box -->
+    <div class="filter-box">
+      <div class="filter-top-row">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="skills-search" class="search-input" placeholder="搜尋技能名稱 (例如: 究極光裂術、衝擊之暈、三重矢、反擊屏障)..." oninput="handleSearch(this.value)">
+        </div>
+        <div class="filter-count">共找到 <b id="filtered-count">0</b> 個技能</div>
+      </div>
+
+      <div class="filter-pills" id="class-pills">
+        <button class="pill-btn active" onclick="setClassFilter('all', this)">全部技能</button>
+        <button class="pill-btn" onclick="setClassFilter('mage', this)">🔮 法師 (1-10階神法)</button>
+        <button class="pill-btn" onclick="setClassFilter('knight', this)">🛡️ 騎士 (衝暈/反屏)</button>
+        <button class="pill-btn" onclick="setClassFilter('elf', this)">🏹 妖精 (精靈魔法)</button>
+        <button class="pill-btn" onclick="setClassFilter('dark', this)">🗡️ 黑暗妖精</button>
+        <button class="pill-btn" onclick="setClassFilter('royal', this)">👑 王族 (戰場光環)</button>
+        <button class="pill-btn" onclick="setClassFilter('dragon', this)">🐉 龍騎士 (屠宰/覺醒)</button>
+        <button class="pill-btn" onclick="setClassFilter('illusion', this)">🌀 幻術士 (立方)</button>
+        <button class="pill-btn" onclick="setClassFilter('warrior', this)">🪓 戰士 (泰坦狂暴)</button>
+      </div>
+
+      <div class="filter-extra-row">
+        <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+          <span>排序方式：</span>
+          <select class="filter-select" id="sort-select" onchange="handleSortChange(this.value)">
+            <option value="id_asc">技能編號 / 階級</option>
+            <option value="mp_desc">MP 消耗 (高到低)</option>
+            <option value="name_asc">技能名稱 (A-Z)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Cards -->
+    <div class="db-grid" id="skills-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--tx2)">正在載入技能圖鑑...</div>
+    </div>
+  </main>
+
+  <!-- Floating CS Widget -->
+  <div class="cs-floating-btn" onclick="toggleCsModal()" id="cs-float-btn" title="開啟官方客訴與即時客服">
+    <div class="cs-pulse-dot"></div>
+    <span>🎧 客訴與線上客服</span>
+  </div>
+
+  <div class="cs-modal-box" id="cs-modal-box">
+    <div class="cs-header">
+      <div class="cs-header-left">
+        <span style="font-size:20px">🎧</span>
+        <div>
+          <div class="cs-header-title">養成天堂 官方客訴中心</div>
+          <div class="cs-header-sub">
+            <span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block"></span>
+            GM / 客服人員在線排查中
+          </div>
+        </div>
+      </div>
+      <button class="cs-close-btn" onclick="toggleCsModal()">✕</button>
+    </div>
+    <div class="cs-body" id="cs-messages-container">
+      <div class="cs-msg system">
+        👋 <b>勇者您好！這裡是官方即時客訴與反饋中心。</b><br>
+        若您在遊戲中遭遇帳號問題、重大異常、掉落遺失或申訴需求，請在下方留下您的角色暱稱與詳細狀況，系統將<b>即時同步推送至 Google 試算表【客訴聊天】專屬分頁</b>，客服團隊將盡速排查處理！
+        <div class="cs-msg-meta">🤖 系統客服 ｜ 剛剛</div>
+      </div>
+    </div>
+    <div class="cs-footer">
+      <form id="cs-form" onsubmit="handleCsSubmit(event)">
+        <div class="cs-footer-inputs">
+          <input type="text" id="cs-name" class="input-field" placeholder="角色暱稱 (必填)" required>
+          <input type="text" id="cs-contact" class="input-field" placeholder="聯絡方式 (LINE/Email 選填)">
+        </div>
+        <div class="cs-send-row" style="margin-top:6px">
+          <input type="text" id="cs-content" class="input-field" placeholder="請描述您的客訴問題或情況..." required>
+          <button type="submit" class="cs-send-btn" id="cs-send-btn">發送 ✈️</button>
+        </div>
+        <div class="cs-sheet-tag">
+          <span>🔒 紀錄將自動同步至 Google 試算表【客訴聊天】</span>
+          <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" style="color:var(--gold);font-size:11px">
+            查看分頁 ↗
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div>
+        © 2026 養成天堂 官方網站 ｜ 經典放置天堂 資料庫中心<br>
+        <span style="font-size:12px;color:var(--tx2)">本站所有怪物掉落、裝備數值與技能數據均同步自伺服器最新版本</span>
+      </div>
+      <div>
+        <a href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener" style="color:var(--gold2);font-weight:bold">
+          📥 立即下載更新補丁包 (Google Drive)
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/db-common.js"></script>
+
+  <!-- Data Script -->
+  <script src="assets/data/data-skills.js"></script>
+  <script>
+    let currentClassFilter = 'all';
+    let searchQuery = '';
+    let sortBy = 'id_asc';
+    let filteredList = [];
+
+    function initSkills() {
+      if (!window.SKILLS_DATA) {
+        setTimeout(initSkills, 100);
+        return;
+      }
+      document.getElementById('stat-total-skills').innerText = window.SKILLS_DATA.length.toLocaleString();
+      applyFilters();
+    }
+
+    function setClassFilter(cls, el) {
+      currentClassFilter = cls;
+      document.querySelectorAll('#class-pills .pill-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      applyFilters();
+    }
+
+    let searchTimeout = null;
+    function handleSearch(val) {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchQuery = val.trim().toLowerCase();
+        applyFilters();
+      }, 200);
+    }
+
+    function handleSortChange(val) {
+      sortBy = val;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const data = window.SKILLS_DATA || [];
+      filteredList = data.filter(s => {
+        const cls = s.class || '';
+        if (currentClassFilter !== 'all') {
+          if (currentClassFilter === 'mage' && !cls.includes('法師')) return false;
+          if (currentClassFilter === 'knight' && !cls.includes('騎士')) return false;
+          if (currentClassFilter === 'elf' && !cls.includes('妖精')) return false;
+          if (currentClassFilter === 'dark' && !cls.includes('黑暗妖精')) return false;
+          if (currentClassFilter === 'royal' && !cls.includes('王族')) return false;
+          if (currentClassFilter === 'dragon' && !cls.includes('龍騎士')) return false;
+          if (currentClassFilter === 'illusion' && !cls.includes('幻術士')) return false;
+          if (currentClassFilter === 'warrior' && !cls.includes('戰士')) return false;
+        }
+
+        if (searchQuery) {
+          const matchName = s.n && s.n.toLowerCase().includes(searchQuery);
+          const matchClass = s.class && s.class.toLowerCase().includes(searchQuery);
+          if (!matchName && !matchClass) return false;
+        }
+
+        return true;
+      });
+
+      filteredList.sort((a, b) => {
+        if (sortBy === 'id_asc') return (a.id || 0) - (b.id || 0);
+        if (sortBy === 'mp_desc') return (b.mp || 0) - (a.mp || 0);
+        if (sortBy === 'name_asc') return a.n.localeCompare(b.n, 'zh-Hant');
+        return 0;
+      });
+
+      document.getElementById('filtered-count').innerText = filteredList.length.toLocaleString();
+      renderGrid();
+    }
+
+    function renderGrid() {
+      const container = document.getElementById('skills-grid');
+      if (filteredList.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--tx2)">查無符合條件的技能，請更換搜尋詞。</div>`;
+        return;
+      }
+
+      let html = '';
+      filteredList.forEach(s => {
+        const mpCost = s.mp ? `<b style="color:var(--blue)">MP ${s.mp}</b>` : '無';
+        const hpCost = s.hp ? `<b style="color:var(--red)">HP ${s.hp}</b>` : '';
+        const costStr = hpCost ? `${mpCost} / ${hpCost}` : mpCost;
+        const durStr = s.dur > 0 ? `${s.dur} 秒` : '瞬間';
+        const cdStr = s.cd > 0 ? `${s.cd} 秒` : '無延遲';
+        const rangeStr = s.range > 0 ? `${s.range} 格` : (s.range === -1 ? '全螢幕/指定目標' : '自身施放');
+
+        html += `
+          <div class="db-card">
+            <div class="db-card-header">
+              <span style="font-size:20px">✨</span>
+              <div class="db-card-title">${s.n}</div>
+              <span class="badge normal">${s.class}</span>
+            </div>
+            <div class="db-card-body">
+              <div class="db-card-stat-row">
+                <span>消耗代價</span>
+                <span>${costStr}</span>
+              </div>
+              <div class="db-card-stat-row">
+                <span>施法距離</span>
+                <span>${rangeStr}</span>
+              </div>
+              <div class="db-card-stat-row">
+                <span>持續時間</span>
+                <span>${durStr}</span>
+              </div>
+              <div class="db-card-stat-row">
+                <span>冷卻延遲</span>
+                <span>${cdStr}</span>
+              </div>
+              <div class="db-card-stat-row">
+                <span>技能編號</span>
+                <span style="color:var(--tx3)">ID: ${s.id}</span>
+              </div>
+            </div>
+            <div class="db-card-footer">
+              <a href="drops.html" onclick="sessionStorage.setItem('search_query', '${s.n}')" class="btn-action" style="margin-left:auto">
+                查技能書掉落 🔍
+              </a>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    window.addEventListener('DOMContentLoaded', initSkills);
+  </script>
+</body>
+</html>

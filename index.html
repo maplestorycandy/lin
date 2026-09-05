@@ -823,13 +823,14 @@
       </div>
       <nav>
         <a href="#hero" class="on">首頁</a>
-        <a href="#download" class="highlight-nav">📥 下載專區</a>
-        <a href="#board">💬 玩家留言板</a>
-        <a href="#features">專屬特色</a>
-        <a href="#classes">八大職業</a>
-        <a href="#database">資料庫</a>
-        <a href="#systems">玩法系統</a>
-        <a href="#news">最新更新</a>
+        <a href="drops.html">🎯 掉落查詢</a>
+        <a href="maps-index.html">🗺️ 獵場地圖</a>
+        <a href="items.html">🎒 道具圖鑑</a>
+        <a href="equip.html">⚔️ 裝備圖鑑</a>
+        <a href="mobs.html">👹 怪物圖鑑</a>
+        <a href="skills.html">✨ 技能圖鑑</a>
+        <a href="#board">💬 留言板</a>
+        <a href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener" class="highlight-nav">📥 下載更新</a>
       </nav>
     </div>
   </header>
@@ -949,30 +950,76 @@
           <div class="panel-b">
             <div class="stats-hub">
               <div class="stat-item">
-                <div class="stat-num">2,202+</div>
-                <div class="stat-lbl">經典裝備與道具</div>
+                <div class="stat-num">2,741+</div>
+                <div class="stat-lbl">道具全圖鑑</div>
               </div>
               <div class="stat-item">
-                <div class="stat-num">430+</div>
+                <div class="stat-num">909+</div>
+                <div class="stat-lbl">神兵防具裝備</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">1,224+</div>
                 <div class="stat-lbl">傳奇魔物與首領</div>
               </div>
               <div class="stat-item">
-                <div class="stat-num">205+</div>
-                <div class="stat-lbl">懷舊獵場地圖</div>
+                <div class="stat-num">264+</div>
+                <div class="stat-lbl">獵場地圖與龍穴</div>
               </div>
               <div class="stat-item">
-                <div class="stat-num">8</div>
-                <div class="stat-lbl">完整平衡職業</div>
+                <div class="stat-num">958+</div>
+                <div class="stat-lbl">掉落物詳細來源</div>
               </div>
               <div class="stat-item">
-                <div class="stat-num">100%</div>
-                <div class="stat-lbl">經典日夜交替與洞窟黑夜</div>
+                <div class="stat-num">191+</div>
+                <div class="stat-lbl">全職業經典技能</div>
               </div>
             </div>
 
-            <div class="searchbar">
-              <input type="text" placeholder="🔍 快速檢索裝備、怪物、獵場、掉落資料庫…" readonly onclick="alert('資料庫系統已就緒，請在遊戲內右下角過濾器直接檢索！')">
-              <button class="btn" onclick="alert('資料庫系統已就緒，請在遊戲內右下角過濾器直接檢索！')">搜尋</button>
+            <!-- Database Search -->
+            <form onsubmit="event.preventDefault(); const q=document.getElementById('db-idx-input').value.trim(); if(q) window.location.href='drops.html?q=' + encodeURIComponent(q); else window.location.href='drops.html';" style="margin: 16px 0 20px;">
+              <div class="searchbar">
+                <input type="text" id="db-idx-input" placeholder="🔍 快速檢索裝備、怪物、獵場、掉落資料庫 (例如: 祝武、瑟魯基、死亡騎士、傲慢之塔)...">
+                <button type="submit" class="btn">立即檢索</button>
+              </div>
+            </form>
+
+            <!-- Six Interactive Database Portals -->
+            <div class="grid g3" style="gap:12px;margin-top:12px">
+              <a href="drops.html" class="card" style="text-decoration:none;border-color:rgba(212,175,55,0.4);transition:0.2s">
+                <div style="font-size:24px;margin-bottom:6px">🎯</div>
+                <h3 style="color:var(--gold2);margin-bottom:4px">掉落查詢資料庫</h3>
+                <p style="font-size:12.5px;color:var(--tx2);margin:0">全服 958 件掉落物，包含 BOSS 掉率、小怪與產出獵場。</p>
+              </a>
+
+              <a href="maps-index.html" class="card" style="text-decoration:none;border-color:rgba(212,175,55,0.4);transition:0.2s">
+                <div style="font-size:24px;margin-bottom:6px">🗺️</div>
+                <h3 style="color:var(--gold2);margin-bottom:4px">獵場地圖索引</h3>
+                <p style="font-size:12.5px;color:var(--tx2);margin:0">傲慢之塔 1-100F、龍之谷、暗影神殿出沒怪物與寶物速查。</p>
+              </a>
+
+              <a href="items.html" class="card" style="text-decoration:none;border-color:rgba(212,175,55,0.4);transition:0.2s">
+                <div style="font-size:24px;margin-bottom:6px">🎒</div>
+                <h3 style="color:var(--gold2);margin-bottom:4px">道具全圖鑑</h3>
+                <p style="font-size:12.5px;color:var(--tx2);margin:0">2,741 件消耗品、武防卷軸、魔法娃娃與材料產出查詢。</p>
+              </a>
+
+              <a href="equip.html" class="card" style="text-decoration:none;border-color:rgba(212,175,55,0.4);transition:0.2s">
+                <div style="font-size:24px;margin-bottom:6px">⚔️</div>
+                <h3 style="color:var(--gold2);margin-bottom:4px">裝備神兵圖鑑</h3>
+                <p style="font-size:12.5px;color:var(--tx2);margin:0">909 件武器、防具、飾品 AC、攻擊力與安定值全公開。</p>
+              </a>
+
+              <a href="mobs.html" class="card" style="text-decoration:none;border-color:rgba(212,175,55,0.4);transition:0.2s">
+                <div style="font-size:24px;margin-bottom:6px">👹</div>
+                <h3 style="color:var(--gold2);margin-bottom:4px">怪物首領圖鑑</h3>
+                <p style="font-size:12.5px;color:var(--tx2);margin:0">1,224 隻怪物與傳奇 BOSS 血量、防禦、經驗與掉落一覽。</p>
+              </a>
+
+              <a href="skills.html" class="card" style="text-decoration:none;border-color:rgba(212,175,55,0.4);transition:0.2s">
+                <div style="font-size:24px;margin-bottom:6px">✨</div>
+                <h3 style="color:var(--gold2);margin-bottom:4px">技能魔法圖鑑</h3>
+                <p style="font-size:12.5px;color:var(--tx2);margin:0">八大職業 191 個技能消耗、冷卻延遲與法術效果解析。</p>
+              </a>
             </div>
           </div>
         </div>

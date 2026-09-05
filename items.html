@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>道具圖鑑 ｜ 養成天堂 官方資料庫</title>
+  <meta name="description" content="養成天堂 道具圖鑑 — 收錄全服 2,700+ 消耗品、強化卷軸、傳送卷軸、各職業魔法書、精靈水晶、技術書與特殊材料等完整資料。">
+  <link rel="stylesheet" href="assets/css/db.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="wrap hd">
+      <a href="index.html" class="brand">
+        <span>養成天堂</span>
+        <span class="brand-badge">PRO</span>
+        <small>官方資料庫站</small>
+      </a>
+      <nav>
+        <a href="index.html">首頁</a>
+        <a href="drops.html" class="">掉落查詢</a>
+        <a href="maps-index.html" class="">獵場地圖</a>
+        <a href="items.html" class="on">道具圖鑑</a>
+        <a href="equip.html" class="">裝備圖鑑</a>
+        <a href="mobs.html" class="">怪物圖鑑</a>
+        <a href="skills.html" class="">技能圖鑑</a>
+        <a href="index.html#board">💬 留言板</a>
+        <a href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener" class="highlight-nav">📥 下載更新</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Playbar -->
+  <div class="playbar">
+    <div class="wrap">
+      <span style="color:var(--gold2)">⚔️ 官方資料庫：</span>
+      <span>2026 全新完整拆包魔物、掉落、裝備、技能數據已同步</span>
+      <span style="color:var(--tx2); margin-left:auto">💡 提示：點擊任何怪物或裝備即可展開即時掉落來源</span>
+    </div>
+  </div>
+
+  <!-- DB Subnav -->
+  <div class="wrap" style="margin-top: 16px;">
+    <div class="db-subnav">
+      <a href="drops.html" class="db-subnav-link ">🎯 掉落查詢</a>
+      <a href="maps-index.html" class="db-subnav-link ">🗺️ 獵場地圖</a>
+      <a href="items.html" class="db-subnav-link active">🎒 道具圖鑑</a>
+      <a href="equip.html" class="db-subnav-link ">⚔️ 裝備圖鑑</a>
+      <a href="mobs.html" class="db-subnav-link ">👹 怪物圖鑑</a>
+      <a href="skills.html" class="db-subnav-link ">✨ 技能圖鑑</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="db-hero">
+    <div class="wrap">
+      <h1>🎒 道具圖鑑資料庫</h1>
+      <p>完整收錄全服 2,700+ 道具！包含衝裝必備武防卷軸、瞬間移動、各職業高階技能書與精靈水晶、珍稀材料原石與掉落魔物。</p>
+      <div class="db-stats-row">
+        <div class="db-stat-chip">道具資料總數：<b id="stat-total-items">2,741</b> 件</div>
+        <div class="db-stat-chip">強化卷軸：<b>白武/祝武/詛武 1元衝裝</b></div>
+        <div class="db-stat-chip">技能書：<b>十階神法、三重矢、反屏</b></div>
+        <div class="db-stat-chip">掉落來源：<b>即時連動魔物掉落表</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="wrap" style="padding-top: 24px;">
+    <!-- Filter Box -->
+    <div class="filter-box">
+      <div class="filter-top-row">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="items-search" class="search-input" placeholder="搜尋道具名稱、魔物名稱 (例如: 對武器施法的卷軸、白水、龍之骨)..." oninput="handleSearch(this.value)">
+        </div>
+        <div class="filter-count">共找到 <b id="filtered-count">0</b> 件道具</div>
+      </div>
+
+      <div class="filter-pills" id="category-pills">
+        <button class="pill-btn active" onclick="setCategory('all', this)">全部道具</button>
+        <button class="pill-btn" onclick="setCategory('scroll', this)">📜 卷軸類 (武防/傳送/變形)</button>
+        <button class="pill-btn" onclick="setCategory('potion', this)">🧪 藥水/恢復劑</button>
+        <button class="pill-btn" onclick="setCategory('spellbook', this)">📕 技能書/精靈水晶</button>
+        <button class="pill-btn" onclick="setCategory('mat', this)">💎 原石與特殊材料</button>
+        <button class="pill-btn" onclick="setCategory('doll', this)">🧸 魔法娃娃與提袋</button>
+        <button class="pill-btn" onclick="setCategory('etc', this)">📦 雜項與任務物品</button>
+      </div>
+
+      <div class="filter-extra-row">
+        <label class="filter-checkbox">
+          <input type="checkbox" id="chk-has-drops" onchange="toggleHasDrops(this.checked)">
+          <span>只看魔物有掉落之道具</span>
+        </label>
+        <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+          <span>排序方式：</span>
+          <select class="filter-select" id="sort-select" onchange="handleSortChange(this.value)">
+            <option value="drops_desc">掉落魔物數 (多到少)</option>
+            <option value="name_asc">道具名稱 (A-Z)</option>
+            <option value="id_asc">道具 ID</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Wrap -->
+    <div class="table-wrap">
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th style="width:280px">道具名稱</th>
+            <th style="width:130px">道具分類</th>
+            <th style="width:90px">重量</th>
+            <th style="width:130px">掉落魔物數</th>
+            <th>出沒掉落魔物預覽</th>
+            <th style="width:120px;text-align:center">掉落情報</th>
+          </tr>
+        </thead>
+        <tbody id="items-table-body">
+          <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--tx2)">正在載入道具圖鑑...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination-controls"></div>
+  </main>
+
+  <!-- Floating CS Widget -->
+  <div class="cs-floating-btn" onclick="toggleCsModal()" id="cs-float-btn" title="開啟官方客訴與即時客服">
+    <div class="cs-pulse-dot"></div>
+    <span>🎧 客訴與線上客服</span>
+  </div>
+
+  <div class="cs-modal-box" id="cs-modal-box">
+    <div class="cs-header">
+      <div class="cs-header-left">
+        <span style="font-size:20px">🎧</span>
+        <div>
+          <div class="cs-header-title">養成天堂 官方客訴中心</div>
+          <div class="cs-header-sub">
+            <span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block"></span>
+            GM / 客服人員在線排查中
+          </div>
+        </div>
+      </div>
+      <button class="cs-close-btn" onclick="toggleCsModal()">✕</button>
+    </div>
+    <div class="cs-body" id="cs-messages-container">
+      <div class="cs-msg system">
+        👋 <b>勇者您好！這裡是官方即時客訴與反饋中心。</b><br>
+        若您在遊戲中遭遇帳號問題、重大異常、掉落遺失或申訴需求，請在下方留下您的角色暱稱與詳細狀況，系統將<b>即時同步推送至 Google 試算表【客訴聊天】專屬分頁</b>，客服團隊將盡速排查處理！
+        <div class="cs-msg-meta">🤖 系統客服 ｜ 剛剛</div>
+      </div>
+    </div>
+    <div class="cs-footer">
+      <form id="cs-form" onsubmit="handleCsSubmit(event)">
+        <div class="cs-footer-inputs">
+          <input type="text" id="cs-name" class="input-field" placeholder="角色暱稱 (必填)" required>
+          <input type="text" id="cs-contact" class="input-field" placeholder="聯絡方式 (LINE/Email 選填)">
+        </div>
+        <div class="cs-send-row" style="margin-top:6px">
+          <input type="text" id="cs-content" class="input-field" placeholder="請描述您的客訴問題或情況..." required>
+          <button type="submit" class="cs-send-btn" id="cs-send-btn">發送 ✈️</button>
+        </div>
+        <div class="cs-sheet-tag">
+          <span>🔒 紀錄將自動同步至 Google 試算表【客訴聊天】</span>
+          <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" style="color:var(--gold);font-size:11px">
+            查看分頁 ↗
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div>
+        © 2026 養成天堂 官方網站 ｜ 經典放置天堂 資料庫中心<br>
+        <span style="font-size:12px;color:var(--tx2)">本站所有怪物掉落、裝備數值與技能數據均同步自伺服器最新版本</span>
+      </div>
+      <div>
+        <a href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener" style="color:var(--gold2);font-weight:bold">
+          📥 立即下載更新補丁包 (Google Drive)
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/db-common.js"></script>
+
+  <!-- Data Script -->
+  <script src="assets/data/data-items.js"></script>
+  <script>
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let hasDropsOnly = false;
+    let sortBy = 'drops_desc';
+    let currentPage = 1;
+    const PAGE_SIZE = 25;
+    let filteredList = [];
+
+    function getItemCategory(n) {
+      if (n.includes('卷軸') || n.includes('傳送符')) return '📜 卷軸類';
+      if (n.includes('藥水') || n.includes('恢復劑') || n.includes('翡翠') || n.includes('勇敢') || n.includes('慎重') || n.includes('精靈餅乾')) return '🧪 藥水類';
+      if (n.includes('魔法書') || n.includes('水晶') || n.includes('技術書') || n.includes('書板') || n.includes('記憶水晶')) return '📕 技能書';
+      if (n.includes('原石') || n.includes('材料') || n.includes('骨') || n.includes('鱗') || n.includes('牙') || n.includes('血') || n.includes('肉') || n.includes('心') || n.includes('粉')) return '💎 特殊材料';
+      if (n.includes('魔法娃娃') || n.includes('袋') || n.includes('箱')) return '🧸 娃娃與禮包';
+      return '📦 一般道具';
+    }
+
+    function initItems() {
+      if (!window.ITEMS_DATA) {
+        setTimeout(initItems, 100);
+        return;
+      }
+      document.getElementById('stat-total-items').innerText = window.ITEMS_DATA.length.toLocaleString();
+      applyFilters();
+    }
+
+    function setCategory(cat, el) {
+      currentCategory = cat;
+      document.querySelectorAll('#category-pills .pill-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      currentPage = 1;
+      applyFilters();
+    }
+
+    let searchTimeout = null;
+    function handleSearch(val) {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchQuery = val.trim().toLowerCase();
+        currentPage = 1;
+        applyFilters();
+      }, 200);
+    }
+
+    function toggleHasDrops(checked) {
+      hasDropsOnly = checked;
+      currentPage = 1;
+      applyFilters();
+    }
+
+    function handleSortChange(val) {
+      sortBy = val;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const data = window.ITEMS_DATA || [];
+      filteredList = data.filter(item => {
+        const catStr = getItemCategory(item.n);
+        if (currentCategory !== 'all') {
+          if (currentCategory === 'scroll' && !catStr.includes('卷軸')) return false;
+          if (currentCategory === 'potion' && !catStr.includes('藥水')) return false;
+          if (currentCategory === 'spellbook' && !catStr.includes('技能書')) return false;
+          if (currentCategory === 'mat' && !catStr.includes('材料')) return false;
+          if (currentCategory === 'doll' && !catStr.includes('娃娃')) return false;
+          if (currentCategory === 'etc' && !catStr.includes('一般道具')) return false;
+        }
+
+        if (hasDropsOnly && (!item.drops || item.drops.length === 0)) return false;
+
+        if (searchQuery) {
+          const matchName = item.n && item.n.toLowerCase().includes(searchQuery);
+          const matchId = item.id && item.id.toLowerCase().includes(searchQuery);
+          const matchMob = item.drops && item.drops.some(d => d.m && d.m.toLowerCase().includes(searchQuery));
+          if (!matchName && !matchId && !matchMob) return false;
+        }
+
+        return true;
+      });
+
+      filteredList.sort((a, b) => {
+        if (sortBy === 'drops_desc') return (b.drops ? b.drops.length : 0) - (a.drops ? a.drops.length : 0);
+        if (sortBy === 'name_asc') return a.n.localeCompare(b.n, 'zh-Hant');
+        if (sortBy === 'id_asc') return a.id.localeCompare(b.id);
+        return 0;
+      });
+
+      document.getElementById('filtered-count').innerText = filteredList.length.toLocaleString();
+      renderTable();
+      renderPagination();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('items-table-body');
+      if (filteredList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--tx2)">查無符合條件的道具，請嘗試更換搜尋詞。</td></tr>`;
+        return;
+      }
+
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      const paged = filteredList.slice(start, end);
+
+      let html = '';
+      paged.forEach(item => {
+        const catStr = getItemCategory(item.n);
+        const dropCount = item.drops ? item.drops.length : 0;
+        const dropBadge = dropCount > 0 ? `<span class="badge boss" style="cursor:pointer" onclick="showItemDetail('${item.id}')">👹 ${dropCount} 隻魔物</span>` : '<span style="color:var(--tx3);font-size:12px">非魔物掉落 / 商店</span>';
+
+        const mobPreviews = (item.drops || []).slice(0, 4).map(d => d.isBoss ? `<b style="color:var(--red)">${d.m}</b>` : d.m).join('、 ') + (dropCount > 4 ? ' 等' : '');
+
+        html += `
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:18px">📦</span>
+                <div>
+                  <div style="font-weight:800;color:#fff;font-size:14px;cursor:pointer" onclick="showItemDetail('${item.id}')">${item.n}</div>
+                  <div style="font-size:11px;color:var(--tx3)">ID: ${item.id}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge normal">${catStr}</span></td>
+            <td>${item.wt || 1}</td>
+            <td>${dropBadge}</td>
+            <td><span style="font-size:12.5px;color:var(--tx2)">${mobPreviews || '<span style="color:var(--tx3)">任務/奇岩一元福利商人</span>'}</span></td>
+            <td style="text-align:center">
+              ${dropCount > 0 ? `<button class="btn-action" onclick="showItemDetail('${item.id}')">查看掉落 🔍</button>` : '<span style="color:var(--tx3);font-size:12px">福利販售</span>'}
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    function renderPagination() {
+      const container = document.getElementById('pagination-controls');
+      const totalPages = Math.ceil(filteredList.length / PAGE_SIZE) || 1;
+      if (totalPages <= 1) {
+        container.innerHTML = `<span class="page-info">第 1 / 1 頁 (共 ${filteredList.length} 筆)</span>`;
+        return;
+      }
+
+      let html = `
+        <button class="page-btn" onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''}>首頁</button>
+        <button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>上一頁</button>
+      `;
+
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, currentPage + 2);
+      if (endPage - startPage < 4) {
+        if (startPage === 1) endPage = Math.min(totalPages, startPage + 4);
+        else if (endPage === totalPages) startPage = Math.max(1, endPage - 4);
+      }
+
+      for (let p = startPage; p <= endPage; p++) {
+        html += `<button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+      }
+
+      html += `
+        <button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>下一頁</button>
+        <button class="page-btn" onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>末頁</button>
+        <span class="page-info">第 ${currentPage} / ${totalPages} 頁 (共 ${filteredList.length} 筆)</span>
+      `;
+      container.innerHTML = html;
+    }
+
+    function goToPage(p) {
+      currentPage = p;
+      renderTable();
+      renderPagination();
+      window.scrollTo({ top: 380, behavior: 'smooth' });
+    }
+
+    function showItemDetail(itemId) {
+      const item = (window.ITEMS_DATA || []).find(d => d.id === itemId);
+      if (!item) return;
+
+      const drops = item.drops || [];
+      drops.sort((a, b) => (b.p || 0) - (a.p || 0));
+
+      let rows = '';
+      drops.forEach(d => {
+        const bossBadge = d.isBoss ? '<span class="badge boss">BOSS</span>' : '<span class="badge normal">一般怪</span>';
+        const rateBadge = getRateBadge(d.p);
+        const mapList = (d.maps && d.maps.length > 0) ? d.maps.filter(m => !m.includes('???')).map(m => `<span class="badge cat">${m}</span>`).join(' ') : '野外隨機刷新';
+
+        rows += `
+          <tr>
+            <td><b>${d.m}</b> ${bossBadge}</td>
+            <td><span style="color:var(--gold2);font-weight:700">Lv.${d.mlv || '?'}</span></td>
+            <td>${rateBadge}</td>
+            <td>${d.min} ~ ${d.max} 個</td>
+            <td><div style="display:flex;flex-wrap:wrap;gap:4px">${mapList}</div></td>
+          </tr>
+        `;
+      });
+
+      const bodyHtml = `
+        <div style="margin-bottom:16px;background:#0d1220;padding:14px;border-radius:8px;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-size:16px;font-weight:900;color:var(--gold2)">${item.n}</div>
+            <div style="font-size:12px;color:var(--tx2)">分類: ${getItemCategory(item.n)} ｜ 重量: ${item.wt || 1} ｜ 掉落魔物: ${drops.length} 隻</div>
+          </div>
+          <a href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener" class="btn-action" style="padding:6px 14px">
+            📥 下載最新補丁
+          </a>
+        </div>
+        <div class="table-wrap" style="max-height:50vh;overflow-y:auto">
+          <table class="db-table">
+            <thead>
+              <tr>
+                <th>掉落魔物</th>
+                <th>等級</th>
+                <th>掉落機率</th>
+                <th>掉落數量</th>
+                <th>出沒地圖</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows || '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--tx2)">此道具主要由奇岩 1 元福利商人或任務產出</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      openDrawer(`🎒 道具掉落情報 ｜ ${item.n}`, bodyHtml);
+    }
+
+    window.addEventListener('DOMContentLoaded', initItems);
+  </script>
+</body>
+</html>
