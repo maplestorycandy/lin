@@ -1,6 +1,6 @@
 ﻿/**
  * ==============================================================================
- * 養成天堂 官方網站 - Google Apps Script (GAS) 後端串接腳本
+ * 天堂ARPG 官方網站 - Google Apps Script (GAS) 後端串接腳本
  * ==============================================================================
  * 
  * 📌 目標試算表：
@@ -17,7 +17,7 @@
  * 2. 清空編輯器預設代碼，將此檔案的所有內容複製貼上，點擊上方 💾 儲存按鈕
  * 3. 點選右上角藍色「部署 (Deploy)」 -> 「新增部署作業 (New deployment)」
  *    - 齒輪圖示選擇：「網路應用程式 (Web app)」
- *    - 說明 (Description)：養成天堂 留言與客訴 API
+ *    - 說明 (Description)：天堂ARPG 留言與客訴 API
  *    - 執行身分 (Execute as)：我 (Me - 您的 Google 帳號)
  *    - 誰可以存取 (Who has access)：所有人 (Anyone)  <--- ⚠️ 重要！一定要選「所有人」
  *    - 點擊「部署」，授權存取權限
@@ -174,7 +174,7 @@ function doGet(e) {
     // 預設健康狀態回傳
     return ContentService.createTextOutput(JSON.stringify({
       status: 'online',
-      service: '養成天堂 官方網站 API',
+      service: '天堂ARPG 官方網站 API',
       spreadsheetId: SPREADSHEET_ID,
       time: Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm:ss')
     })).setMimeType(ContentService.MimeType.JSON);

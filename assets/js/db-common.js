@@ -1,5 +1,5 @@
 // ==========================================================================
-// 養成天堂 - 資料庫全域通用工具與客服組件 (DB Common & CS Widget)
+// 天堂ARPG - 資料庫全域通用工具與客服組件 (DB Common & CS Widget)
 // ==========================================================================
 
 const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyb55bX3x7e3qY0_x_Qd9t8aP1p-demo-lin/exec";

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>養成天堂 官方網站 ｜ 經典天堂 × 放置掛機 × 爽快養成</title>
-  <meta name="description" content="養成天堂 官方網站 — 經典天堂原汁原味重現，融合全新放置掛機、獨家物品掉落過濾器、奇岩1元福利衝裝、全職業試煉一鍵領取與防具詞綴解鎖！">
+  <title>天堂ARPG 官方網站 ｜ 經典天堂 × 動作養成 × 爽快放置</title>
+  <meta name="description" content="天堂ARPG 官方網站 — 經典天堂原汁原味重現，融合全新放置掛機、獨家物品掉落過濾器、奇岩1元福利衝裝、全職業試煉一鍵領取與防具詞綴解鎖！">
   <style>
     :root {
       --bg: #0b0e14;
@@ -149,22 +149,169 @@
       color: var(--gold2);
     }
 
-    /* Hero Banner */
+    /* Hero Banner Enhanced */
     .hero {
       position: relative;
-      min-height: 440px;
+      min-height: 520px;
       display: flex;
       align-items: center;
-      background: linear-gradient(135deg, #101728 0%, #080b11 100%);
-      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11, 14, 20, 0.75) 0%, rgba(11, 14, 20, 0.94) 100%),
+                  url("assets/images/nostalgia_ship.png") center/cover no-repeat;
+      border-bottom: 2px solid var(--gold);
       overflow: hidden;
     }
     .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 35%, rgba(212,175,55,0.12) 0%, transparent 65%);
+      background: radial-gradient(circle at 50% 30%, rgba(212,175,55,0.2) 0%, transparent 70%);
       pointer-events: none;
+    }
+
+    /* 天堂‧經典追憶錄 (Nostalgia Gallery) */
+    .nostalgia-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .nostalgia-card {
+      background: #111726;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .nostalgia-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold);
+      box-shadow: 0 10px 25px rgba(212,175,55,0.3);
+    }
+    .nostalgia-img-box {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      overflow: hidden;
+      background: #000;
+    }
+    .nostalgia-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .nostalgia-card:hover .nostalgia-img-box img {
+      transform: scale(1.06);
+    }
+    .nostalgia-zoom-hint {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.75);
+      color: var(--gold2);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(212,175,55,0.4);
+      pointer-events: none;
+      backdrop-filter: blur(2px);
+    }
+    .nostalgia-info {
+      padding: 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .nostalgia-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .nostalgia-tag {
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .nostalgia-desc {
+      font-size: 12.5px;
+      color: var(--tx2);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Lightbox Modal */
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .lightbox-modal.open { display: flex; }
+    .lightbox-content {
+      background: #141b2a;
+      border: 2px solid var(--gold);
+      border-radius: 14px;
+      max-width: 960px;
+      width: 100%;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      animation: popIn 0.25s ease-out;
+    }
+    .lightbox-header {
+      background: #1c2438;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    .lightbox-title { font-size: 16px; font-weight: 900; color: var(--gold2); }
+    .lightbox-close {
+      background: transparent;
+      border: none;
+      color: var(--tx2);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .lightbox-close:hover { color: #fff; }
+    .lightbox-body {
+      padding: 16px;
+      text-align: center;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .lightbox-body img {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      object-fit: contain;
+    }
+    .lightbox-caption {
+      margin-top: 14px;
+      font-size: 13.5px;
+      color: var(--tx);
+      line-height: 1.7;
+      background: #0e131f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border-left: 3px solid var(--gold);
+      text-align: left;
     }
     .hero .wrap {
       position: relative;
@@ -817,12 +964,13 @@
   <header>
     <div class="wrap hd">
       <div class="brand">
-        <span>養成天堂</span>
+        <span>天堂ARPG</span>
         <span class="brand-badge">PRO</span>
         <small>經典放置天堂 官方資訊站</small>
       </div>
       <nav>
         <a href="#hero" class="on">首頁</a>
+        <a href="#nostalgia">📜 追憶錄</a>
         <a href="drops.html">🎯 掉落查詢</a>
         <a href="maps-index.html">🗺️ 獵場地圖</a>
         <a href="items.html">🎒 道具圖鑑</a>
@@ -847,7 +995,7 @@
   <!-- Hero Section -->
   <section class="hero" id="hero">
     <div class="wrap">
-      <h1>養成天堂</h1>
+      <h1>天堂ARPG</h1>
       <p class="desc">
         經典天堂 1.0~3.8 原汁原味完美重現 × 現代放置爽快養成！<br>
         上班上課自動掛機練功打寶，獨家物品過濾器遠離垃圾，奇岩一元卷軸衝裝圓夢，重溫熱血傳奇。
@@ -870,6 +1018,92 @@
 
       <!-- Left Column -->
       <div>
+
+        <!-- Nostalgia Gallery (天堂‧追憶錄) -->
+        <div class="panel" id="nostalgia" style="border-color:var(--gold)">
+          <div class="panel-h">
+            <div class="panel-h-title">
+              <span>📜 天堂‧經典追憶錄 (巴哈精選經典紀實)</span>
+              <span class="badge hot">滿滿回憶</span>
+            </div>
+            <a href="https://forum.gamer.com.tw/Co.php?bsn=842&sn=5815474" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--gold2);display:flex;align-items:center;gap:4px">
+              巴哈原帖（Diavel 追憶錄）↗
+            </a>
+          </div>
+          <div class="panel-b">
+            <p style="color:var(--tx2);font-size:13.5px;line-height:1.7;margin-bottom:14px">
+              「還記得 2001 年在話島等待木船開往古魯丁的焦急期待嗎？還記得看著背包裡 +8 瑟魯基之劍與滿地卷軸時的激動嗎？」<br>
+              特別收錄巴哈姆特經典追憶圖文，重溫那段屬於我們的青春年華與熱血冒險！<b>（點擊各圖片可查看高清原圖與解說）</b>
+            </p>
+
+            <div class="nostalgia-grid">
+              <!-- Item 1: 說話之島渡輪 -->
+              <div class="nostalgia-card" onclick="openLightbox('assets/images/nostalgia_ship.png', '說話之島渡輪啟航 ｜ 萬人登船大遷徙', '排隊買船票、等待船伕開航、船艙內小心變怪、滿屏武器發光！重溫當年無數勇者跨越大海、前往古魯丁大陸冒險的壯麗歷史時刻。')">
+                <div class="nostalgia-img-box">
+                  <img src="assets/images/nostalgia_ship.png" alt="說話之島渡輪" loading="lazy">
+                  <div class="nostalgia-zoom-hint">🔍 點擊看大圖</div>
+                </div>
+                <div class="nostalgia-info">
+                  <div class="nostalgia-title">⛵ 說話之島渡輪 ｜ 萬人登船</div>
+                  <div class="nostalgia-tag">經典回憶 ｜ 跨海大遷徙</div>
+                  <p class="nostalgia-desc">排隊上船、甲板齊發光刃！當年多少勇士在船艙內屏氣凝神，只為踏上古魯丁大陸。</p>
+                </div>
+              </div>
+
+              <!-- Item 2: 經典神裝紙娃娃 -->
+              <div class="nostalgia-card" onclick="openLightbox('assets/images/nostalgia_gear.png', '初代說話之島小木屋 ｜ 經典神裝紙娃娃', '+8 瑟魯基之劍、+5 侏儒鐵盔、+5 T恤、+5 金屬盔甲、+5 保護者斗篷、+5 長靴、傳戒、變戒與 299,898 金幣！老玩家心中最極致的圓夢狀態。')">
+                <div class="nostalgia-img-box">
+                  <img src="assets/images/nostalgia_gear.png" alt="經典神裝紙娃娃" loading="lazy">
+                  <div class="nostalgia-zoom-hint">🔍 點擊看大圖</div>
+                </div>
+                <div class="nostalgia-info">
+                  <div class="nostalgia-title">🎒 +8 瑟魯基與神裝紙娃娃</div>
+                  <div class="nostalgia-tag">神裝畢業 ｜ +8 瑟劍 +5 全套</div>
+                  <p class="nostalgia-desc">+8 瑟劍、傳送控制戒指、變戒、29萬金幣，小木屋前記錄下那段最輝煌的榮耀。</p>
+                </div>
+              </div>
+
+              <!-- Item 3: 2001 傳奇創角石門 -->
+              <div class="nostalgia-card" onclick="openLightbox('assets/images/nostalgia_character.png', '2001 傳奇創角石門 ｜ 熱血冒險起點', '2001.06.29 創建角色「真誠對待」！燃燒的火炬、神祕的石門拱柱，多少故事與傳奇皆誕生於這座大門。')">
+                <div class="nostalgia-img-box">
+                  <img src="assets/images/nostalgia_character.png" alt="創角石門" loading="lazy">
+                  <div class="nostalgia-zoom-hint">🔍 點擊看大圖</div>
+                </div>
+                <div class="nostalgia-info">
+                  <div class="nostalgia-title">🏛️ 2001 傳奇創角神殿</div>
+                  <div class="nostalgia-tag">經典初生 ｜ 2001.06.29 創角</div>
+                  <p class="nostalgia-desc">燃燒火炬與古老石門，輸入名稱的那一刻，開啟了陪伴我們二十餘年的天堂世界。</p>
+                </div>
+              </div>
+
+              <!-- Item 4: 血盟「沉默的艦隊」 -->
+              <div class="nostalgia-card" onclick="openLightbox('assets/images/nostalgia_bloodpledge.jpg', '血盟「沉默的艦隊」 ｜ 生死與共的盟友情誼', '創建於 2001/06/28 的血盟！銀原騎士村集合、背包滿載卷軸與金幣，那些曾與你並肩作戰的盟友，如今可好？')">
+                <div class="nostalgia-img-box">
+                  <img src="assets/images/nostalgia_bloodpledge.jpg" alt="血盟沉默的艦隊" loading="lazy">
+                  <div class="nostalgia-zoom-hint">🔍 點擊看大圖</div>
+                </div>
+                <div class="nostalgia-info">
+                  <div class="nostalgia-title">⚔️ 血盟「沉默的艦隊」</div>
+                  <div class="nostalgia-tag">盟友情深 ｜ 2001 創盟名錄</div>
+                  <p class="nostalgia-desc">王族號召、歃血為盟！在沒有語音的網咖年代，盟友一聲招呼就是熱血赴死。</p>
+                </div>
+              </div>
+
+              <!-- Item 5: 初代村莊廣場盛況 -->
+              <div class="nostalgia-card" onclick="openLightbox('assets/images/nostalgia_village.png', '初代村莊廣場盛況 ｜ 滿地卷軸與萬人集會', '古早話島與銀騎村莊前擠滿玩家，打字喝水、綠水加速疾馳、滿地傳送卷軸與擺攤，無可替代的盛世熱血。')">
+                <div class="nostalgia-img-box">
+                  <img src="assets/images/nostalgia_village.png" alt="村莊盛況" loading="lazy">
+                  <div class="nostalgia-zoom-hint">🔍 點擊看大圖</div>
+                </div>
+                <div class="nostalgia-info">
+                  <div class="nostalgia-title">🏰 初代村莊廣場萬人齊聚</div>
+                  <div class="nostalgia-tag">盛世風華 ｜ 滿地卷軸綠水</div>
+                  <p class="nostalgia-desc">村莊門口熙來攘往，綠水奔騰、武器發光，那是一去不復返卻永恆銘刻的黃金年代。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Player Message Board (玩家留言板看板) -->
         <div class="panel" id="board" style="border-color:var(--gold)">
@@ -911,7 +1145,7 @@
                     <option value="隨聊交流">💬 隨聊交流</option>
                   </select>
                 </div>
-                <textarea id="board-msg" class="input-field" placeholder="請留下您對養成天堂的寶貴意見、平衡建議或心得反饋..." required maxlength="500"></textarea>
+                <textarea id="board-msg" class="input-field" placeholder="請留下您對天堂ARPG的寶貴意見、平衡建議或心得反饋..." required maxlength="500"></textarea>
                 <div class="board-form-footer">
                   <button type="submit" class="btn big" id="board-submit-btn" style="padding:10px 24px">
                     🚀 送出留言並推送至試算表
@@ -1269,7 +1503,7 @@
       <div class="cs-header-left">
         <span style="font-size:20px">🎧</span>
         <div>
-          <div class="cs-header-title">養成天堂 官方客訴中心</div>
+          <div class="cs-header-title">天堂ARPG 官方客訴中心</div>
           <div class="cs-header-sub">
             <span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block"></span>
             GM / 客服人員在線排查中
@@ -1313,7 +1547,7 @@
   <footer>
     <div class="wrap">
       <div>
-        © 2026 養成天堂 官方網站 ｜ 經典放置天堂 綠色懷舊版<br>
+        © 2026 天堂ARPG 官方網站 ｜ 經典放置天堂 綠色懷舊版<br>
         <span style="font-size:12px;color:var(--tx2)">
           試算表串接支援：Google Apps Script ｜ 
           <a href="javascript:void(0)" onclick="promptGASConfig()" style="color:var(--tx2);text-decoration:underline">⚙️ 設定 Apps Script API 網址</a>
@@ -1558,6 +1792,20 @@
     // --------------------------------------------------------------------------
     // 右下角客訴聊天室模組 (Customer Service Float Chat)
     // --------------------------------------------------------------------------
+    
+    function openLightbox(src, title, caption) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox-title').innerText = title;
+      document.getElementById('lightbox-caption').innerText = caption;
+      const modal = document.getElementById('lightbox-modal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeLightbox(e) {
+      const modal = document.getElementById('lightbox-modal');
+      if (modal) modal.classList.remove('open');
+    }
+
     function toggleCsModal() {
       const modal = document.getElementById('cs-modal-box');
       modal.classList.toggle('open');
@@ -1724,6 +1972,21 @@
         .replace(/'/g, '&#039;');
     }
   </script>
+
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox(event)">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <div class="lightbox-header">
+        <div class="lightbox-title" id="lightbox-title">經典回憶</div>
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      </div>
+      <div class="lightbox-body">
+        <img id="lightbox-img" src="" alt="大圖預覽">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
