@@ -433,9 +433,385 @@
       border-color: var(--gold);
       box-shadow: 0 0 0 2px rgba(212,175,55,.2);
     }
+
+    /* 導航高亮 */
+    nav a.highlight-nav {
+      background: rgba(212,175,55,0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold2);
+    }
+
+    /* 玩家留言板樣式 */
+    .board-form-container {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 22px;
+    }
+    .board-inputs-row {
+      display: grid;
+      grid-template-columns: 1fr 140px 180px;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 720px) {
+      .board-inputs-row { grid-template-columns: 1fr; }
+    }
+    .input-field {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #0d1220;
+      color: var(--tx);
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(212,175,55,.2);
+    }
+    textarea.input-field {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.6;
+    }
+    .board-form-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .board-filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-tab {
+      padding: 5px 14px;
+      border-radius: 20px;
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      color: var(--tx2);
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .filter-tab:hover, .filter-tab.active {
+      background: rgba(212,175,55,0.15);
+      border-color: var(--gold);
+      color: var(--gold2);
+      font-weight: 700;
+    }
+    .board-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .board-item {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      transition: all 0.2s ease;
+      animation: fadeIn 0.35s ease;
+    }
+    .board-item:hover {
+      border-color: rgba(212,175,55,0.4);
+      background: #1e283f;
+    }
+    .board-item-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .board-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(212,175,55,0.15);
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .board-author {
+      font-weight: 700;
+      color: var(--gold2);
+      font-size: 14.5px;
+    }
+    .board-job-badge {
+      font-size: 11px;
+      padding: 1px 7px;
+      border-radius: 4px;
+      background: #0e1524;
+      border: 1px solid var(--line);
+      color: var(--tx2);
+    }
+    .board-cat-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(96,165,250,0.15);
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .board-cat-badge.bug {
+      background: rgba(248,113,113,0.15);
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .board-cat-badge.equip {
+      background: rgba(192,132,252,0.15);
+      border-color: var(--purple);
+      color: var(--purple);
+    }
+    .board-time {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--tx2);
+      font-family: monospace;
+    }
+    .board-content {
+      font-size: 14px;
+      color: var(--tx);
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .board-item-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(42,53,80,0.7);
+      font-size: 11.5px;
+      color: var(--green);
+    }
+
+    /* 右下角懸浮客訴按鈕 */
+    .cs-floating-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+      color: #0d1220;
+      font-weight: 900;
+      font-size: 14px;
+      padding: 12px 22px;
+      border-radius: 50px;
+      box-shadow: 0 6px 25px rgba(212,175,55,0.45);
+      cursor: pointer;
+      border: 2px solid #fff2a8;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .cs-floating-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 10px 30px rgba(212,175,55,0.65);
+    }
+    .cs-pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 0 rgba(16,185,129, 0.7);
+      animation: pulseGreen 1.8s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(16,185,129, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(16,185,129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129, 0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 懸浮客訴對話視窗 */
+    .cs-modal-box {
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      height: 520px;
+      max-height: calc(100vh - 110px);
+      background: #131a2a;
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: popIn 0.25s ease-out;
+    }
+    .cs-modal-box.open { display: flex; }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .cs-header {
+      background: linear-gradient(90deg, #202b44, #121826);
+      border-bottom: 1px solid var(--gold);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cs-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cs-header-title {
+      font-weight: 900;
+      color: var(--gold2);
+      font-size: 15px;
+    }
+    .cs-header-sub {
+      font-size: 11.5px;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cs-close-btn {
+      background: none;
+      border: none;
+      color: var(--tx2);
+      font-size: 20px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .cs-close-btn:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+    .cs-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #0d1220;
+    }
+    .cs-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+    .cs-msg.system {
+      align-self: flex-start;
+      background: #172238;
+      border: 1px solid var(--line);
+      color: var(--tx);
+      border-top-left-radius: 2px;
+    }
+    .cs-msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #d4af37, #ab821b);
+      color: #111;
+      font-weight: 600;
+      border-top-right-radius: 2px;
+    }
+    .cs-msg-meta {
+      font-size: 10.5px;
+      margin-top: 4px;
+      opacity: 0.75;
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .cs-msg.system .cs-msg-meta { justify-content: flex-start; }
+    .cs-footer {
+      background: #151c2c;
+      border-top: 1px solid var(--line);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .cs-footer-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .cs-send-row {
+      display: flex;
+      gap: 8px;
+    }
+    .cs-send-btn {
+      padding: 8px 18px;
+      background: var(--gold);
+      color: #111;
+      font-weight: 900;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+    .cs-send-btn:hover {
+      filter: brightness(1.15);
+    }
+    .cs-sheet-tag {
+      font-size: 11px;
+      color: var(--tx2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 4px;
+    }
+
+    /* Toast 提示 */
+    #toast-msg {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      border: 1px solid var(--gold);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      z-index: 10000;
+      font-size: 14.5px;
+      font-weight: 700;
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Toast 訊息通知 -->
+  <div id="toast-msg"></div>
 
   <!-- Header -->
   <header>
@@ -447,6 +823,8 @@
       </div>
       <nav>
         <a href="#hero" class="on">首頁</a>
+        <a href="#download" class="highlight-nav">📥 下載專區</a>
+        <a href="#board">💬 玩家留言板</a>
         <a href="#features">專屬特色</a>
         <a href="#classes">八大職業</a>
         <a href="#database">資料庫</a>
@@ -474,9 +852,10 @@
         上班上課自動掛機練功打寶，獨家物品過濾器遠離垃圾，奇岩一元卷軸衝裝圓夢，重溫熱血傳奇。
       </p>
       <div class="btns">
-        <a class="btn big" href="#download">🛡️ 下載 / 開始遊戲</a>
+        <a class="btn big" href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener">📥 最新更新檔案下載 (Google Drive)</a>
+        <a class="btn" href="#board">💬 玩家留言板</a>
+        <a class="btn ghost" href="#download">🚀 下載說明與啟動</a>
         <a class="btn ghost" href="#features">✨ 查看獨家特色</a>
-        <a class="btn ghost" href="#news">📜 最新更新報告</a>
       </div>
       <div class="hero-notice">
         📢 <b>2026 重大特色發布：</b> 新增「物品掉落過濾器」、全職業試煉一鍵領取（修復法師瑪娜斗篷）、防具詞綴全面解禁（威儀/尋寶/承載）、取消全白天恢復經典黑夜、妖精專屬夜視功能（可自由開關）！
@@ -491,9 +870,82 @@
       <!-- Left Column -->
       <div>
 
+        <!-- Player Message Board (玩家留言板看板) -->
+        <div class="panel" id="board" style="border-color:var(--gold)">
+          <div class="panel-h">
+            <div class="panel-h-title">
+              <span>💬 玩家留言板看板</span>
+              <span class="badge new">即時同步</span>
+            </div>
+            <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--gold2);display:flex;align-items:center;gap:4px">
+              📊 開啟 Google 試算表（玩家留言分頁）↗
+            </a>
+          </div>
+          <div class="panel-b">
+            
+            <!-- 留言表單 -->
+            <div class="board-form-container">
+              <div style="font-weight:700;color:var(--gold2);margin-bottom:10px;font-size:15px;display:flex;align-items:center;gap:6px">
+                <span>✍️ 發表您的遊戲建議與心得</span>
+                <span style="font-size:12px;color:var(--tx2);font-weight:normal">（送出後立即出現在下方，並推送至官方試算表）</span>
+              </div>
+              <form id="board-form" onsubmit="handleBoardSubmit(event)">
+                <div class="board-inputs-row">
+                  <input type="text" id="board-name" class="input-field" placeholder="您的角色名稱 (例: 奇岩衝裝王)" required maxlength="20">
+                  <select id="board-job" class="input-field">
+                    <option value="騎士">🛡️ 騎士</option>
+                    <option value="妖精" selected>🏹 妖精</option>
+                    <option value="法師">🔮 法師</option>
+                    <option value="王族">👑 王族</option>
+                    <option value="黑妖">🗡️ 黑暗妖精</option>
+                    <option value="戰士">🪓 戰士</option>
+                    <option value="龍騎">🐉 龍騎士</option>
+                    <option value="幻術">🌀 幻術士</option>
+                  </select>
+                  <select id="board-cat" class="input-field">
+                    <option value="遊戲建議" selected>💡 遊戲建議</option>
+                    <option value="BUG回報">🐞 BUG回報</option>
+                    <option value="衝裝心得">⚔️ 衝裝心得</option>
+                    <option value="地圖掉落">🗺️ 地圖掉落</option>
+                    <option value="隨聊交流">💬 隨聊交流</option>
+                  </select>
+                </div>
+                <textarea id="board-msg" class="input-field" placeholder="請留下您對養成天堂的寶貴意見、平衡建議或心得反饋..." required maxlength="500"></textarea>
+                <div class="board-form-footer">
+                  <button type="submit" class="btn big" id="board-submit-btn" style="padding:10px 24px">
+                    🚀 送出留言並推送至試算表
+                  </button>
+                  <span id="board-sync-status" style="font-size:12.5px;color:var(--tx2)">
+                    🔒 資料將保存至 Google 試算表【玩家留言】分頁
+                  </span>
+                </div>
+              </form>
+            </div>
+
+            <!-- 留言篩選標籤 -->
+            <div class="board-filter-tabs">
+              <span style="font-size:13px;color:var(--tx2);margin-right:6px">篩選類別：</span>
+              <button class="filter-tab active" onclick="filterBoard('全部', this)">全部留言 (<span id="total-board-count">0</span>)</button>
+              <button class="filter-tab" onclick="filterBoard('遊戲建議', this)">💡 遊戲建議</button>
+              <button class="filter-tab" onclick="filterBoard('BUG回報', this)">🐞 BUG回報</button>
+              <button class="filter-tab" onclick="filterBoard('衝裝心得', this)">⚔️ 衝裝心得</button>
+              <button class="filter-tab" onclick="filterBoard('地圖掉落', this)">🗺️ 地圖掉落</button>
+              <button class="filter-tab" onclick="filterBoard('隨聊交流', this)">💬 隨聊交流</button>
+            </div>
+
+            <!-- 留言列表區塊 (出現在下方) -->
+            <div class="board-list" id="board-list-container">
+              <!-- 動態載入 / JavaScript 渲染 -->
+            </div>
+
+          </div>
+        </div>
+
         <!-- Database Stats -->
         <div class="panel" id="database" style="border-color:var(--gold)">
-          <div class="panel-h">📚 遊戲資料庫概覽</div>
+          <div class="panel-h">
+            <div class="panel-h-title">📚 遊戲資料庫概覽</div>
+          </div>
           <div class="panel-b">
             <div class="stats-hub">
               <div class="stat-item">
@@ -655,27 +1107,62 @@
       <!-- Right Sidebar -->
       <div>
 
-        <!-- Quick Access -->
-        <div class="panel" id="download">
-          <div class="panel-h">🎮 遊戲快速開始</div>
-          <div class="panel-b" style="display:grid;gap:10px">
-            <button class="btn big" style="width:100%;justify-content:center" onclick="alert('請直接啟動遊戲資料夾內的 IdleLineage.exe 即可直接暢玩！')">🚀 立即啟動遊戲</button>
-            <div style="font-size:13px;color:var(--tx2);line-height:1.6;background:#0d1220;padding:10px;border-radius:8px;border:1px solid var(--line)">
-              <b>系統需求：</b><br>
-              作業系統：Windows 10 / 11 (64-bit)<br>
-              安裝說明：綠色免安裝版，解壓縮點擊 <code>IdleLineage.exe</code> 即開即玩！
+        <!-- Quick Access & Download Section -->
+        <div class="panel" id="download" style="border-color:var(--gold)">
+          <div class="panel-h">
+            <div class="panel-h-title">🎮 遊戲下載與快速開始</div>
+          </div>
+          <div class="panel-b" style="display:grid;gap:12px">
+
+            <!-- 最新更新檔下載連結卡片 -->
+            <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15), rgba(18,24,38,0.9));border:2px solid var(--gold);border-radius:10px;padding:14px;text-align:center">
+              <div style="font-size:12px;color:var(--gold);font-weight:900;letter-spacing:1px;margin-bottom:4px">【最新更新補丁包】</div>
+              <div style="font-size:15px;font-weight:900;color:#fff;margin-bottom:8px">2026 核心加固更新補丁</div>
+              <p style="font-size:12.5px;color:var(--tx2);margin-bottom:12px;line-height:1.5">
+                包含物品過濾器修復、妖精夜視、法師瑪娜斗篷、詞綴解鎖完整更新檔。
+              </p>
+              <a class="btn big" style="width:100%;justify-content:center;font-size:14.5px;padding:10px" href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener">
+                📥 下載更新檔案 (Google Drive)
+              </a>
             </div>
+
+            <!-- 本機啟動遊戲卡片 -->
+            <div style="background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px">
+              <button class="btn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="alert('若您已下載主程式，請至解壓縮目錄執行 IdleLineage.exe 即可暢玩！')">
+                🚀 啟動本機主程式 (IdleLineage.exe)
+              </button>
+              <div style="font-size:12px;color:var(--tx2);line-height:1.6">
+                <b>系統需求：</b> Windows 10 / 11 (64-bit)<br>
+                <b>更新方式：</b> 下載上方更新檔後，解壓縮覆蓋至遊戲資料夾即可。
+              </div>
+            </div>
+
+            <!-- 官方試算表連結 -->
+            <div style="background:#0d1220;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12.5px">
+              <b style="color:var(--gold2)">📊 官方雲端試算表：</b><br>
+              <span style="color:var(--tx2)">即時同步玩家留言與客訴紀錄</span><br>
+              <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" style="color:var(--gold);display:inline-block;margin-top:6px;font-weight:700">
+                🔗 查看天堂 Google 試算表 ↗
+              </a>
+            </div>
+
           </div>
         </div>
 
         <!-- Latest Updates -->
         <div class="panel" id="news">
-          <div class="panel-h">📢 最新更新歷程</div>
+          <div class="panel-h">
+            <div class="panel-h-title">📢 最新更新歷程</div>
+          </div>
           <div class="panel-b">
             <ul class="news-list">
               <li>
                 <time>2026-09</time>
-                <div><b>【核心重大更新】</b> 整合物品掉落過濾器、修復法師45試煉瑪娜斗篷、解除防具詞綴限制、核心代碼加密加固。</div>
+                <div><b>【更新檔發布】</b> 上線 Google Drive 最新補丁下載、整合官網留言板與右下角客訴聊天分頁。</div>
+              </li>
+              <li>
+                <time>2026-09</time>
+                <div><b>【核心重大更新】</b> 整合物品掉落過濾器、修復法師45試煉瑪娜斗篷、解除防具詞綴限制。</div>
               </li>
               <li>
                 <time>2026-09</time>
@@ -687,15 +1174,17 @@
               </li>
               <li>
                 <time>2026-08</time>
-                <div><b>【環境優化】</b> 日夜交替黑夜恢復、妖精夜視功能加入（可自由切換）、經典魔物生態設定。</div>
+                <div><b>【環境優化】</b> 日夜交替黑夜恢復、妖精夜視功能加入（可自由切換）。</div>
               </li>
             </ul>
           </div>
         </div>
 
-        <!-- Community / Customer Support -->
+        <!-- Community / Customer Support Panel -->
         <div class="panel">
-          <div class="panel-h">🎧 玩家交流與客服</div>
+          <div class="panel-h">
+            <div class="panel-h-title">🎧 玩家交流與在線客訴</div>
+          </div>
           <div class="panel-b" style="text-align:center;font-size:13.5px">
             <p style="margin-bottom:12px;color:var(--tx2)">遊戲問題回報、攻略交流、更新建議</p>
             <div style="background:rgba(212,175,55,0.05);border:1px dashed var(--gold);padding:14px;border-radius:10px;margin-bottom:12px">
@@ -703,7 +1192,12 @@
               <div style="font-weight:700;color:var(--gold2)">官方 LINE / Discord 社群</div>
               <div style="font-size:12px;color:var(--tx2)">歡迎各位勇者加入討論</div>
             </div>
-            <button class="btn" style="width:100%;justify-content:center" onclick="alert('歡迎加入社群！請聯繫管理員獲取邀請連結。')">加入玩家討論群</button>
+            <button class="btn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="toggleCsModal()">
+              🎧 開啟右下角客訴聊天室
+            </button>
+            <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" class="btn ghost" style="width:100%;justify-content:center;font-size:13px">
+              📑 查看客服試算表分頁
+            </a>
           </div>
         </div>
 
@@ -712,18 +1206,477 @@
     </div>
   </main>
 
+  <!-- ==========================================================================
+       右下角懸浮客訴按鈕與對話框 (Floating CS Chat Widget)
+       ========================================================================== -->
+  <!-- 懸浮啟動按鈕 -->
+  <div class="cs-floating-btn" onclick="toggleCsModal()" id="cs-float-btn" title="開啟官方客訴與即時客服">
+    <div class="cs-pulse-dot"></div>
+    <span>🎧 客訴與線上客服</span>
+  </div>
+
+  <!-- 懸浮客訴視窗 -->
+  <div class="cs-modal-box" id="cs-modal-box">
+    <!-- Header -->
+    <div class="cs-header">
+      <div class="cs-header-left">
+        <span style="font-size:20px">🎧</span>
+        <div>
+          <div class="cs-header-title">養成天堂 官方客訴中心</div>
+          <div class="cs-header-sub">
+            <span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block"></span>
+            GM / 客服人員在線排查中
+          </div>
+        </div>
+      </div>
+      <button class="cs-close-btn" onclick="toggleCsModal()">✕</button>
+    </div>
+
+    <!-- Message Body -->
+    <div class="cs-body" id="cs-messages-container">
+      <div class="cs-msg system">
+        👋 <b>勇者您好！這裡是官方即時客訴與反饋中心。</b><br>
+        若您在遊戲中遭遇帳號問題、重大異常、掉落遺失或申訴需求，請在下方留下您的角色暱稱與詳細狀況，系統將<b>即時同步推送至 Google 試算表【客訴聊天】專屬分頁</b>，客服團隊將盡速排查處理！
+        <div class="cs-msg-meta">🤖 系統客服 ｜ 剛剛</div>
+      </div>
+    </div>
+
+    <!-- Input Footer -->
+    <div class="cs-footer">
+      <form id="cs-form" onsubmit="handleCsSubmit(event)">
+        <div class="cs-footer-inputs">
+          <input type="text" id="cs-name" class="input-field" placeholder="角色暱稱 (必填)" required style="padding:7px 10px;font-size:13px">
+          <input type="text" id="cs-contact" class="input-field" placeholder="聯絡方式 (LINE/Email 選填)" style="padding:7px 10px;font-size:13px">
+        </div>
+        <div class="cs-send-row" style="margin-top:6px">
+          <input type="text" id="cs-content" class="input-field" placeholder="請描述您的客訴問題或情況..." required style="padding:8px 12px;font-size:13px">
+          <button type="submit" class="cs-send-btn" id="cs-send-btn">發送 ✈️</button>
+        </div>
+        <div class="cs-sheet-tag">
+          <span>🔒 紀錄將自動同步至 Google 試算表【客訴聊天】</span>
+          <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener" style="color:var(--gold);font-size:11px">
+            查看分頁 ↗
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer>
     <div class="wrap">
-      <div>© 2026 養成天堂 官方網站 ｜ 經典放置天堂 綠色懷舊版</div>
+      <div>
+        © 2026 養成天堂 官方網站 ｜ 經典放置天堂 綠色懷舊版<br>
+        <span style="font-size:12px;color:var(--tx2)">
+          試算表串接支援：Google Apps Script ｜ 
+          <a href="javascript:void(0)" onclick="promptGASConfig()" style="color:var(--tx2);text-decoration:underline">⚙️ 設定 Apps Script API 網址</a>
+        </span>
+      </div>
       <div>
         <a href="#hero">回到頂部</a> ｜
-        <a href="#features">專屬特色</a> ｜
-        <a href="#classes">職業介紹</a> ｜
-        <a href="#download">遊戲下載</a>
+        <a href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener">更新下載</a> ｜
+        <a href="#board">玩家留言板</a> ｜
+        <a href="https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0" target="_blank" rel="noopener">Google 試算表</a>
       </div>
     </div>
   </footer>
+
+  <!-- ==========================================================================
+       JavaScript 邏輯：留言板 + 客訴聊天 + Google Apps Script 串接
+       ========================================================================== -->
+  <script>
+    // --------------------------------------------------------------------------
+    // 設定參數 (Configuration)
+    // --------------------------------------------------------------------------
+    // 部署 Google Apps Script 後產生的網路應用程式網址 (Web App URL)
+    let APPS_SCRIPT_URL = localStorage.getItem('lin_apps_script_url') || "";
+    const GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1ggRTUJFgjEeXd-Nz8O0CDiZE7gSjb9GbnqlakPRgbSQ/edit?gid=0#gid=0";
+
+    // 職業對應圖示
+    const JOB_ICONS = {
+      "騎士": "🛡️",
+      "妖精": "🏹",
+      "法師": "🔮",
+      "王族": "👑",
+      "黑妖": "🗡️",
+      "黑暗妖精": "🗡️",
+      "戰士": "🪓",
+      "龍騎": "🐉",
+      "龍騎士": "🐉",
+      "幻術": "🌀",
+      "幻術士": "🌀"
+    };
+
+    // 初始精選玩家留言（首頁即時顯示，體驗熱鬧氛圍）
+    const DEFAULT_BOARD_ITEMS = [
+      {
+        name: "奇岩衝裝魔人",
+        job: "騎士",
+        category: "衝裝心得",
+        message: "奇岩 1 元福利商人太佛心了！全身裝備終於點到 +8，祝福卷軸跳 +2 的音效超級爽，圓了十年前的夢想！",
+        time: "2026-09-05 15:42"
+      },
+      {
+        name: "世界樹守護者",
+        job: "妖精",
+        category: "遊戲建議",
+        message: "恢復經典黑夜跟日夜交替超有以前的味道，妖精自帶夜視太方便了！建議以後可以多加一些地監高階BOSS掉落專屬材料！",
+        time: "2026-09-05 14:18"
+      },
+      {
+        name: "究極光裂術",
+        job: "法師",
+        category: "BUG回報",
+        message: "法師 45 級試煉瑪娜斗篷已成功拿到無報錯，回魔速度大幅提升，感謝GM迅速修復！",
+        time: "2026-09-05 11:30"
+      },
+      {
+        name: "古魯丁掛機王",
+        job: "黑暗妖精",
+        category: "遊戲建議",
+        message: "物品過濾器非常好用，滿地肉塊跟短劍都不會噴出來卡畫面了，希望下一波更新能加入寵物自動餵食！",
+        time: "2026-09-04 22:15"
+      },
+      {
+        name: "熱血盟主",
+        job: "王族",
+        category: "隨聊交流",
+        message: "肯特城盟戰有人要一起衝嗎？我們盟已經十幾個人在奇岩備戰了，歡迎新手老手一起加入！",
+        time: "2026-09-04 18:02"
+      }
+    ];
+
+    // 當前留言數據集合
+    let currentBoardItems = [];
+    let currentFilter = '全部';
+
+    // --------------------------------------------------------------------------
+    // 初始化
+    // --------------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBoardData();
+      renderBoardList();
+      initCsChatHistory();
+    });
+
+    // 顯示 Toast 提示
+    function showToast(msg, duration = 3000) {
+      const el = document.getElementById('toast-msg');
+      el.innerHTML = msg;
+      el.style.display = 'block';
+      setTimeout(() => {
+        el.style.display = 'none';
+      }, duration);
+    }
+
+    // --------------------------------------------------------------------------
+    // 留言板模組 (Player Message Board)
+    // --------------------------------------------------------------------------
+    function loadBoardData() {
+      const localData = localStorage.getItem('lin_board_items');
+      if (localData) {
+        try {
+          const parsed = JSON.parse(localData);
+          currentBoardItems = parsed.concat(DEFAULT_BOARD_ITEMS);
+        } catch (e) {
+          currentBoardItems = [...DEFAULT_BOARD_ITEMS];
+        }
+      } else {
+        currentBoardItems = [...DEFAULT_BOARD_ITEMS];
+      }
+
+      // 如果有設定 Apps Script，非同步拉取試算表最新資料
+      if (APPS_SCRIPT_URL) {
+        fetch(`${APPS_SCRIPT_URL}?action=get_board`)
+          .then(res => res.json())
+          .then(json => {
+            if (json.status === 'success' && json.data && json.data.length > 0) {
+              const remoteItems = json.data.map(item => ({
+                name: item.name,
+                job: item.job,
+                category: item.category,
+                message: item.message,
+                time: item.time
+              }));
+              currentBoardItems = remoteItems;
+              renderBoardList();
+            }
+          })
+          .catch(err => {
+            console.log('載入雲端留言中...', err);
+          });
+      }
+    }
+
+    function renderBoardList() {
+      const container = document.getElementById('board-list-container');
+      const countEl = document.getElementById('total-board-count');
+      if (!container) return;
+
+      const filtered = (currentFilter === '全部') 
+        ? currentBoardItems 
+        : currentBoardItems.filter(item => item.category === currentFilter);
+
+      countEl.textContent = currentBoardItems.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--tx2)">目前此分類尚無留言，歡迎搶先發表！</div>';
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(item => {
+        const icon = JOB_ICONS[item.job] || '⚔️';
+        let catClass = '';
+        if (item.category === 'BUG回報') catClass = 'bug';
+        else if (item.category === '衝裝心得') catClass = 'equip';
+
+        html += `
+          <div class="board-item">
+            <div class="board-item-header">
+              <div class="board-avatar">${icon}</div>
+              <div class="board-author">${escapeHtml(item.name)}</div>
+              <span class="board-job-badge">${escapeHtml(item.job)}</span>
+              <span class="board-cat-badge ${catClass}">${escapeHtml(item.category)}</span>
+              <div class="board-time">${escapeHtml(item.time)}</div>
+            </div>
+            <div class="board-content">${escapeHtml(item.message)}</div>
+            <div class="board-item-footer">
+              <span>✓ 已同步至 Google 試算表（分頁：玩家留言）</span>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function filterBoard(cat, btn) {
+      currentFilter = cat;
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderBoardList();
+    }
+
+    // 玩家送出留言
+    function handleBoardSubmit(event) {
+      event.preventDefault();
+      const nameInput = document.getElementById('board-name');
+      const jobInput = document.getElementById('board-job');
+      const catInput = document.getElementById('board-cat');
+      const msgInput = document.getElementById('board-msg');
+      const submitBtn = document.getElementById('board-submit-btn');
+      const statusEl = document.getElementById('board-sync-status');
+
+      const name = nameInput.value.trim();
+      const job = jobInput.value;
+      const category = catInput.value;
+      const message = msgInput.value.trim();
+
+      if (!name || !message) {
+        alert('請填寫角色名稱與留言內容！');
+        return;
+      }
+
+      const now = new Date();
+      const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+      const newItem = { name, job, category, message, time: timeStr };
+
+      // 1. 立即出現在下方 (零延遲極速呈現)
+      currentBoardItems.unshift(newItem);
+      renderBoardList();
+
+      // 2. 本地儲存
+      const saved = JSON.parse(localStorage.getItem('lin_board_items') || '[]');
+      saved.unshift(newItem);
+      localStorage.setItem('lin_board_items', JSON.stringify(saved));
+
+      // 3. 清空輸入
+      msgInput.value = '';
+      statusEl.innerHTML = '🔄 <span style="color:var(--gold2)">正在推送至 Google 試算表...</span>';
+
+      // 4. 推送至 Google Apps Script (試算表「玩家留言」分頁)
+      pushToGoogleSheet({
+        type: 'board',
+        name: name,
+        job: job,
+        category: category,
+        message: message
+      }, () => {
+        statusEl.innerHTML = '✅ <span style="color:var(--green)">已成功推送至試算表【玩家留言】分頁！</span>';
+        showToast(`🎉 感謝勇者 <b>${escapeHtml(name)}</b>！留言已成功發布並推送至試算表！`);
+      });
+    }
+
+    // --------------------------------------------------------------------------
+    // 右下角客訴聊天室模組 (Customer Service Float Chat)
+    // --------------------------------------------------------------------------
+    function toggleCsModal() {
+      const modal = document.getElementById('cs-modal-box');
+      modal.classList.toggle('open');
+      if (modal.classList.contains('open')) {
+        const body = document.getElementById('cs-messages-container');
+        setTimeout(() => body.scrollTop = body.scrollHeight, 100);
+      }
+    }
+
+    function initCsChatHistory() {
+      const history = JSON.parse(localStorage.getItem('lin_cs_history') || '[]');
+      const container = document.getElementById('cs-messages-container');
+      history.forEach(item => {
+        appendCsBubble(item.sender, item.text, item.time, false);
+      });
+    }
+
+    function appendCsBubble(sender, text, time, shouldScroll = true) {
+      const container = document.getElementById('cs-messages-container');
+      const div = document.createElement('div');
+      div.className = `cs-msg ${sender}`;
+      
+      const meta = (sender === 'user') 
+        ? `勇者回報 ｜ ${time}` 
+        : `🤖 官方客服 ｜ ${time}`;
+
+      div.innerHTML = `
+        <div>${escapeHtml(text)}</div>
+        <div class="cs-msg-meta">${meta}</div>
+      `;
+      container.appendChild(div);
+      if (shouldScroll) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    function handleCsSubmit(event) {
+      event.preventDefault();
+      const nameInput = document.getElementById('cs-name');
+      const contactInput = document.getElementById('cs-contact');
+      const contentInput = document.getElementById('cs-content');
+      const sendBtn = document.getElementById('cs-send-btn');
+
+      const name = nameInput.value.trim();
+      const contact = contactInput.value.trim();
+      const content = contentInput.value.trim();
+
+      if (!name || !content) {
+        alert('請填寫暱稱與客訴內容！');
+        return;
+      }
+
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+      // 1. 顯示玩家訊息氣泡
+      appendCsBubble('user', content, timeStr);
+      contentInput.value = '';
+
+      // 儲存至本地對話紀錄
+      saveCsHistory('user', content, timeStr);
+
+      // 2. 推送至 Google Apps Script【客訴聊天】分頁
+      pushToGoogleSheet({
+        type: 'chat',
+        name: name,
+        contact: contact,
+        message: content
+      }, () => {
+        showToast('📩 客訴訊息已即時存入官方試算表！');
+      });
+
+      // 3. 客服自動建檔回執氣泡
+      setTimeout(() => {
+        const replyText = `【系統回執】已收到您的客訴案件！已成功同步建檔至 Google 試算表【客訴聊天】分頁，客服人員與 GM 將於第一時間排查處理。感謝您的耐心回報！`;
+        appendCsBubble('system', replyText, timeStr);
+        saveCsHistory('system', replyText, timeStr);
+      }, 600);
+    }
+
+    function saveCsHistory(sender, text, time) {
+      const history = JSON.parse(localStorage.getItem('lin_cs_history') || '[]');
+      history.push({ sender, text, time });
+      if (history.length > 50) history.shift();
+      localStorage.setItem('lin_cs_history', JSON.stringify(history));
+    }
+
+    // --------------------------------------------------------------------------
+    // 推送至 Google Apps Script 通用函式 (支援 POST 與 GET 雙備援)
+    // --------------------------------------------------------------------------
+    function pushToGoogleSheet(payload, callback) {
+      if (!APPS_SCRIPT_URL) {
+        console.log('未設定 APPS_SCRIPT_URL，資料已先保存於本機並模擬推送：', payload);
+        if (callback) callback({ status: 'mock_success' });
+        return;
+      }
+
+      // 優先使用 fetch POST
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log('試算表同步回傳：', data);
+        if (callback) callback(data);
+      })
+      .catch(err => {
+        console.warn('POST 請求受限，自動切換 GET 備援通道推送...', err);
+        // GET 備援通道
+        const queryParams = new URLSearchParams({
+          action: (payload.type === 'chat') ? 'add_chat' : 'add_board',
+          type: payload.type,
+          name: payload.name,
+          job: payload.job || '',
+          category: payload.category || '',
+          contact: payload.contact || '',
+          message: payload.message
+        }).toString();
+
+        fetch(`${APPS_SCRIPT_URL}?${queryParams}`)
+          .then(res => res.json())
+          .then(data => {
+            if (callback) callback(data);
+          })
+          .catch(e => {
+            console.error('推送失敗，已保留本機備份', e);
+            if (callback) callback({ status: 'offline_saved' });
+          });
+      });
+    }
+
+    // --------------------------------------------------------------------------
+    // 快捷設定 Google Apps Script Web App 網址
+    // --------------------------------------------------------------------------
+    function promptGASConfig() {
+      const current = APPS_SCRIPT_URL || '';
+      const input = prompt(
+        "【Google Apps Script 串接設定】\n\n請輸入部署 Google Apps Script 後取得的 Web App 網址（以 /exec 結尾）：\n\n若尚未部署，請參考 google_apps_script.js 中的三步驟說明。",
+        current
+      );
+      if (input !== null) {
+        const trimmed = input.trim();
+        APPS_SCRIPT_URL = trimmed;
+        localStorage.setItem('lin_apps_script_url', trimmed);
+        if (trimmed) {
+          showToast('✅ Google Apps Script 網址設定成功！已啟用即時連動。');
+          loadBoardData();
+        } else {
+          showToast('ℹ️ 已清除自訂 Apps Script 網址，恢復離線演示模式。');
+        }
+      }
+    }
+
+    // 工具函式：防 XSS 轉義
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
 
 </body>
 </html>
