@@ -11,7 +11,7 @@ window.SKILLS_DATA = [
     "range": 10,
     "aoe": 0,
     "dmg": 45,
-    "desc": "10/0/0",
+    "desc": "引導地心滾燙岩漿向前方噴吐，對遠距離目標造成爆裂火焰傷害。",
     "img": "assets/icons/skills/岩漿噴吐.png"
   },
   {
@@ -26,7 +26,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "0/6/0",
+    "desc": "將狂暴龍炎附著於兵刃之上，每次普通攻擊附加強大的火屬性物理破壞力。",
     "img": "assets/icons/skills/燃燒擊砍.png"
   },
   {
@@ -41,7 +41,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "0/20/0",
+    "desc": "以龍力巨勁破除敵方護具，在時效內大幅粉碎降低目標的物理防禦力。",
     "img": "assets/icons/skills/護衛毀滅.png"
   },
   {
@@ -56,7 +56,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "0/12/0",
+    "desc": "喚醒龍之血脈凝成堅不可摧的龍鱗護鎧，大幅提升自身近距離傷害減免效果。",
     "img": "assets/icons/skills/龍之護鎧.png"
   },
   {
@@ -71,7 +71,7 @@ window.SKILLS_DATA = [
     "range": 8,
     "aoe": 0,
     "dmg": 50,
-    "desc": "0/35/0",
+    "desc": "引動九天滅絕神雷轟擊目標，造成巨額雷電傷害並有機率造成目標觸電定身。",
     "img": "assets/icons/skills/奪命之雷.png"
   },
   {
@@ -86,7 +86,7 @@ window.SKILLS_DATA = [
     "range": 2,
     "aoe": 0,
     "dmg": 0,
-    "desc": "0/16/0",
+    "desc": "龍騎士招牌終結技！以極限速度連續爆發 3 次強力近戰猛攻，瞬間秒殺強敵。",
     "img": "assets/icons/skills/屠宰者.png"
   },
   {
@@ -101,7 +101,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 2,
     "dmg": 45,
-    "desc": "5/0/0",
+    "desc": "凝聚高溫熔岩化為熾熱箭矢射穿目標，附加持續灼燒傷害。",
     "img": "assets/icons/skills/岩漿之箭.png"
   },
   {
@@ -116,7 +116,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "0/12/0",
+    "desc": "釋放遠古巨龍的恐怖威壓，令目標陷入恐懼深淵，全方位弱化其戰鬥能力。",
     "img": "assets/icons/skills/恐懼無助.png"
   },
   {
@@ -131,7 +131,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "0/50/0",
+    "desc": "狂暴龍血在體表流轉，受到近戰攻擊時對攻擊者造成強力反震反彈傷害。",
     "img": "assets/icons/skills/致命身軀.png"
   },
   {
@@ -146,7 +146,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "0/30/1",
+    "desc": "燃燒沸騰龍血進入極速戰鬥姿態，大幅提升自身移動速度與揮刀攻擊速度（二段加速）。",
     "img": "assets/icons/skills/血之渴望.png"
   },
   {
@@ -161,7 +161,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/10/1",
+    "desc": "喚醒地龍安塔瑞斯的守護之力，大幅提高自身最大體力上限與物理防禦。",
     "img": "assets/icons/skills/覺醒：安塔瑞斯.png"
   },
   {
@@ -176,7 +176,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/20/1",
+    "desc": "喚醒水龍法利昂的甘霖之力，大幅增幅魔防、抗性與生命自動回復速度。",
     "img": "assets/icons/skills/覺醒：法利昂.png"
   },
   {
@@ -191,8 +191,8 @@ window.SKILLS_DATA = [
     "range": 10,
     "aoe": 0,
     "dmg": 45,
-    "desc": "10/10/0",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "洞察龍之真諦，大幅強化近戰命中率與弱點穿透機率。",
+    "img": "assets/icons/skills/暴龍之眼.png"
   },
   {
     "id": 195,
@@ -206,7 +206,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "50/30/1",
+    "desc": "喚醒火龍巴拉卡斯的毀滅狂炎，極限爆發近戰攻擊力與極致爆擊傷害。",
     "img": "assets/icons/skills/覺醒：巴拉卡斯.png"
   },
   {
@@ -221,7 +221,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "0/20/0",
+    "desc": "召喚死神巨爪禁錮牽制敵人，令其無法逃脫並遭受撕裂傷害。",
     "img": "assets/icons/skills/驚悚死神.png"
   },
   {
@@ -236,7 +236,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0/0",
+    "desc": "凝神屏氣凝聚思維，提高精神集中度，大幅增加自身魔力自然回復量 (MPR +2)。",
     "img": "assets/icons/skills/專注.png"
   },
   {
@@ -251,7 +251,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/0",
+    "desc": "為友軍施加歐吉巨力的強力精神暗示，近距離攻擊力 +4、命中率 +4。",
     "img": "assets/icons/skills/幻覺：歐吉.png"
   },
   {
@@ -266,7 +266,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 5,
-    "desc": "20/15/0",
+    "desc": "撕裂敵方精神核心，造成無視魔法防禦的真實魔法傷害，並燃燒奪取目標魔力。",
     "img": "assets/icons/skills/心靈破壞.png"
   },
   {
@@ -281,7 +281,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 10,
-    "desc": "15/10/0",
+    "desc": "擾亂敵人心智與施法專注力，使其陷入混亂狀態，大幅提升施法失敗率。",
     "img": "assets/icons/skills/混亂.png"
   },
   {
@@ -296,7 +296,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 3,
     "dmg": 10,
-    "desc": "30/0/1",
+    "desc": "在地面召喚火之立方結界，持續賦予結界內友軍火屬性物理攻擊增幅。",
     "img": "assets/icons/skills/立方：燃燒.png"
   },
   {
@@ -311,7 +311,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 50,
-    "desc": "5/0/0",
+    "desc": "將強大精神意志實體化為心靈衝擊波，重創目標靈魂精神。",
     "img": "assets/icons/skills/粉碎能量.png"
   },
   {
@@ -326,7 +326,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "10/0/0",
+    "desc": "凝聚精神製造虛實交錯的幻象殘影，大幅提升自身迴避率 (DG +30)。",
     "img": "assets/icons/skills/鏡像.png"
   },
   {
@@ -341,7 +341,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 10,
-    "desc": "30/0/0",
+    "desc": "精神巨錘粉碎敵人的意念與骨骼，造成高額心靈傷害並令目標陷入暈眩昏迷！",
     "img": "assets/icons/skills/骷髏毀壞.png"
   },
   {
@@ -356,7 +356,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/25/0",
+    "desc": "扭曲現實空間營造奇異幻象，使敵方目標迷失方向並降低行動效率。",
     "img": "assets/icons/skills/幻想.png"
   },
   {
@@ -371,7 +371,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/0",
+    "desc": "為友軍施加巫妖智慧的精神共鳴，魔法攻擊力 (SP) +2，大幅強化法術威力。",
     "img": "assets/icons/skills/幻覺：巫妖.png"
   },
   {
@@ -386,7 +386,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "4/0/0",
+    "desc": "為友軍施加鑽石高崙的無匹防護，獲得超高額近戰傷害減免 (+20)。",
     "img": "assets/icons/skills/幻覺：鑽石高崙.png"
   },
   {
@@ -401,7 +401,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "60/0/0",
+    "desc": "通透心靈洞察萬物真理，自身全屬性（力量、敏捷、體質、智力、精神、魅力）全 +1！",
     "img": "assets/icons/skills/洞察.png"
   },
   {
@@ -416,7 +416,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 3,
     "dmg": 0,
-    "desc": "35/0/1",
+    "desc": "在地面召喚地之立方結界，持續為結界內全體友軍提供物理減傷與護甲強化。",
     "img": "assets/icons/skills/立方：地裂.png"
   },
   {
@@ -431,7 +431,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 3,
     "dmg": 0,
-    "desc": "55/0/1",
+    "desc": "在地面召喚雷之立方結界，結界每隔數秒對範圍內所有敵軍造成麻痺定身。",
     "img": "assets/icons/skills/立方：衝擊.png"
   },
   {
@@ -446,7 +446,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "25/0/0",
+    "desc": "以鋼鐵般堅忍的心靈屏障護體，在時效內降低自身所承受的各類物理傷害。",
     "img": "assets/icons/skills/耐力.png"
   },
   {
@@ -461,8 +461,8 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 15,
-    "desc": "10/0/0",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "破除虛妄幻影！強制解除周圍潛伏敵人的隱身與遁形狀態。",
+    "img": "assets/icons/skills/隱身破壞者.png"
   },
   {
     "id": 219,
@@ -476,7 +476,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "50/0/0",
+    "desc": "喚醒友軍深層的狂暴化身力量，近戰攻擊力 +10，但受到傷害略微增加。",
     "img": "assets/icons/skills/幻覺：化身.png"
   },
   {
@@ -491,7 +491,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/30/0",
+    "desc": "引發敵人內心深處最原始的恐懼，大幅削弱目標六大基礎核心屬性。",
     "img": "assets/icons/skills/恐慌.png"
   },
   {
@@ -506,7 +506,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "40/0/0",
+    "desc": "幻術士最具特色的復仇反擊！將自身所受的創傷化為致命傷害，自身血量越低傷害越高！",
     "img": "assets/icons/skills/疼痛的歡愉.png"
   },
   {
@@ -521,7 +521,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 3,
     "dmg": 0,
-    "desc": "55/0/2",
+    "desc": "在地面召喚和諧立方結界，持續為結界內所有隊友回復生命值 (HP) 與魔力 (MP)。",
     "img": "assets/icons/skills/立方：和諧.png"
   },
   {
@@ -536,7 +536,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "戰士終極抓人神技！強制鎖定敵方英雄無法瞬移逃跑並降低治癒效果！",
     "img": "assets/icons/skills/亡命之徒.png"
   },
   {
@@ -551,7 +551,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 3,
     "dmg": 50,
-    "desc": "",
+    "desc": "戰士發出驚天動地的戰鬥咆哮，大幅震懾周圍敵人並提高自身威勢與命中。",
     "img": "assets/icons/skills/咆哮.png"
   },
   {
@@ -566,7 +566,7 @@ window.SKILLS_DATA = [
     "range": 6,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "以排山倒海的臂力擲出飛斧，遠程重創目標並造成短暫減速。",
     "img": "assets/icons/skills/戰斧投擲.png"
   },
   {
@@ -581,7 +581,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "泰坦秘術！血量低於 40% 時受到的遠距離箭矢物理攻擊大幅反彈！",
     "img": "assets/icons/skills/泰坦：子彈.png"
   },
   {
@@ -596,7 +596,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "泰坦秘術！血量低於 40% 時近距離物理攻擊大幅反彈反擊！",
     "img": "assets/icons/skills/泰坦：岩石.png"
   },
   {
@@ -611,7 +611,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "泰坦秘術！血量低於 40% 時受到的魔法攻擊大幅反射反彈！",
     "img": "assets/icons/skills/泰坦：魔法.png"
   },
   {
@@ -626,7 +626,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "生命低於警戒線時觸發狂暴狀態，移動與攻擊速度極致暴增！",
     "img": "assets/icons/skills/狂暴.png"
   },
   {
@@ -641,7 +641,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "凝聚萬鈞之力重擊地面與目標，造成護甲碎裂與高額物理打擊。",
     "img": "assets/icons/skills/粉碎.png"
   },
   {
@@ -656,7 +656,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "千錘百鍊的肉體如同厚重鋼甲，永久提升自身防禦減傷能力。",
     "img": "assets/icons/skills/護甲身軀.png"
   },
   {
@@ -671,7 +671,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "戰士核心技能！熟練掌握雙手持斧雙持作戰技巧，大幅提升攻擊攻速與爆擊率。",
     "img": "assets/icons/skills/迅猛雙斧.png"
   },
   {
@@ -686,7 +686,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "",
+    "desc": "激發體內潛藏的氣血體能，大幅擴充生命最大上限與負重極限。",
     "img": "assets/icons/skills/體能強化.png"
   },
   {
@@ -881,7 +881,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "10/1/1",
+    "desc": "黑暗妖精特色技能。持續時間 320 秒，消耗 MP 10，消耗 HP 1。",
     "img": "assets/icons/skills/附加劇毒.png"
   },
   {
@@ -926,7 +926,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "黑暗妖精特色技能。持續時間 192 秒，消耗 MP 30。",
     "img": "assets/icons/skills/暗影之牙.png"
   },
   {
@@ -986,7 +986,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "黑暗妖精特色技能。持續時間 192 秒，消耗 MP 30。",
     "img": "assets/icons/skills/雙重破壞.png"
   },
   {
@@ -1001,7 +1001,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0",
+    "desc": "王者號令天下！瞬間將指定畫面的血盟盟友召喚傳送至王族身邊協同作戰。",
     "img": "assets/icons/skills/呼喚盟友.png"
   },
   {
@@ -1016,8 +1016,8 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "王者親征護衛！王族自身瞬間傳送移動至指定血盟成員身邊進行緊急支援。",
+    "img": "assets/icons/skills/援護盟友.png"
   },
   {
     "id": 114,
@@ -1031,8 +1031,8 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": -1,
     "dmg": 0,
-    "desc": "25/0",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "激發血盟成員的昂揚鬥志，大幅提升周圍隊伍成員的物理攻擊力與命中率。",
+    "img": "assets/icons/skills/激勵士氣.png"
   },
   {
     "id": 113,
@@ -1046,7 +1046,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "1/0",
+    "desc": "降低單一目標的迴避率，並在其頭頂召喚光標標記，指引血盟全體成員集火攻擊。",
     "img": "assets/icons/skills/精準目標.png"
   },
   {
@@ -1061,8 +1061,8 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": -1,
     "dmg": 0,
-    "desc": "25/0",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "釋放王者霸氣光環，大幅提升周圍盟友近戰攻擊力與近戰爆擊傷害。",
+    "img": "assets/icons/skills/衝擊士氣.png"
   },
   {
     "id": 115,
@@ -1076,7 +1076,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": -1,
     "dmg": 0,
-    "desc": "25/0",
+    "desc": "王者的堅毅光輝化為護盾，為身邊所有盟友提供防護，提升物理防禦力 (AC -8)。",
     "img": "assets/icons/skills/閃亮之盾.png"
   },
   {
@@ -1106,8 +1106,8 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "200/0/10",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "法師 (10階)特色技能。消耗 MP 200。",
+    "img": "assets/icons/skills/創造魔法武器.png"
   },
   {
     "id": 74,
@@ -1121,7 +1121,7 @@ window.SKILLS_DATA = [
     "range": 10,
     "aoe": 3,
     "dmg": 50,
-    "desc": "60/0",
+    "desc": "法師十階終極範圍禁咒！召喚漫天滅世隕石群轟擊全場，造成毀滅性範圍打擊！",
     "img": "assets/icons/skills/流星雨.png"
   },
   {
@@ -1136,7 +1136,7 @@ window.SKILLS_DATA = [
     "range": 10,
     "aoe": 0,
     "dmg": 100,
-    "desc": "70/0/0",
+    "desc": "法師單體最強爆發神法！召喚撕裂天地的神聖聖光裁決目標，造成毀天滅地的終極傷害！",
     "img": "assets/icons/skills/究極光裂術.png"
   },
   {
@@ -1151,8 +1151,8 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "100/0/1",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "法師 (10階)特色技能。消耗 MP 100。",
+    "img": "assets/icons/skills/終極返生術.png"
   },
   {
     "id": 78,
@@ -1166,7 +1166,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0/2",
+    "desc": "張開絕對無敵屏障！在時效內免疫任何形式的傷害與負面狀態！",
     "img": "assets/icons/skills/絕對屏障.png"
   },
   {
@@ -1181,8 +1181,8 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 3,
     "dmg": 0,
-    "desc": "20/0/2",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "法師 (10階)特色技能。持續時間 64 秒，消耗 MP 20。",
+    "img": "assets/icons/skills/集體緩速術.png"
   },
   {
     "id": 79,
@@ -1272,7 +1272,7 @@ window.SKILLS_DATA = [
     "aoe": 0,
     "dmg": 0,
     "desc": "10/0",
-    "img": "assets/icons/skills/技能.png"
+    "img": "assets/icons/skills/指定傳送.png"
   },
   {
     "id": 2,
@@ -1376,7 +1376,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "10/0/1",
+    "desc": "法師 (2階)特色技能。持續時間 30 秒，消耗 MP 10。",
     "img": "assets/icons/skills/毒咒.png"
   },
   {
@@ -1586,7 +1586,7 @@ window.SKILLS_DATA = [
     "range": 4,
     "aoe": 0,
     "dmg": 0,
-    "desc": "32/0/1",
+    "desc": "法師 (4階)特色技能。消耗 MP 32。",
     "img": "assets/icons/skills/壞物術.png"
   },
   {
@@ -1631,7 +1631,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "法師 (4階)特色技能。持續時間 64 秒，消耗 MP 20。",
     "img": "assets/icons/skills/緩速術.png"
   },
   {
@@ -1646,7 +1646,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "50/0",
+    "desc": "疏導周身氣脈，使目標敏捷 (DEX) +5，大幅增幅遠程輸出與迴避能力。",
     "img": "assets/icons/skills/通暢氣脈術.png"
   },
   {
@@ -1661,7 +1661,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "法師 (4階)特色技能。持續時間 16 秒，消耗 MP 20。",
     "img": "assets/icons/skills/魔法屏障.png"
   },
   {
@@ -1691,7 +1691,7 @@ window.SKILLS_DATA = [
     "range": 1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "80/0/2",
+    "desc": "法師 (5階)特色技能。持續時間 20 秒，消耗 MP 80。",
     "img": "assets/icons/skills/木乃伊的詛咒.png"
   },
   {
@@ -1706,7 +1706,7 @@ window.SKILLS_DATA = [
     "range": 6,
     "aoe": 0,
     "dmg": 40,
-    "desc": "18/0",
+    "desc": "召喚九霄天雷精準轟擊敵人，造成凌厲的雷電魔法打擊！",
     "img": "assets/icons/skills/極道落雷.png"
   },
   {
@@ -1736,7 +1736,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/20/1",
+    "desc": "法師 (5階)特色技能。持續時間 3600 秒，消耗 MP 30，消耗 HP 20。",
     "img": "assets/icons/skills/迷魅術.png"
   },
   {
@@ -1781,7 +1781,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "15/0/1",
+    "desc": "法師 (5階)特色技能。持續時間 32 秒，消耗 MP 15。",
     "img": "assets/icons/skills/黑闇之影.png"
   },
   {
@@ -1796,7 +1796,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "40/0",
+    "desc": "為目標施加疾風加護，提升移動速度與攻擊動作頻率（一段加速）。",
     "img": "assets/icons/skills/加速術.png"
   },
   {
@@ -1811,7 +1811,7 @@ window.SKILLS_DATA = [
     "range": 8,
     "aoe": 0,
     "dmg": 50,
-    "desc": "20/0",
+    "desc": "召喚地脈劇烈震裂突刺，對單體目標造成強力的地屬性爆裂魔法打擊！",
     "img": "assets/icons/skills/地裂術.png"
   },
   {
@@ -1826,7 +1826,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "10/0/1",
+    "desc": "法師 (6階)特色技能。持續時間 64 秒，消耗 MP 10。",
     "img": "assets/icons/skills/弱化術.png"
   },
   {
@@ -1841,7 +1841,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 40,
-    "desc": "20/0",
+    "desc": "召喚極致高溫炎火燃燒目標，法師最經典的單體高性價比輸出火系神法！",
     "img": "assets/icons/skills/烈炎術.png"
   },
   {
@@ -1871,7 +1871,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "5/80/1",
+    "desc": "法師 (6階)特色技能。消耗 MP 5，消耗 HP 80。",
     "img": "assets/icons/skills/造屍術.png"
   },
   {
@@ -1886,7 +1886,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "50/0",
+    "desc": "賦予神力祝福，使目標力量 (STR) +5，大幅增幅近戰輸出與負重能力。",
     "img": "assets/icons/skills/體魄強健術.png"
   },
   {
@@ -1901,7 +1901,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "40/0/2",
+    "desc": "法師王牌驅散！破除目標身上所有增益狀態與魔法輔助，令其陷入裸裝狀態！",
     "img": "assets/icons/skills/魔法相消術.png"
   },
   {
@@ -1931,7 +1931,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/30/3",
+    "desc": "法師 (7階)特色技能。消耗 MP 30，消耗 HP 30。",
     "img": "assets/icons/skills/召喚術.png"
   },
   {
@@ -1976,7 +1976,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "10/0/1",
+    "desc": "法師 (7階)特色技能。持續時間 64 秒，消耗 MP 10。",
     "img": "assets/icons/skills/疾病術.png"
   },
   {
@@ -2036,7 +2036,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 12,
-    "desc": "48/0",
+    "desc": "引導浩瀚聖光，一次性為自身或指定盟友完全回復全滿的生命力！",
     "img": "assets/icons/skills/全部治癒術.png"
   },
   {
@@ -2051,7 +2051,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 10,
     "dmg": 3,
-    "desc": "60/10",
+    "desc": "召喚暴風雪席捲戰場，造成大範圍冰屬性傷害並有機率緩速凍結目標！",
     "img": "assets/icons/skills/冰雪暴.png"
   },
   {
@@ -2066,7 +2066,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 3,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "法師 (8階)特色技能。持續時間 320 秒，消耗 MP 20。",
     "img": "assets/icons/skills/治癒能量風暴.png"
   },
   {
@@ -2096,7 +2096,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "50/0",
+    "desc": "召喚天使聖光，使死亡的盟友或隊友當場復生，並恢復部分生命值！",
     "img": "assets/icons/skills/返生術.png"
   },
   {
@@ -2111,7 +2111,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "15/0/1",
+    "desc": "法師 (8階)特色技能。消耗 MP 15。",
     "img": "assets/icons/skills/隱身術.png"
   },
   {
@@ -2141,7 +2141,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "法師 (8階)特色技能。持續時間 16 秒，消耗 MP 20。",
     "img": "assets/icons/skills/魔法封印.png"
   },
   {
@@ -2157,7 +2157,7 @@ window.SKILLS_DATA = [
     "aoe": -1,
     "dmg": 30,
     "desc": "30/0",
-    "img": "assets/icons/skills/技能.png"
+    "img": "assets/icons/skills/強力無所遁形術.png"
   },
   {
     "id": 66,
@@ -2171,7 +2171,7 @@ window.SKILLS_DATA = [
     "range": 10,
     "aoe": 3,
     "dmg": 0,
-    "desc": "40/0/1",
+    "desc": "法師 (9階)特色技能。持續時間 32 秒，消耗 MP 40。",
     "img": "assets/icons/skills/沉睡之霧.png"
   },
   {
@@ -2186,7 +2186,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 3,
     "dmg": 30,
-    "desc": "48/0",
+    "desc": "召喚席捲戰場的狂暴烈焰風暴，對大範圍所有魔物造成高額火系魔法傷害！",
     "img": "assets/icons/skills/火風暴.png"
   },
   {
@@ -2201,7 +2201,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0/2",
+    "desc": "法師最強防護神咒！在目標周圍張開神聖光幕結界，使所受所有傷害減免 30%~50%！",
     "img": "assets/icons/skills/聖結界.png"
   },
   {
@@ -2216,8 +2216,8 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/2",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "法師 (9階)特色技能。持續時間 16 秒，消耗 MP 20。",
+    "img": "assets/icons/skills/藥水霜化術.png"
   },
   {
     "id": 67,
@@ -2231,8 +2231,8 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "80/0/1",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "法師 (9階)特色技能。持續時間 7200 秒，消耗 MP 80。",
+    "img": "assets/icons/skills/變形術.png"
   },
   {
     "id": 69,
@@ -2246,7 +2246,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 2,
     "dmg": 0,
-    "desc": "60/0/1",
+    "desc": "法師 (9階)特色技能。消耗 MP 60。",
     "img": "assets/icons/skills/集體傳送術.png"
   },
   {
@@ -2336,7 +2336,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "10/0/1",
+    "desc": "妖精特色技能。持續時間 16 秒，消耗 MP 10。",
     "img": "assets/icons/skills/鏡反射.png"
   },
   {
@@ -2351,7 +2351,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "5/0/1",
+    "desc": "妖精特色技能。持續時間 1200 秒，消耗 MP 5。",
     "img": "assets/icons/skills/魔法防禦.png"
   },
   {
@@ -2366,7 +2366,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "10/0/1",
+    "desc": "妖精特色技能。持續時間 1200 秒，消耗 MP 10。",
     "img": "assets/icons/skills/屬性防禦.png"
   },
   {
@@ -2381,7 +2381,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "10/0/1",
+    "desc": "妖精特色技能。持續時間 1200 秒，消耗 MP 10。",
     "img": "assets/icons/skills/淨化精神.png"
   },
   {
@@ -2396,7 +2396,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "6/0/1",
+    "desc": "妖精特色技能。持續時間 64 秒，消耗 MP 6。",
     "img": "assets/icons/skills/單屬性防禦.png"
   },
   {
@@ -2411,7 +2411,7 @@ window.SKILLS_DATA = [
     "range": 10,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "妖精特色技能。持續時間 64 秒，消耗 MP 20。",
     "img": "assets/icons/skills/地面障礙.png"
   },
   {
@@ -2456,7 +2456,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0/2",
+    "desc": "妖精特色技能。消耗 MP 30。",
     "img": "assets/icons/skills/釋放元素.png"
   },
   {
@@ -2516,7 +2516,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/2",
+    "desc": "妖精特色技能。消耗 MP 20。",
     "img": "assets/icons/skills/召喚屬性精靈.png"
   },
   {
@@ -2531,7 +2531,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "18/0/2",
+    "desc": "妖精特色技能。持續時間 16 秒，消耗 MP 10。",
     "img": "assets/icons/skills/大地屏障.png"
   },
   {
@@ -2577,7 +2577,7 @@ window.SKILLS_DATA = [
     "aoe": 0,
     "dmg": 0,
     "desc": "30/0",
-    "img": "assets/icons/skills/技能.png"
+    "img": "assets/icons/skills/水之防護.png"
   },
   {
     "id": 155,
@@ -2592,7 +2592,7 @@ window.SKILLS_DATA = [
     "aoe": -1,
     "dmg": 0,
     "desc": "40/0",
-    "img": "assets/icons/skills/技能.png"
+    "img": "assets/icons/skills/烈炎氣息.png"
   },
   {
     "id": 158,
@@ -2621,7 +2621,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "18/0/1",
+    "desc": "妖精特色技能。持續時間 32 秒，消耗 MP 10。",
     "img": "assets/icons/skills/魔法消除.png"
   },
   {
@@ -2636,7 +2636,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/4",
+    "desc": "妖精特色技能。消耗 MP 20。",
     "img": "assets/icons/skills/召喚強力屬性精靈.png"
   },
   {
@@ -2651,7 +2651,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": -1,
     "dmg": 0,
-    "desc": "40/0/8",
+    "desc": "妖精特色技能。持續時間 16 秒，消耗 MP 40。",
     "img": "assets/icons/skills/封印禁地.png"
   },
   {
@@ -2696,8 +2696,8 @@ window.SKILLS_DATA = [
     "range": 10,
     "aoe": 0,
     "dmg": 0,
-    "desc": "50/0/1",
-    "img": "assets/icons/skills/技能.png"
+    "desc": "妖精特色技能。消耗 MP 50。",
+    "img": "assets/icons/skills/生命呼喚.png"
   },
   {
     "id": 164,
@@ -2741,7 +2741,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "15/0/1",
+    "desc": "妖精特色技能。持續時間 16 秒，消耗 MP 15。",
     "img": "assets/icons/skills/風之枷鎖.png"
   },
   {
@@ -2756,7 +2756,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "妖精特色技能。持續時間 192 秒，消耗 MP 20。",
     "img": "assets/icons/skills/屬性之火.png"
   },
   {
@@ -2772,7 +2772,7 @@ window.SKILLS_DATA = [
     "aoe": 0,
     "dmg": 0,
     "desc": "10/0",
-    "img": "assets/icons/skills/技能.png"
+    "img": "assets/icons/skills/暴風疾走.png"
   },
   {
     "id": 170,
@@ -2786,7 +2786,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "1/0/1",
+    "desc": "妖精特色技能。持續時間 64 秒，消耗 MP 1。",
     "img": "assets/icons/skills/水之元氣.png"
   },
   {
@@ -2801,7 +2801,7 @@ window.SKILLS_DATA = [
     "range": 3,
     "aoe": 0,
     "dmg": 0,
-    "desc": "20/0/1",
+    "desc": "妖精特色技能。持續時間 192 秒，消耗 MP 20。",
     "img": "assets/icons/skills/污濁之水.png"
   },
   {
@@ -2816,7 +2816,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0/3",
+    "desc": "妖精特色技能。持續時間 64 秒，消耗 MP 30。",
     "img": "assets/icons/skills/烈焰之魂.png"
   },
   {
@@ -2831,7 +2831,7 @@ window.SKILLS_DATA = [
     "range": -1,
     "aoe": 0,
     "dmg": 0,
-    "desc": "15/0/3",
+    "desc": "妖精特色技能。持續時間 192 秒，消耗 MP 10。",
     "img": "assets/icons/skills/精準射擊.png"
   },
   {
@@ -2846,7 +2846,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0/1",
+    "desc": "妖精特色技能。持續時間 960 秒，消耗 MP 30。",
     "img": "assets/icons/skills/能量激發.png"
   },
   {
@@ -2861,7 +2861,7 @@ window.SKILLS_DATA = [
     "range": 0,
     "aoe": 0,
     "dmg": 0,
-    "desc": "30/0/1",
+    "desc": "妖精特色技能。持續時間 960 秒，消耗 MP 30。",
     "img": "assets/icons/skills/體能激發.png"
   }
 ];
