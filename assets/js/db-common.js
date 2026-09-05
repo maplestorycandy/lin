@@ -2,7 +2,7 @@
 // 天堂ARPG - 資料庫全域通用工具與客服組件 (DB Common & CS Widget)
 // ==========================================================================
 
-const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyb55bX3x7e3qY0_x_Qd9t8aP1p-demo-lin/exec";
+const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw-if16oaLbWggYT_izxXOJdLMriMR6AjW1VsZusnkDbmCe3pJ2Wf8qzTH1nR9OaIE/exec";
 
 // 取得機率視覺標籤
 function getRateBadge(p) {
@@ -95,11 +95,12 @@ async function handleCsSubmit(e) {
   sendBtn.disabled = true;
   sendBtn.innerText = "發送中...";
 
-  // 模擬/真實推送至 Google 試算表【客訴聊天】分頁
+  // 推送至 Google 試算表【客訴聊天】分頁
   const payload = {
-    action: "cs_chat",
+    type: "chat",
     name: name,
     contact: contact,
+    message: content,
     content: content,
     page: window.location.pathname.split("/").pop() || "首頁"
   };
@@ -108,7 +109,7 @@ async function handleCsSubmit(e) {
     fetch(GAS_WEBAPP_URL, {
       method: "POST",
       mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
     }).catch(err => console.log("GAS log push:", err));
   } catch(err) {}
