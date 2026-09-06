@@ -1609,11 +1609,16 @@
 
         <!-- Latest Updates -->
         <div class="panel" id="news">
-          <div class="panel-h">
+          <div class="panel-h" style="display:flex;align-items:center;justify-content:space-between">
             <div class="panel-h-title">📢 重點公告速覽</div>
+            <span id="news-sync-status" style="font-size:11px;color:var(--tx2);font-weight:normal">🔄 雲端即時連動</span>
           </div>
           <div class="panel-b">
-            <ul class="news-list">
+            <ul class="news-list" id="news-list-ul">
+              <li>
+                <time>2026-09-06</time>
+                <div><span class="badge" style="background:#e2938f;color:#1a1010;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:bold;margin-right:6px">最新</span><b>【核心與戰鬥重大更新】</b> 妖精「三重矢」0.15s極速CD且施法可同步普攻、後台地圖怪物刷新率即時調整、自訂地圖怪物全數現身(解除BOSS互斥與視野外限制)、原地站立自動刷新重生、核心代碼混淆加密。</div>
+              </li>
               <li>
                 <time>2026-09</time>
                 <div><b>【圖資全同步】</b> 提取 1,223 隻怪物透明立繪、264 張獵場實景、3,000+ 道具裝備技能原版圖標。</div>
@@ -1804,9 +1809,114 @@
     let currentFilter = '全部';
 
     // --------------------------------------------------------------------------
+    // 官方公告數據與模組 (Official News & Announcements Module)
+    // --------------------------------------------------------------------------
+    const DEFAULT_NEWS_ITEMS = [
+      {
+        date: "2026-09-06",
+        tag: "最新",
+        title: "【核心與戰鬥重大更新】",
+        content: "妖精「三重矢」0.15s極速CD且施法可同步普攻、後台地圖怪物刷新率即時調整、自訂地圖怪物全數現身(解除BOSS互斥與視野外限制)、原地站立自動刷新重生、核心代碼混淆加密。"
+      },
+      {
+        date: "2026-09",
+        tag: "更新",
+        title: "【圖資全同步】",
+        content: "提取 1,223 隻怪物透明立繪、264 張獵場實景、3,000+ 道具裝備技能原版圖標。"
+      },
+      {
+        date: "2026-09",
+        tag: "發布",
+        title: "【更新檔發布】",
+        content: "上線 Google Drive 最新補丁下載、整合官網留言板與右下角客訴聊天。"
+      },
+      {
+        date: "2026-09",
+        tag: "核心",
+        title: "【核心重大更新】",
+        content: "整合物品掉落過濾器、修復法師45試煉瑪娜斗篷、解除防具詞綴限制。"
+      },
+      {
+        date: "2026-08",
+        tag: "活動",
+        title: "【福利商城上線】",
+        content: "奇岩 1 元福利商人、白/祝/詛武防卷全面上架。"
+      },
+      {
+        date: "2026-08",
+        tag: "優化",
+        title: "【環境優化】",
+        content: "日夜交替黑夜恢復、妖精夜視功能加入（可自由切換）。"
+      }
+    ];
+
+    let currentNewsItems = [];
+
+    function loadNewsData() {
+      // 1. 先從快取讀取（毫秒級即時呈現，避免任何空白延遲）
+      const localData = localStorage.getItem('lin_news_items');
+      if (localData) {
+        try {
+          const parsed = JSON.parse(localData);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            currentNewsItems = parsed;
+          } else {
+            currentNewsItems = [...DEFAULT_NEWS_ITEMS];
+          }
+        } catch (e) {
+          currentNewsItems = [...DEFAULT_NEWS_ITEMS];
+        }
+      } else {
+        currentNewsItems = [...DEFAULT_NEWS_ITEMS];
+      }
+      renderNewsList();
+
+      // 2. 從 Google 試算表（透過 Apps Script 或 API）動態抓取最新公告
+      if (APPS_SCRIPT_URL) {
+        fetch(`${APPS_SCRIPT_URL}?action=get_news`)
+          .then(res => res.json())
+          .then(json => {
+            if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
+              currentNewsItems = json.data.map(item => ({
+                date: item.date || '最新',
+                tag: item.tag || '公告',
+                title: item.title || '',
+                content: item.content || ''
+              }));
+              localStorage.setItem('lin_news_items', JSON.stringify(currentNewsItems));
+              renderNewsList();
+              const syncEl = document.getElementById('news-sync-status');
+              if (syncEl) syncEl.innerHTML = '🟢 雲端已連線';
+            }
+          })
+          .catch(err => {
+            console.log('News sync from sheet info:', err);
+          });
+      }
+    }
+
+    function renderNewsList() {
+      const ul = document.getElementById('news-list-ul');
+      if (!ul) return;
+      if (!currentNewsItems || currentNewsItems.length === 0) {
+        currentNewsItems = [...DEFAULT_NEWS_ITEMS];
+      }
+      ul.innerHTML = currentNewsItems.map((item, idx) => {
+        const isFirst = (idx === 0);
+        const tagText = item.tag || (isFirst ? '最新' : '公告');
+        const badgeHtml = `<span class="badge" style="background:${isFirst ? '#e2938f' : '#2b394a'};color:${isFirst ? '#1a1010' : '#ffd700'};font-size:10px;padding:2px 6px;border-radius:4px;font-weight:bold;margin-right:6px">${escapeHtml(tagText)}</span>`;
+        return `<li>
+          <time>${escapeHtml(item.date)}</time>
+          <div>${badgeHtml}<b>${escapeHtml(item.title)}</b> ${escapeHtml(item.content)}</div>
+        </li>`;
+      }).join('');
+    }
+
+    // --------------------------------------------------------------------------
     // 初始化
     // --------------------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', () => {
+      loadNewsData();
       loadBoardData();
       renderBoardList();
       initCsChatHistory();

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ==============================================================================
  * 天堂ARPG 官方網站 - Google Apps Script (GAS) 後端串接腳本
  * ==============================================================================
@@ -168,6 +168,65 @@ function doGet(e) {
       return ContentService.createTextOutput(JSON.stringify({
         status: 'success',
         data: list.reverse() // 最新留言排前面
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 讀取「官方公告」最新清單（支援隨時於試算表編輯更新）
+    if (action === 'get_news') {
+      const sheet = getOrCreateSheet('官方公告', ['發布日期', '標籤', '公告標題', '公告內容', '顯示狀態']);
+      const rows = sheet.getDataRange().getValues();
+      
+      // 若試算表剛建立或只有表頭，自動填充預設公告
+      if (rows.length <= 1) {
+        const defaultNews = [
+          ['2026-09-06', '最新', '【核心與戰鬥重大更新】', '妖精「三重矢」0.15s極速CD且施法可同步普攻、後台地圖怪物刷新率即時調整、自訂地圖怪物全數現身(解除BOSS互斥與視野外限制)、原地站立自動刷新重生、核心代碼混淆加密。', '公開'],
+          ['2026-09', '更新', '【圖資全同步】', '提取 1,223 隻怪物透明立繪、264 張獵場實景、3,000+ 道具裝備技能原版圖標。', '公開'],
+          ['2026-09', '發布', '【更新檔發布】', '上線 Google Drive 最新補丁下載、整合官網留言板與右下角客訴聊天。', '公開'],
+          ['2026-09', '核心', '【核心重大更新】', '整合物品掉落過濾器、修復法師45試煉瑪娜斗篷、解除防具詞綴限制。', '公開'],
+          ['2026-08', '活動', '【福利商城上線】', '奇岩 1 元福利商人、白/祝/詛武防卷全面上架。', '公開'],
+          ['2026-08', '優化', '【環境優化】', '日夜交替黑夜恢復、妖精夜視功能加入（可自由切換）。', '公開']
+        ];
+        sheet.getRange(2, 1, defaultNews.length, 5).setValues(defaultNews);
+        try { sheet.autoResizeColumns(1, 5); } catch(e){}
+        return ContentService.createTextOutput(JSON.stringify({
+          status: 'success',
+          data: defaultNews.map(function(r) {
+            return {
+              date: r[0],
+              tag: r[1],
+              title: r[2],
+              content: r[3],
+              status: r[4]
+            };
+          })
+        })).setMimeType(ContentService.MimeType.JSON);
+      }
+
+      const list = [];
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (row[0] || row[2] || row[3]) {
+          const status = String(row[4] || '公開').trim();
+          if (status !== '隱藏' && status !== '草稿') {
+            let dateStr = row[0];
+            if (row[0] instanceof Date) {
+              dateStr = Utilities.formatDate(row[0], 'Asia/Taipei', 'yyyy-MM-dd');
+            } else {
+              dateStr = String(row[0] || '').trim();
+            }
+            list.push({
+              date: dateStr,
+              tag: String(row[1] || '公告').trim(),
+              title: String(row[2] || '').trim(),
+              content: String(row[3] || '').trim(),
+              status: status
+            });
+          }
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({
+        status: 'success',
+        data: list
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
