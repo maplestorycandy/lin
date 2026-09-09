@@ -363,6 +363,18 @@
       .cols { grid-template-columns: 1fr; }
     }
 
+    .announce-top-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .announce-top-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* Panels */
     .panel {
       background: var(--panel);
@@ -1010,13 +1022,117 @@
         <a class="btn ghost" href="#features">✨ 查看獨家特色</a>
       </div>
       <div class="hero-notice">
-        📢 <b>2026 重大特色發布：</b> 新增「物品掉落過濾器」、全職業試煉一鍵領取（修復法師瑪娜斗篷）、防具詞綴全面解禁（威儀/尋寶/承載）、取消全白天恢復經典黑夜、妖精專屬夜視功能（可自由開關）！
+        📢 <b>2026-09-09 重大版本更新：</b> 全新世界 Boss「扭曲的 潔尼斯女王」傲慢降臨！最新同步補丁安裝器極限瘦身發布（無後台純淨版，僅 350MB），全套 8 方位序列幀動畫與特色地圖全面實裝！
       </div>
     </div>
   </section>
 
   <!-- Main Content -->
   <main>
+    <!-- Latest Major Announcement with Image (放在最上面) -->
+    <div class="wrap" style="margin-bottom: 24px;" id="latest-announcement">
+      <div class="panel" style="border: 2px solid var(--gold); box-shadow: 0 8px 30px rgba(212,175,55,0.25); background: linear-gradient(180deg, #1b2438 0%, #121824 100%);">
+        <div class="panel-h" style="background: linear-gradient(90deg, #324368, #1a2337); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 12px 18px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="font-size: 20px;">🔥</span>
+            <span style="font-size: 17px; font-weight: 900; color: #fff; letter-spacing: 0.5px;">
+              【重大版本更新公告】全新世界王「扭曲的 潔尼斯女王」降臨 ＆ 最新同步補丁瘦身發布！
+            </span>
+            <span class="badge hot" style="font-size: 11px; padding: 3px 8px; border-radius: 4px;">重大更新</span>
+          </div>
+          <div style="font-size: 12.5px; color: var(--gold2); font-family: monospace; font-weight: bold;">
+            發布日期：2026-09-09
+          </div>
+        </div>
+        <div class="panel-b" style="padding: 20px;">
+          <div class="announce-top-grid">
+            <!-- Left: Showcase Image -->
+            <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.4); border-radius: 10px; overflow: hidden; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s;" 
+                 onclick="openLightbox('assets/images/zenith_distorted_showcase.png', '全新世界王【扭曲的 潔尼斯女王】 ｜ 8方位全動作序列幀', '完全一致且像素對齊的全新原創八方位動作序列幀（待機/行走/普攻/受傷/死亡/施法），散發劇毒幽綠微光與曜石黑鋼八足，強勢降臨傲慢之塔！點擊可查看高清大圖。')"
+                 onmouseover="this.style.transform='scale(1.02)'; this.style.borderColor='var(--gold)';" 
+                 onmouseout="this.style.transform='scale(1)'; this.style.borderColor='rgba(212,175,55,0.4)';">
+              <div style="position: relative;">
+                <img src="assets/images/zenith_distorted_showcase.png" alt="扭曲的潔尼斯女王展示" style="width: 100%; display: block; border-bottom: 1px solid rgba(212,175,55,0.2);">
+                <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.75); color: var(--gold2); font-size: 11px; padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(212,175,55,0.4); font-weight: 500;">
+                  🔍 點擊查看高清大圖
+                </div>
+              </div>
+              <div style="padding: 10px 12px; font-size: 13px; color: var(--tx2); background: rgba(26,34,51,0.7);">
+                <b style="color: var(--gold2);">【扭曲的 潔尼斯女王】</b> 全動作・8 方位 Sprite Sheet 實裝
+              </div>
+            </div>
+
+            <!-- Right: Content Details -->
+            <div>
+              <div style="font-size: 14.5px; line-height: 1.8; color: #e0e6ed; margin-bottom: 16px;">
+                各位親愛的勇者們好！本次版本迎來重大核心升級與全新世界 Boss 挑戰，同時推出了經過<b>極限容量瘦身（淨省 173MB，僅 350MB）</b>、<b>12 執行緒多線程極速解壓</b>與<b>核心加密保護</b>的最新一鍵同步更新安裝器！
+              </div>
+
+              <!-- Update Highlights Grid -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 18px;">
+                <!-- Card 1 -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px; padding: 12px;">
+                  <div style="font-weight: 700; color: var(--gold2); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-size: 13.5px;">
+                    🕷️ <span>全新世界王：扭曲的潔尼斯女王</span>
+                  </div>
+                  <div style="font-size: 12.5px; color: var(--tx2); line-height: 1.6;">
+                    • 傲慢之塔全新王者，全套 8 方位 × 6 動態原創序列幀動畫<br>
+                    • 專屬奢華掉落：<b style="color:#ffd700">潔尼斯戒指 (0.5%)</b>、<b style="color:#ff7777">封印傲慢11F符 (2%)</b>、傲慢1F卷軸、祝武、祝防！
+                  </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px; padding: 12px;">
+                  <div style="font-weight: 700; color: var(--gold2); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-size: 13.5px;">
+                    ⚡ <span>同步補丁安裝器：瘦身至 350MB</span>
+                  </div>
+                  <div style="font-size: 12.5px; color: var(--tx2); line-height: 1.6;">
+                    • 安裝器容量由 523MB 降至 <b style="color:#66ff99">349.82MB</b>（淨縮小 173MB）<br>
+                    • 啟用 12 執行緒極限壓縮，<b>徹底隔離零後台工具</b>，純淨安全！
+                  </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px; padding: 12px;">
+                  <div style="font-weight: 700; color: var(--gold2); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-size: 13.5px;">
+                    🗺️ <span>全新自訂特色冒險地圖</span>
+                  </div>
+                  <div style="font-size: 12.5px; color: var(--tx2); line-height: 1.6;">
+                    • 實裝「失落的亞丁」、「被襲擊的成長之島」、「海戰」等場景<br>
+                    • 動態網格碰撞與全新刷怪機制，探索打寶體驗全面昇華！
+                  </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px; padding: 12px;">
+                  <div style="font-weight: 700; color: var(--gold2); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; font-size: 13.5px;">
+                    🛡️ <span>NPC 稱號雙行化 ＆ 商店多元分類</span>
+                  </div>
+                  <div style="font-size: 12.5px; color: var(--tx2); line-height: 1.6;">
+                    • 優化 NPC 稱號浮動標籤（如：福利商人^戴捷爾 兩行排版）<br>
+                    • 商店支援動態自訂分頁，消耗品新增「巧克力蛋糕」等高階補給！
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                <a class="btn big" href="https://drive.google.com/file/d/1bs4m0x7u6y2TEvPCBvuWzNMn0tfDzb3s/view?usp=sharing" target="_blank" rel="noopener" style="font-size: 13.5px; padding: 9px 18px;">
+                  📥 立即下載最新同步更新安裝器 (Google Drive)
+                </a>
+                <a class="btn" href="mobs.html" style="font-size: 13px;">
+                  👾 前往怪物圖鑑查看潔尼斯女王
+                </a>
+                <a class="btn ghost" href="drops.html" style="font-size: 13px;">
+                  🎁 掉落率即時查詢
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="wrap cols">
 
       <!-- Left Column -->
@@ -1616,8 +1732,12 @@
           <div class="panel-b">
             <ul class="news-list" id="news-list-ul">
               <li>
+                <time>2026-09-09</time>
+                <div><span class="badge" style="background:#e2938f;color:#1a1010;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:bold;margin-right:6px">最新</span><b>【重大版本更新】</b> 全新世界王「扭曲的 潔尼斯女王」登場（8方位全套序列幀＋專屬戒指掉落）、最新同步補丁安裝器瘦身發布（無後台純淨版，僅 350MB）、NPC 雙行稱號優化、商店動態自訂分頁實裝。</div>
+              </li>
+              <li>
                 <time>2026-09-06</time>
-                <div><span class="badge" style="background:#e2938f;color:#1a1010;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:bold;margin-right:6px">最新</span><b>【核心與戰鬥重大更新】</b> 妖精「三重矢」0.15s極速CD且施法可同步普攻、後台地圖怪物刷新率即時調整、自訂地圖怪物全數現身(解除BOSS互斥與視野外限制)、原地站立自動刷新重生、核心代碼混淆加密。</div>
+                <div><b>【核心與戰鬥重大更新】</b> 妖精「三重矢」0.15s極速CD且施法可同步普攻、後台地圖怪物刷新率即時調整、自訂地圖怪物全數現身(解除BOSS互斥與視野外限制)、原地站立自動刷新重生、核心代碼混淆加密。</div>
               </li>
               <li>
                 <time>2026-09</time>

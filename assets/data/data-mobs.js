@@ -91790,5 +91790,178 @@ window.MOBS_DATA = [
       }
     ],
     "img": "assets/mobs/l1j_45005.png"
+  },
+  {
+    "id": "l1j_98056",
+    "n": "金色妖魔",
+    "lv": 5,
+    "hp": 30,
+    "mp": 4,
+    "ac": 10,
+    "s": "S",
+    "beh": "被動",
+    "isBoss": false,
+    "exp": 25,
+    "maps": [
+      "古魯丁地監1樓",
+      "沙漠地監1樓"
+    ],
+    "drops": [
+      {
+        "id": "l1j_item_40029",
+        "n": "妖魔之血",
+        "p": 60,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/etc/妖魔之血.png"
+      },
+      {
+        "id": "l1j_item_41223",
+        "n": "妖魔之心",
+        "p": 30,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/etc/妖魔之心.png"
+      }
+    ],
+    "icon": "assets/mobs/l1j_98056.png"
+  },
+  {
+    "id": "l1j_98057",
+    "n": "銀色妖魔",
+    "lv": 8,
+    "hp": 60,
+    "mp": 4,
+    "ac": 10,
+    "s": "S",
+    "beh": "被動",
+    "isBoss": false,
+    "exp": 50,
+    "maps": [
+      "古魯丁地監1樓",
+      "沙漠地監1樓"
+    ],
+    "drops": [
+      {
+        "id": "l1j_item_40029",
+        "n": "妖魔之血",
+        "p": 60,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/etc/妖魔之血.png"
+      },
+      {
+        "id": "l1j_item_41223",
+        "n": "妖魔之心",
+        "p": 30,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/etc/妖魔之心.png"
+      }
+    ],
+    "icon": "assets/mobs/l1j_98057.png"
+  },
+  {
+    "id": "l1j_98058",
+    "n": "紅色妖魔",
+    "lv": 12,
+    "hp": 120,
+    "mp": 4,
+    "ac": 10,
+    "s": "S",
+    "beh": "被動",
+    "isBoss": false,
+    "exp": 100,
+    "maps": [
+      "古魯丁地監1樓",
+      "沙漠地監1樓"
+    ],
+    "drops": [
+      {
+        "id": "l1j_item_40029",
+        "n": "妖魔之血",
+        "p": 60,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/etc/妖魔之血.png"
+      },
+      {
+        "id": "l1j_item_41223",
+        "n": "妖魔之心",
+        "p": 30,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/etc/妖魔之心.png"
+      }
+    ],
+    "icon": "assets/mobs/l1j_98058.png"
+  },
+  {
+    "id": "l1j_92807",
+    "n": "扭曲的潔尼斯女王",
+    "lv": 68,
+    "hp": 8500,
+    "mp": 1200,
+    "ac": -80,
+    "s": "L",
+    "beh": "主動",
+    "isBoss": true,
+    "exp": 15000,
+    "maps": [
+      "傲慢之塔:10樓",
+      "扭曲的地牢"
+    ],
+    "drops": [
+      {
+        "id": "acc_jenis_ring",
+        "n": "潔尼斯戒指",
+        "p": 0.5,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/accessories/潔尼斯戒指.png"
+      },
+      {
+        "id": "l1j_item_49138",
+        "n": "傲慢之塔 1 樓移動卷軸",
+        "p": 50,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/scrolls/傲慢之塔1樓移動卷軸.png"
+      },
+      {
+        "id": "l1j_item_40074",
+        "n": "對盔甲施法的卷軸",
+        "p": 25,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/scrolls/對盔甲施法的卷軸.png"
+      },
+      {
+        "id": "l1j_item_40087",
+        "n": "對武器施法的卷軸",
+        "p": 35,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/scrolls/對武器施法的卷軸.png"
+      },
+      {
+        "id": "l1j_item_140074",
+        "n": "受祝福的 對盔甲施法的卷軸",
+        "p": 5,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/scrolls/受祝福的對盔甲施法的卷軸.png"
+      },
+      {
+        "id": "l1j_item_140087",
+        "n": "受祝福的 對武器施法的卷軸",
+        "p": 8,
+        "min": 1,
+        "max": 1,
+        "img": "assets/icons/scrolls/受祝福的對武器施法的卷軸.png"
+      }
+    ],
+    "img": "assets/mobs/l1j_92807.png",
+    "icon": "assets/mobs/l1j_92807.png"
   }
 ];
